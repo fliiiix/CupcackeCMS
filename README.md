@@ -1,3 +1,5 @@
+//in work layout ist völlig falsch
+
 CupcackeCMS
 ===========
 #Schwerpunkte der Seite:
@@ -9,7 +11,7 @@ CupcackeCMS
 2. Zeitplan
 3. Pflichtenheft
 #Ziel Bestimmung
-##Musskriterien
+##Musskriterien##
 1. Benutzer Authentifizierung
 2. Bilderupload von mehrern Bildern Gleichzeitig
 2. Bilder anzeigen in Animation (siehe XYZ)
