@@ -58,12 +58,12 @@ Hauptseite                    Kalender
                      '----------'
                      
 #Rechte:
--------------Kalender--BilderGallerie- AdminPanel-
-|jeder     | Ansehen | darf nichts   |darf nichts|
-|user      | X       | X             |darf nichts|
-|admin     | X       | X             |X          |
-|betrachter| Ansehen | Ansehen       |darf nichts|
---------------------------------------------------
+| Wer      |Kalender      |BilderGallerie |  AdminPanel|
+|:--------:|:------------:|:-------------:|:----------:|
+|jeder     | Ansehen      | darf nichts   |darf nichts |
+|user      | X            | X             |darf nichts |
+|admin     | X            | X             |X           |
+|betrachter| Ansehen      | Ansehen       |darf nichts |
 X Bearbeiten, Löschen, Editieren
 
 ###Haubtseite
