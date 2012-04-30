@@ -1,0 +1,21 @@
+-------------------------------
+Datenbankstrukturen für CuteCMS
+-------------------------------
+
+Tabelle pages:
+id     | int(11) NOT NULL AUTO_INCREMENT
+title  | mediumtext
+content| longtext
+topic  | mediumtext
+owner  | int(11)
+
+Tabelle pics:
+id     | int(11) NOT NULL AUTO_INCREMENT
+owner  | int(11)
+guid   | mediumtext
+
+Tabelle users:
+id     | int(11) NOT NULL AUTO_INCREMENT
+name   | tinytext
+email  | tinytext
+pw_hash| varchar(128)
