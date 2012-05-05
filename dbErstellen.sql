@@ -1,0 +1,65 @@
+CREATE DATABASE  IF NOT EXISTS CupkackeCMS;
+use CupkackeCMS;
+
+/*Create all tables (user / user_rolle / Rolle / cookie_mapping / Beitrag / Bild)*/
+CREATE TABLE user
+(
+  id INTEGER(11),
+  name VARCHAR(100) NOT NULL,
+  eMail VARCHAR(100),
+  pw_Hash VARCHAR(120) NOT NULL,
+  aktiv BIT NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE cookie_mapping
+(
+  id INTEGER(11),
+  id_user INTEGER(11),
+  cookie_content BIGINT(20) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY (id_user) REFERENCES user(id)
+);
+
+CREATE TABLE rolle
+(
+  id INTEGER(11),
+  name VARCHAR(100) NOT NULL,
+  beschreib TINYTEXT,
+  aktiv BIT NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE user_rolle
+(
+  id INTEGER(11),
+  id_user INTEGER(11),
+  id_rolle INTEGER(12),
+  PRIMARY KEY(id),
+  FOREIGN KEY (id_user) REFERENCES user(id),
+  FOREIGN KEY (id_rolle) REFERENCES rolle(id)
+);
+
+CREATE TABLE beitrag
+(
+  id INTEGER(11),
+  titel VARCHAR(100) NOT NULL,
+  untertitel VARCHAR(100),
+  inhalt TEXT,
+  id_Owner INTEGER(11),
+  Aktiv BIT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY (id_Owner) REFERENCES user(id)
+);
+
+CREATE TABLE bild
+(
+  id INTEGER(11),
+  id_beitrag INTEGER(11),
+  speicherName VARCHAR(50) NOT NULL,
+  uploadName VARCHAR(100) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY (id_beitrag) REFERENCES beitrag(id)
+);
+
+
