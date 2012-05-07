@@ -7,7 +7,7 @@ function db_connect (){
 }
 
 function login_user ($username,$password){
-$ergebnis = mysql_query("SELECT id FROM users WHERE name=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = TRUE");
+$ergebnis = mysql_query("SELECT id FROM users WHERE eMail=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = TRUE");
 	if (!$ergebnis)
       return "Datenbank-Fehler!";
 	else {
