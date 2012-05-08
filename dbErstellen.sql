@@ -63,4 +63,13 @@ CREATE TABLE bild
   FOREIGN KEY (id_beitrag) REFERENCES beitrag(id)
 );
 
-
+CREATE TABLE kalenderEintrag
+(
+  id INTEGER(11) AUTO_INCREMENT,
+  datum DATE NOT NULL,
+  titel VARCHAR(100) NOT NULL,
+  beschreib LONGTEXT,
+  id_user,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_user) REFERENCES  user(id)
+);
