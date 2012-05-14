@@ -1,0 +1,1080 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+
+<title>
+###current calendar title### Calendar
+</title>
+
+###css stuff###
+
+###javascript stuff###
+
+</head>
+
+
+<body>
+
+###debug stuff###
+
+
+<div style="text-align:center;margin-bottom:20px;">
+
+<div style="float:right;">###logged-in stuff###</div>
+
+
+<div class="lite_box"  style="float:left;margin-left:20%;padding-left:3em;padding-right:3em;">
+<span style="font-weight:bold;">Welcome to the <a href="http://www.planscalendar.com">Plans</a> demo!</span> (Plans version ###version###) 
+
+<div>###choose theme###</div>
+</div>
+</div>
+
+###messages###
+
+<br style="clear:both;"/>
+
+<table style="width:100%;margin:auto;"><tr><td>
+
+<!--<div style="display:table;margin:auto;text-align:center;">-->
+
+<div id="menu_tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+	###tab menu stuff###
+		<li id="login_logout">
+			<a id="login_link" class="lang_login"></a>
+			<a id="logout_link" class="lang_logout"></a>
+		</li>
+	</ul>
+
+
+	<div id="menu_tab_0" class="active_tab" style="clear:both;padding:10px;margin:0px;text-align:center;">
+
+	<div class="calendar_controls">
+		<form name="tab0_form" action="" method="get">
+			<div style="float:right;margin:5px;padding:2px;vertical-align:middle;">
+				<input id="controls_submit_button" class="lang_controls_change" type="submit" value=""/>
+			</div>
+
+			<div style="margin:5px;padding:2px;text-align:right;float:right;">
+				<span class="lang_controls_start_month"></span>
+				<select id="cal_start_month" name="cal_start_month" onChange="jQuery.planscalendar.blink('#controls_submit_button');">
+				</select>
+
+				<input id="cal_start_year" name="cal_start_year" value = "" size=4 onChange="jQuery.planscalendar.blink('#controls_submit_button');"/>
+				<br/>
+				<span class="lang_controls_num_months"></span>
+				<input id="cal_num_months" name="cal_num_months" value = "" size=3 onChange="jQuery.planscalendar.blink('#controls_submit_button');"/>
+			</div>
+
+
+		<span id="server_supplied_calendar_controls">
+		###calendar controls###
+		</span>
+			<br style="clear:both;"/>
+		</form>
+		</div>
+
+		<div style="clear:both;width:100%;" id ="calendar_area">
+
+		###calendar area###
+
+		<script type="text/html" id="available_remote_calendar_tmpl">
+			<li class="available_remote_calendar <%=display_class%>">
+				<div style="float:left;">
+					<div class="remote_calendar_title"><%=title%></div>
+					<input id="merge_remote_calendar_checkbox_<%=id%>" type="checkbox" value=""/>
+					<label for="merge_remote_calendar_checkbox_<%=id%>"><span class="lang_detect_remote_calendars2"></span></label>
+				</div>
+				<div id="remote_calendar_password_required_<%=id%>" class="remote_calendar_password">
+					<span class="lang_detect_remote_calendars3"></span>
+					<input id="remote_calendar_password_<%=id%>"/>
+				</div>
+				<br style="clear:both;"/>
+			</li>
+		</script>
+
+
+		<script type="text/html" id="pending_events_tmpl">
+
+			<div style="text-align:right;"><img id="pending_events_check_all_button" src="<%=theme_url%>/graphics/green_check.gif"><img id="pending_events_trash_all_button" src="<%=theme_url%>/graphics/trashcan.gif"/></div>
+
+			<div id="pending_events_list"></div>
+
+			<br style="clear:both;">
+			<a id="pending_events_submit_button" class="lang_email_reminder_text5"  href="javascript:void(0)" ><%=email_reminder_text5%></a>
+			<br style="clear:both;">
+		</script>
+
+
+		<script type="text/html" id="pending_calendar_tmpl">
+			<div class="pending_calendar">
+
+				<div style="margin: 10px; float: left; text-align: left; width: 40%; clear: both;" class="info_box">
+					<div class="cal_title">
+					<%=title%>
+					</div>
+
+					<div>
+					<%=details%>
+					</div>
+
+				</div>
+
+				<div class="approve_delete_inputs" style="margin: 10px; float: left; text-align: left;">
+					<input type="radio" value="approve" name="pending_calendar_<%=id%>_approve_delete" id="pending_calendar_<%=id%>_approve"/>
+					<label for="pending_calendar_<%=id%>_approve" class="optional_field lang_view_pending_calendars3">Approve</label><br/>
+					<input type="radio" value="delete" name="pending_calendar_<%=id%>_approve_delete" id="pending_calendar_<%=id%>_delete"/>
+					<label for="pending_calendar_<%=id%>_delete" class="optional_field lang_view_pending_calendars4">Delete</label><br/>
+				</div>
+			</div>
+
+		</script>
+
+		<script type="text/html" id="remote_calendar_xml_tmpl">
+			<remote_calendar><type>plans</type><version><%=plans_version%></version><url><%=url%></url><remote_id><%=id%></remote_id><title><%=title%></title><password><%=password%></password></remote_calendar>
+		</script>
+
+		<script type="text/html" id="remote_calendar_tmpl">
+			<li>
+			<a href="<%=url%>?cal_id=<%=remote_id%>" target="_blank"><%=title%></a>
+			<input type="checkbox" value="y" style="padding: 0pt; margin-top: 0pt; margin-bottom: 0pt; vertical-align: bottom;" name="delete_remote_calendar_<%=remote_id%>" id="delete_remote_calendar_<%=remote_id%>"/> <span class="lang_get_remote_calendar3"></span>
+			</li>
+		</script>
+
+		</div>
+		<br style="clear:both;"/>
+
+		<div id="plans_links" style="padding:5px;text-align:left;">
+		###export calendar link###<br/>
+		###subscribe calendar link###<br/>
+		</div>
+	</div> <!-- end menu_tab_0-->
+
+	<div id="menu_tab_1" class="active_tab ui-tabs-hide">
+
+		<div id="add_edit_event_dialog">
+			<div id="add_edit_event_tabs" class="subtabs">
+				<ul>
+					<li><a href="#add_edit_event_main"><span class="lang_add_edit_events_tab0"></span></a></li>
+					<li><a href="#add_edit_event_recurrence"><span class="lang_add_edit_events_tab1"></span></a></li>
+				</ul>
+			</div>
+
+			<div id="add_edit_event_main">
+				<input type="hidden" id="add_edit_event_id" name="evt_id" value="">
+
+				<div class="form_field">
+					<label class="required lang_event_calendar" for="add_edit_event_cal_id"></label>
+					<select name="add_edit_event_cal_id" id="add_edit_event_cal_id">
+					</select>
+					<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('evt_cal_id')" class="lang_help_on_this"></a></div>
+
+					<div class="block_merge_control">&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="add_edit_event_block_merge" value="1" id="add_edit_event_block_merge"/>
+						<label style="width:auto;" for="add_edit_event_block_merge"><span class="lang_block_merge"></span></label>
+					</div>
+
+				</div>
+
+				<div class="form_field" id="add_edit_event_other_cal_ids_control">
+					<label class="lang_event_other_calendars" for="evt_title"></label>
+					<select multiple="multiple" id="add_edit_event_other_cal_ids" name="evt_other_cal_ids" style="width:250px;" value="">
+					</select>
+				</div>
+
+
+
+				<div class="form_field">
+				<label class="required lang_event_title" for="evt_title"></label>
+				<input id="add_edit_event_title" name="evt_title" style="width:250px;" value=""/>
+				<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('evt_title')" class="lang_help_on_this"></a></div>
+				</div>
+
+				<div class="form_field">
+				<label for="evt_details"><span class="lang_event_details"></span>
+				<br/><span class="small_note help_link" style="float:right;"><a href="javascript:jQuery.planscalendar.display_help('evt_details')" class="lang_help_on_this"></a>&nbsp;&nbsp;</span>
+				</label>
+				<textarea name="evt_details" id="add_edit_event_details" rows="10" cols="0" style="width:400px;"></textarea>
+				</div>
+
+				<div class="form_field">
+				<label class="required" for="evt_start_date">Start Date:</label>
+				<input id="add_edit_event_start_date" name="evt_start_date" style="width: 7em;" value=""/>
+				</div>
+
+
+				<div class="form_field">
+				<label class="required" for="evt_days">Length (in Days):</label>
+				<input id="add_edit_event_days" name="evt_days" style="width: 2em;" value="1"/>
+				<input id="add_edit_event_all_day_event" name="all_day_event" value="1" type="checkbox"/>
+				<label class="optional_field" style="width:auto;" for="all_day_event">All-Day Event:</label>
+				</div>
+
+
+				<div id="event_time_inputs">
+					<div class="form_field">
+						<label for="evt_start_time" class="required">Start Time:</label>
+						<input value="9:00 am" style="width: 7em;" name="evt_start_time" id="add_edit_event_start_time"/>
+					</div>
+
+
+					<div class="form_field">
+						<label for="evt_end_time">End Time:</label>
+						<input value="5:00 pm" style="width: 7em;" name="evt_end_time" id="add_edit_event_end_time"/>
+					</div>
+				</div>
+
+				<div class="form_field">
+					<label class="lang_event_icon" for="add_edit_event_icon"></label>
+					<select name="evt_icon" id="add_edit_event_icon">
+					</select>
+
+					<div class="icon_preview_box">
+					<div id="icon_preview" style="text-align:center;">
+					<img id="icon_preview_img" src="" alt='event icon' border="0" vspace=0 hspace=0>
+					</div>
+					</div>
+				</div>
+
+
+				<div class="form_field">
+					<label class="lang_event_background_color" for="add_edit_event_background_color"></label>
+					<select name="add_edit_event_background_color" id="add_edit_event_background_color">
+					</select>
+					<div id="event_color_select_icon" class="color_select_icon" style="display:none;">&nbsp;</div>
+
+				</div>
+
+
+				<br style="clear:both;"/>
+				<br style="clear:both;"/>
+
+			</div>
+
+			<div id="add_edit_event_recurrence">
+				<div id="define_recurrence">
+
+					<div class="form_field">
+						<label>
+							<span class="small_note help_link" style="float:right;"><a href="javascript:jQuery.planscalendar.display_help('recurring_event')" class="lang_help_on_this"></a>&nbsp;&nbsp;</span>
+						</label>
+						<input type="checkbox" name="add_edit_event_recurring_event" value="1" id="add_edit_event_recurring_event" class="recurring_event_change_trigger"/>
+						<label style="width:auto;" for="add_edit_event_recurring_event"><span class="lang_recurring_event"></span></label>
+
+					</div>
+
+
+					<div class="form_field" style="padding-top:20px;">
+						<label style="text-align:right;">
+							<span class="small_note lang_recurrence_type">Recurrence type</span>
+							<br/>
+							<span class="small_note help_link" style="float:none;display:inline;text-align:right;"><a href="javascript:jQuery.planscalendar.display_help('recurrence_type')" class="lang_help_on_this"></a>&nbsp;&nbsp;</span>
+						</label>
+
+						<div style="float:left;">
+
+							<input type="radio" name="add_edit_event_recurrence_type" value="same_day_of_month" id="add_edit_event_recurrence_type_same_day_of_month" class="recurring_event_change_trigger"/>
+							<label style="width:auto;" for="add_edit_event_recurrence_type_same_day_of_month"><span class="lang_same_day_of_month"></span></label>
+
+							<br style="clear:left;"/>
+							<input type="radio" name="add_edit_event_recurrence_type" value="same_weekday" id="add_edit_event_recurrence_type_same_weekday" class="recurring_event_change_trigger"/>
+							<label style="width:auto;" for="add_edit_event_recurrence_type_same_weekday">
+								<span class="lang_same_weekday"></span>
+								<select style="float:none;" id="add_edit_event_weekday_of_month_type" name="add_edit_event_weekday_of_month_type">
+								<option value = "every_week">on every week
+								<option value = "only_first_week">on the first week
+								<option value = "only_second_week">on the second week
+								<option value = "only_third_week">on the third week
+								<option value = "only_fourth_week">on the fourth week
+								<option value = "only_fifth_week">on the fifth week
+								<option value = "only_last_week">on the last week
+								</select>
+								<span class="lang_of_the_month"></span>
+							</label>
+
+							<br style="clear:left;"/>
+							<input type="radio" name="add_edit_event_recurrence_type" value="every_x_days" id="add_edit_event_recurrence_type_every_x_days" class="recurring_event_change_trigger"/>
+							<label style="width:auto;" for="add_edit_event_recurrence_type_every_x_days">
+								<span class="lang_daily_every"></span>
+								<input style="width:2em;float:none;" id="add_edit_event_every_x_days"/>
+								<span class="lang_days"></span>
+							</label>
+
+							<br style="clear:left;"/>
+							<input style="clear:left;" type="radio" name="add_edit_event_recurrence_type" value="every_x_weeks" id="add_edit_event_recurrence_type_every_x_weeks" class="recurring_event_change_trigger"/>
+							<label style="width:auto;" for="add_edit_event_recurrence_type_every_x_weeks">
+								<span class="lang_weekly_every"></span>
+								<input style="width:2em;float:none;" id="add_edit_event_every_x_weeks">
+								<span class="lang_weeks"></span>
+							</label>
+						</div>
+					</div>
+
+
+					<div class="form_field" style="padding-top:20px;">
+						<label style="text-align:right;">
+							<span class="small_note lang_fit_into_year"></span>
+							<br/>
+							<span class="small_note help_link" style="float:none;display:inline;text-align:right;"><a href="javascript:jQuery.planscalendar.display_help('fit_into_year')" class="lang_help_on_this"></a>&nbsp;&nbsp;</span>
+						</label>
+
+						<div style="float:left;">
+
+							<input type="radio" name="add_edit_event_year_fit_type" value="every_month" id="add_edit_event_year_fit_type_every_month" class="recurring_event_change_trigger"/>
+							<label style="width:auto;text-align:left;" for="add_edit_event_year_fit_type_every_month"><span class="lang_every_month"></span></label>
+
+							<br style="clear:left;"/>
+							<input type="radio" name="add_edit_event_year_fit_type" value="custom_months" id="add_edit_event_year_fit_type_custom_months" class="recurring_event_change_trigger"/>
+							<label style="width:auto;" for="add_edit_event_year_fit_type_every_month">
+								<span class="lang_certain_months1"></span>
+								<br/>
+								<span class="certain_months2"for="add_edit_event_year_fit_type_every_month"><span class="lang_certain_months2"></span></span>
+							</label>
+							<label class="certain_months_select" style="width:auto;" for="add_edit_event_year_fit_type_custom_months">
+								<select multiple style="float:none;" name="add_edit_event_custom_months" id="add_edit_event_custom_months" size="4">
+								<option value="0">Jan</option>
+								</select>
+							</label>
+						</div>
+					</div>
+
+
+					<div class="form_field" style="padding-top:20px;">
+						<label class="required lang_recurring_event_ends" for="add_edit_event_recur_end_date"></label>
+						<input id="add_edit_event_recur_end_date" name="add_edit_event_recur_end_date" style="width:7em;" value=""/>
+					</div>
+
+					<br style="clear:both;"/>
+					<br style="clear:both;"/>
+
+				</div>
+
+				<div id="recurrence_already_defined">
+					<span class="lang_recurring_event_edit1"> </span>
+
+					<br style="clear:both;"/>
+
+					<div class="form_field multiline">
+						<input id="add_edit_event_recurring_event_change_all" name="add_edit_event_recurring_event_change_all" value="1" type="checkbox"/>
+						<label for="add_edit_event_recurring_event_change_all">
+						<span class="lang_recurring_event_change_all1"></span>
+						<br/>
+						<span class="small_note lang_recurring_event_change_all2"></span>
+						</label>
+					</div>
+
+
+				</div>
+
+				<div id="recurrence_not_allowed">
+					<span class="lang_recurrence_not_allowed"> </span>
+				</div>
+
+				<br style="clear:both;"/>
+				<br style="clear:both;"/>
+
+
+
+			</div>
+
+			<div class="add_edit_middle_stuff">
+				<div style="clear:both;padding:30px;">
+					<div class="preview_event_box">
+						<a id="preview_event" href="javascript:void(0);">Preview Event</a>
+					</div>
+
+					<div class="preview_dates_box">
+						<a id="preview_dates" href="javascript:void(0);">Preview Dates</a>
+					</div>
+					<br/>
+				</div>
+				<br style="clear:both;"/>
+			</div>
+
+			<div class="add_edit_bottom_stuff">
+				<br style="clear:both;"/>
+
+				<div class="form_field" id="add_edit_event_cal_password_field">
+					<label class="required lang_cal_password" for="add_edit_event_cal_password"></label>
+					<input type="password" id="add_edit_event_cal_password" name="add_edit_event_cal_password" style="width:200px;" value=""/>
+					<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_password')" class="lang_help_on_this"></a></div>
+				</div>
+
+
+				<div class="form_field">
+					<label>&nbsp;</label>
+					<div style="float:left;">
+						<input type="submit" value="Add Event!" name="add_event_button" id="add_edit_event_submit_button"/>
+						<br/>
+						<span id="preview_note" class="small_note"> (Please preview first!) </span>
+					</div>
+				</div>
+				<br style="clear:both;"/>
+				<br style="clear:both;"/>
+
+			</div>
+				<br style="clear:both;"/>
+
+
+		</div>
+
+
+
+	</div> <!-- end menu_tab_1-->
+
+	<div id="menu_tab_2" class="active_tab ui-tabs-hide">
+
+		<div id="add_edit_calendar_dialog">
+
+			<div id="choose_calendar">
+				<div class="info_box" style="margin-top:20px;float:left;padding-left:20px;padding-right:20px;text-align:left;white-space:nowrap;">
+					<select name="edit_calendar_cal_id" id="edit_calendar_cal_id">
+					</select>
+					<a id="choose_calendar_link" href="javascript:void(0);"><span class="lang_tab2_edit_delete"></span></a>
+				</div>
+
+				<br style="clear:both;"/>
+
+
+				<div class="info_box" style="margin-top:20px;float:left;padding-left:20px;padding-right:20px;text-align:left;">
+					<ul>
+						<li><a id="add_new_cal_link" href="javascript:void(0);"><span class="lang_add_new_calendar"></span></a></li>
+						<li><a id="add_new_ical_link" href="javascript:void(0);"><span class="lang_add_new_ical_calendar"></span></a></li>
+						<li><a id="view_pending_calendars_link" href="javascript:void(0);"><span class="lang_tab2_view_new_calendars"></span></a> <span id="pending_calendars_status">(X in file)</span></li>
+					</ul>
+				<br style="clear:both;"/>
+				<br style="clear:both;"/>
+				</div>
+				<br style="clear:both;"/>
+				<br style="clear:both;"/>
+
+			</div>
+
+			<div id="edit_calendar" style="display:none;">
+				<h1 style="text-align:center;" class="lang_add_calendar">Edit Calendar</h1>
+
+				<div id="add_edit_calendar_tabs" class="subtabs">
+					<ul>
+						<li><a href="#add_edit_calendar_tab0"><span class="lang_add_edit_calendars_tab0"></span></a></li>
+						<li><a href="#add_edit_calendar_tab1"><span class="lang_add_edit_calendars_tab1"></span></a></li>
+						<li><a href="#add_edit_calendar_tab2"><span class="lang_add_edit_calendars_tab2"></span></a></li>
+						<li><a href="#add_edit_calendar_tab3"><span class="lang_add_edit_calendars_tab3"></span></a></li>
+						<li><a href="#add_edit_calendar_tab4"><span class="lang_add_edit_calendars_tab4"></span></a></li>
+					</ul>
+				</div>
+
+				<div id="add_edit_calendar_tab0" class="add_edit_calendar_tab_area">
+					<div class="form_field">
+					<label class="required lang_calendar_title" for="add_edit_calendar_cal_title"></label>
+					<input id="add_edit_calendar_cal_title" style="width:250px;" value=""/>
+					<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_title')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<div class="form_field">
+					<label class="lang_calendar_link" for="add_edit_calendar_cal_link"></label>
+					<input id="add_edit_calendar_cal_link" style="width:250px;" value=""/>
+					<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_link')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<div class="form_field">
+					<label for="cal_details"><span class="lang_calendar_details"></span>
+					<br/><span class="small_note help_link" style="float:right;"><a href="javascript:jQuery.planscalendar.display_help('cal_details')" class="lang_help_on_this"></a>&nbsp;&nbsp;</span>
+					</label>
+					<textarea name="cal_details" id="add_edit_calendar_details" rows="10" cols="0" style="width:400px;"></textarea>
+					<br style="clear:both;"/>
+					</div>
+
+					<br style="clear:both;"/>
+				</div>
+
+				<div id="add_edit_calendar_tab1" class="add_edit_calendar_tab_area">
+					<div style="float:left;width:45%;text-align:left;">
+						<div class="lite_box">
+							<label for="background_calendars"><span class="lang_background_calendars3"></span> </label>
+							<div class="small_note help_link" style="float:none;"><a href="javascript:jQuery.planscalendar.display_help('cal_background_calendars')" class="lang_help_on_this"></a></div>
+							<br/> <span class="small_note lang_background_calendars2"></span>
+							<select multiple size=8 style="display:block;clear:left;" name="background_calendars" id="background_calendars">
+							</select>
+						</div>
+
+						<div class="lite_box">
+							<label for="remote_background_calendars"><span class="lang_remote_background_calendars1"></span></label>
+							<div class="small_note help_link" style="float:none;"><a href="javascript:jQuery.planscalendar.display_help('cal_remote_background_calendars')" class="lang_help_on_this"></a></div>
+							<ul id="remote_calendars_list">
+							</ul>
+
+							<br/>
+							<a id="get_remote_calendars_button" href="javascript:void(0)"><span class="lang_get_remote_calendars"></span></a>
+
+							<div id="remote_background_calendars_status"></div>
+
+						</div>
+
+						<input type="hidden" id="new_remote_calendars_xml" name="new_remote_calendars_xml" value=""/>
+
+					</div>
+
+					<div style="float:left;width:45%;text-align:left;">
+
+						<div class="lite_box">
+							<div id="all_calendars_selectable">
+								<label><span class="lang_selectable_calendars1"></span></label>
+								<br/><span class="small_notei lang_selectable_calendars3"></span>
+								<br style="clear:both;"/>&nbsp;
+							</div>
+
+							<div id="some_calendars_selectable">
+								<label for="selectable_calendars">
+									<span class="lang_selectable_calendars1"></span>
+									<br/><span class="small_note lang_selectable_calendars2"></span>
+									<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('selectable_calendars')" class="lang_help_on_this"></a></div>
+								</label>
+								<select multiple size=8 style="display:block;clear:left;" name="selectable_calendars" id="selectable_calendars">
+								</select>
+
+								<div style="margin-top:2ex;">
+									<input type="checkbox" id="new_calendars_automatically_selectable" name="new_calendars_automatically_selectable" value="y"/>
+									<label for="new_calendars_automatically_selectable"><span class="lang_new_calendars_automatically_selectable"></span></label>
+									<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('new_calendars_automatically_selectable')" class="lang_help_on_this"></a></div>
+								</div>
+							</div>
+						</div> 
+
+					</div> <!-- right column -->
+
+					<br style="clear:both;"/>
+
+				</div>
+
+
+				<div id="add_edit_calendar_tab2" class="add_edit_calendar_tab_area">
+
+					<div style="float:left;width:45%;text-align:left;">
+						<div class="lite_box">
+
+
+							<div class="form_field">
+								<label style=""><span class="lang_cal_events_display_style1"></span></label>
+								<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_events_display_style')" class="lang_help_on_this"></a></div>
+							</div>
+
+							<div class="form_field">
+								<label style="width:280px;" for="calendar_events_color"><span class="lang_cal_events_display_style2"></span></label>
+								<select id="calendar_events_color" class="merged_calendars_display_style_change_trigger" name="calendar_events_color" value = "" style="margin-left:27px;width:10ex;">
+								</select>
+
+								<div id="calendar_events_color_select_icon" class="color_select_icon" style="display:none;">&nbsp;</div>
+							</div>
+							<br style="clear:both;"/>
+
+						</div>
+					</div> <!-- end left column -->
+
+					<div style="float:left;width:45%;text-align:left;">
+
+						<div class="lite_box">
+
+							<div class="form_field">
+								<label style="width:auto;"><span class="lang_bg_events_display_style1"></span></label>
+								<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_background_events_display_style')" class="lang_help_on_this"></a></div>
+							</div>
+
+							<div class="lite_box" style="float:left;clear:left;">
+
+								<input type="radio" id="background_events_display_style1" class="merged_calendars_display_style_change_trigger" class="merged_calendars_display_style_change_trigger" name="background_events_display_style" value = "normal"/>
+								<label style="width:auto;" for="background_events_display_style1"><span class="lang_bg_events_display_style2"></span></label>
+								<br/>
+
+								<div id="background_events_color_select_icon" class="color_select_icon" style="float:right;">&nbsp;</div>
+								<input type="radio" id="background_events_display_style2" class="merged_calendars_display_style_change_trigger" name="background_events_display_style" value = "single_color"/>
+								<label style="width:auto;" for="background_events_display_style2"><span class="lang_bg_events_display_style3"></span></label>
+
+								<input id="background_events_color" class="merged_calendars_display_style_change_trigger" name="background_events_color" style=";width:10ex;"/>
+
+								<br/>
+								<input type="radio" id="background_events_display_style3" class="merged_calendars_display_style_change_trigger" name="background_events_display_style"  value = "faded"/>
+								<label style="width:auto;" for="background_events_display_style3"><span class="lang_bg_events_display_style4"></span></label>
+								<select id="background_events_fade_factor" class="merged_calendars_display_style_change_trigger" name="background_events_fade_factor">
+								</select>
+
+							</div>
+
+							<br style="clear:both;"/>
+						</div>
+
+					</div>
+
+					<br style="clear:both;"/>
+
+						<div style="text-align:center;margin-top:20px;" class="optional_field"><span class="lang_bg_events_display_style5"></span></div>
+
+						<table class="calendar" summary="" style="width:90%;">
+							<tr><td class="day" style="border-bottom-width:0;">
+								<span class="this_month">1</span>
+							</td><td class="day cell_bottom" style="border-bottom-width:0;">
+								<div>2</div>
+							</td></tr>
+							<tr><td class="day" style="border-top-width:0;border-bottom-width:0;">
+							  <a id="preview_e1" class="event_box" href="" style="display:block;background-color:#ffffcc;">
+							  <span class="lang_bg_events_display_style6"></span>
+							  </a>
+							</td><td class="day" style="border-top-width:0;border-bottom-width:0;">
+							  <a id="bg_preview_e1" class="event_box background" style="display:block;background-color:#ffffcc;" href="">
+							  <span class="lang_bg_events_display_style7"></span>
+							  </a>
+							   <a id="preview_e2" class="event_box" href="" style="display:block;background-color:#ccffcc;">
+							  <span class="lang_bg_events_display_style6"></span>
+							  </a>
+							</td></tr>
+							<tr class="last_week"><td class="day cell_bottom" colspan=2 style="border-top-width:0;">
+							  <a id="bg_preview_e2" class="event_box background" style="display:block;background-color:#ccffff;text-align:center;">
+							  <span class="lang_bg_events_display_style7"></span>
+							  </a>
+							</td></tr>
+						</table>
+
+
+					<br style="clear:both;"/>
+
+				</div>
+
+
+				<div id="add_edit_calendar_tab3" class="add_edit_calendar_tab_area">
+
+					<div class="form_field">
+						<label class="lang_default_number_of_months" for="default_number_of_months" style="width:35%;"></label>
+						<input id="default_number_of_months" name="default_number_of_months" style="width:5ex;" value=""/>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_default_number_of_months')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<div class="form_field">
+						<label class="lang_max_months" for="max_number_of_months" style="width:35%;"></label>
+						<input id="max_number_of_months" name="max_number_of_months" style="width:5ex;" value=""/>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_max_months')" class="lang_help_on_this"></a></div>
+					</div>
+
+
+					<div class="form_field" style="padding-top:50px;">
+						<label class="lang_timezone_offset" for="gmtime_diff" style="width:35%;"></label>
+						<input id="gmtime_diff" name="gmtime_diff" style="width:5ex;" value=""/>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_gmtime_diff')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<div class="form_field">
+						<label class="lang_date_format" for="date_format" style="width:35%;"></label>
+						<input id="date_format" name="date_format" style="width:10ex;" value=""/>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_date_format')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<div class="form_field">
+						<label class="lang_week_start_day" for="week_start_day" style="width:35%;"></label>
+						<select id="week_start_day" name="week_start_day">
+						</select>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_week_start_day')" class="lang_help_on_this"></a></div>
+					</div>
+
+
+					<div class="form_field">
+						<label class="lang_event_change_email" for="event_change_email" style="width:35%;"></label>
+						<input id="event_change_email" name="event_change_email" style="width:300px;" value=""/>
+						<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_event_change_email')" class="lang_help_on_this"></a></div>
+					</div>
+
+					<br style="clear:both;"/>
+
+				</div>
+
+
+				<div id="add_edit_calendar_tab4" class="add_edit_calendar_tab_area">
+					<div id="list_users">
+					</div>
+
+					<span id="add_user_link">
+					<a href="javascript:void(0);"><span class="lang_add_user"></span></a>
+					</span>
+					<br/>
+				
+					<div id="user_no_add">
+					<label class="lang_no_users_on_add"></label>
+					</div>
+
+					<br style="clear:both;"/>
+
+				</div>
+
+				
+
+
+
+				<div class="add_edit_middle_stuff">
+					<br style="clear:both;"/>
+				</div>
+
+				<div class="add_edit_bottom_stuff">
+
+					<div id="add_calendar_password_interface" class="info_box" style="margin-left:20px;margin-top:20px;padding-left:20px;padding-right:20px;text-align:left;">
+
+						<div class="form_field" id="add_calendar_cal_password_field">
+							<label class="required lang_existing_cal_password1" for="add_calendar_cal_password"><br/><span class="small_note lang_existing_cal_password2"></span></label>
+							<input type="password" id="add_calendar_cal_password" name="add_calendar_cal_password" style="width:100px;" value=""/>
+							<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_password')" class="lang_help_on_this"></a></div>
+						</div>
+
+						<div class="form_field">
+							<label class="required lang_new_password" for="add_calendar_new_cal_password"></label>
+							<input type="password" id="add_calendar_new_cal_password" name="add_calendar_new_cal_password" style="width:100px;" value=""/>
+							<div class="small_note lang_choose_password"></div>
+						</div>
+
+						<div class="form_field">
+							<label for="required add_calendar_repeat_new_cal_password">&nbsp;</label>
+							<input type="password" id="add_calendar_repeat_new_cal_password" name="add_calendar_repeat_new_cal_password" style="width:100px;" value=""/>
+							<div class="small_note lang_repeat_password"></div>
+						</div>
+
+						<div class="form_field">
+							<label for="add_calendar_repeat_new_cal_password">&nbsp;</label>
+							<input type="submit" id="add_cal_button"/>
+						</div>
+						<br style="clear:both;"/>
+
+					</div>
+
+
+
+					<div id="edit_calendar_password_interface" class="info_box" style="margin-left:20px;margin-top:20px;padding-left:20px;padding-right:20px;text-align:left;">
+
+						<div class="form_field" id="edit_calendar_cal_password_field">
+							<label class="required lang_cal_password" for="edit_calendar_cal_password"></label>
+							<input type="password" id="edit_calendar_cal_password" name="edit_calendar_cal_password" style="width:100px;" value=""/>
+							<div class="small_note help_link"><a href="javascript:jQuery.planscalendar.display_help('cal_password')" class="lang_help_on_this"></a></div>
+						</div>
+
+						<div class="form_field">
+							<label class="lang_change_password" for="edit_calendar_new_cal_password"></label>
+							<input type="password" id="edit_calendar_new_cal_password" name="edit_calendar_new_cal_password" style="width:100px;" value=""/>
+							<div class="small_note lang_new_password"></div>
+						</div>
+
+						<div class="form_field">
+							<label for="edit_csdfalendar_repeat_new_cal_password">&nbsp;</label>
+							<input type="password" id="edit_calendar_repeat_new_cal_password" name="edit_calendar_repeat_new_cal_password" style="width:100px;" value=""/>
+							<div class="small_note lang_repeat_new_password"></div>
+						</div>
+
+						<div class="form_field">
+							<label for="update_cal_button">&nbsp;</label>
+							<input type="submit" id="update_cal_button"/>
+						</div>
+						<br style="clear:both;"/>
+
+						<div class="clear:both;">
+							<input id="del_cal_button" class="delete_button" type="submit"/>
+							<div id="delete_note">
+								<span class="small_note lang_del_cal_button3"></span>
+							</div>
+						</div>
+
+					</div>
+
+					<br style="clear:both;"/>
+
+				</div>  <!-- end add_edit_bottom_stuff -->
+
+			</div>
+
+		</div>
+
+
+	</div> <!-- end menu_tab_2-->
+
+</div>
+
+
+</td></tr></table>
+
+<div style="margin:auto;text-align:center;">
+<br/>
+This calendar service is <br/>
+powered by <a class=info_box_link href="http://www.planscalendar.com">Plans.</a> (v###version###)
+</div>
+<br style="clear:both;"/>&nbsp;
+
+
+
+<div id="day_contextmenu" class="contextMenu" style="display:none;">
+	<ul>
+		<li id="day_contextmenu_add_event">Add event on this day</li>
+	</ul>
+</div>
+
+<div id="event_contextmenu" class="contextMenu" style="display:none;">
+	<ul>
+		<li id="event_contextmenu_edit_event">Edit this event</li>
+		<li id="event_contextmenu_clone_event">Clone this event</li>
+		<li id="event_contextmenu_delete_event">Delete this event</li>
+	</ul>
+</div>
+
+
+<div id="login_dialog" style="display:none;">
+
+	<div class="form_field">
+		<label for="login_password"><span class="lang_password" ></span>: </label>
+		<input type="password" id="login_password" name="login_password" style="width:100px;" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="login_submit_button">&nbsp;</label>
+		<input type="submit" id="login_submit_button" class="lang_login"/>
+	</div>
+
+</div>
+
+<div id="help_dialog" style="display:none;">
+</div>
+
+<div id="delete_event_dialog" style="display:none;">
+</div>
+
+<div id="event_details_dialog" style="display:none;">
+</div>
+
+<div id="pending_calendars_dialog" style="display:none;">
+</div>
+
+<div id="email_reminder_dialog" style="display:none;">
+</div>
+
+
+<div id="preview_dates_dialog" style="display:none;">
+<span class="lang_date_preview_this_event_falls_on"></span>
+<span class="lang_date_preview_recurring_event_falls_on"></span>
+
+<ul id="preview_dates_list">
+</ul>
+</div>
+
+
+<script type="text/html" id="email_reminder_tmpl">
+	<div class="event_details">
+		<p class="title">
+		<%=title%>	
+		</p><p>
+		<%=nice_date%>
+		</p>
+
+		<div class="form_field multiline" style="">
+			<label class="lang_email_reminder_text2" for="email_reminder_email_address"></label>
+			<input id="email_reminder_email_address" name="email_reminder_email_address" style="width:90%;" value="your_email@address.com"/>
+		</div>
+
+		<div class="form_field">
+			<select id="email_reminder_reminder_time" name="email_reminder_reminder_time">
+			<option value="604800" class="lang_email_reminder_option1"></option>
+			<option value="172800" class="lang_email_reminder_option2"></option>
+			<option value="86400" class="lang_email_reminder_option3"></option>
+			<option value="3600" class="lang_email_reminder_option4"></option>
+			<option value="1800" class="lang_email_reminder_option5"></option>
+			<option value="900" class="lang_email_reminder_option6"></option>
+			</select>
+			<span class="lang_email_reminder_text3"></span>
+		</div>
+
+		<div class="form_field multiline">
+			<br/>
+			<label class="lang_email_reminder_text7" for="email_reminder_extra_text"></label>
+			<textarea id="email_reminder_extra_text" name="email_reminder_extra_text" style="width:90%" rows="4"></textarea>
+		</div>
+
+		<div class="form_field multiline">
+			<input type="checkbox" id="email_reminder_send_test_now" name="email_reminder_send_test_now" value="1">
+			<label for="email_reminder_send_test_now" class="lang_email_reminder_text4" style="text-align:left;"></label>
+		</div>
+
+		<div class="form_field multiline series_event_reminder">
+			<br/>
+			<input type="checkbox" id="email_reminder_all_in_series" name="email_reminder_all_in_series" value="1"/>
+			<label for="email_reminder_all_in_series" class="lang_email_reminder_text6" style="text-align:left;"></label>
+		</div>
+
+		<div class="form_field">
+			<br/>
+			<input type="submit" value=""/>
+		</div>
+
+	</div>
+
+</script>
+
+
+<script type="text/html" id="preview_date_tmpl">
+
+<li><%=date%></li>
+</script>
+
+<div id="add_edit_user_dialog" style="display:none;">
+
+	<input type="hidden" id="user_id" value=""/>
+
+	<div class="form_field">
+		<label for="user_name" class="required"><span class="lang_add_user_name"></span></label>
+		<input id="user_name" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="user_password" class="required"><span class="lang_user_password"></span></label>
+		<input id="user_password" type="password" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="user_repeat_password" class="required"><span class="lang_repeat_password"></span></label>
+		<input id="user_repeat_password" type="password" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="add_edit_user_cal_password" class="required"><span class="lang_cal_password"></span></label>
+		<input id="add_edit_user_cal_password" type="password" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="add_edit_user_submit">&nbsp;</label>
+		<input type="submit" id="add_edit_user_submit_button" class="lang_add_user"/>
+	</div>
+
+	<div class="form_field" class="delete_user_button_field">
+		<label for="add_edit_user_submit">&nbsp;</label>
+		<input type="submit" id="delete_user_button" class="delete_button lang_delete_user" style="float:right;"/>
+	</div>
+
+	<br style="clear:both;"/>
+
+</div>
+
+<div id="add_ical_dialog" style="display:none;">
+
+	<div class="form_field">
+		<label for="ical_url" class="required"><span class="lang_ical_url"></span></label>
+		<input id="ical_url" value="" style="width:400px;"/>
+	</div>
+
+	<div class="form_field">
+		<label for="add_ical_cal_password" class="required"><span class="lang_cal_password"></span></label>
+		<input id="add_ical_cal_password" type="password" value=""/>
+	</div>
+
+	<div class="form_field">
+		<label for="add_ical_submit">&nbsp;</label>
+		<input type="submit" id="add_ical_submit_button" class="lang_add_ical"/>
+	</div>
+
+	<br style="clear:both;"/>
+
+</div>
+
+
+
+<div id="get_remote_calendars_dialog" style="display:none;">
+
+
+	<div class="form_field">
+		<label for="remote_calendars_url" style="width:auto;"><span class="lang_get_remote_calendars_url"></span></label><btr/>
+		<br/>
+		<input id="remote_calendars_url" value="" style="width:400px;"/>
+		<br/><br/>
+		<input type="submit" id="check_remote_calendars_button" style="clear:left;"/>
+	</div>
+
+	<ul id="available_remote_calendars">
+	</ul>
+
+
+	<br style="clear:both;"/>
+	<a href="javascript:void(0)" id="merge_selected_calendars_link" class="lang_detect_remote_calendars4" style="display:none;"></a>
+
+	<br style="clear:both;"/>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+# The event details template (the pop-up window)
+<event_details>
+<div class="event_details">
+
+<p class="date">
+###event date###<br/>
+###event time###
+</p>
+
+<div style="white-space:nowrap;float:left;margin-right:10px;">
+###event icon###<br/>
+###unit number icon###
+</div>
+
+<p class="title">
+###event title###
+</p>
+
+<p style="clear:left;">
+###event details###
+</p>
+
+<ul class="event_details_menu_links small_note" style="">
+<li><a event_id="<%=id%>" class="edit_event_link lang_context_menu_edit_event" href="javascript:void(0)"></a></li>
+<li><a event_id="<%=id%>" class="email_reminder_link lang_email_reminder_link" href="javascript:void(0)"></a></li>
+<li style="white-space:nowrap;">###export event link###</li>
+</ul>
+
+<p class="small_note" style="padding:5px;">
+This event is part of the <b>###event calendar name###</b> calendar:
+<br/>
+</p>
+<div id="calendar_details" style="display:none;">
+###event calendar details###
+</div>
+</div>
+</event_details>
+
+
+# The list item template (each event in the "event list" view)
+<event_list_item>
+<li style="padding:0;margin:0;margin-top:###variable_margin###;">
+<span class="small_note" style="margin:0;border:0;vertical-align:middle;width:7em;white-space:nowrap;text-align:right;cursor:pointer;cursor:hand;"> ###weekday_abv###, ###date### </span>
+<a event_id="###id###" class="event_box" style="text-align:left;white-space:nowrap;background-color:###bgcolor###;" href="###link###"> ###icon### ###time### ###title###</a>
+</li>
+</event_list_item>
+
+
+# The calendar item template (each event on the calendar)
+<calendar_item>
+###icon######time######title###
+</calendar_item>
+
+
+# The upcoming event template (each item on the upcoming_events list)
+<upcoming_item>
+<li onclick="display_event('###id###', '###event link###')">
+<span class="date">###date######time###</span>
+<a class="event_box" style="background-color:###background color###;" href="javascript:display_event('###id###', '###event link###')"> ###icon### ###title### 
+</a>
+</li>
+</upcoming_item>
+
+

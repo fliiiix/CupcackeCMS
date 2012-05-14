@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<link rel="stylesheet" href="http://www.planscalendar.com/demo/theme/upcoming_events.css" type="text/css"/>
+</head>
+<body>
+
+<script type="text/javascript" src="http://www.planscalendar.com/demo/theme/lpd.js"></script>
+<script type="text/javascript" src="http://www.planscalendar.com/demo/theme/plans.js"></script>
+<script type="text/javascript" src="http://www.planscalendar.com/demo/theme/plans_lang.js"></script>
+<script type="text/javascript" src="http://www.planscalendar.com/demo/theme/upcoming_events.js"></script>
+
+<script type="text/javascript">
+<!--
+var ue0 = new plans_upcoming_events({'id':'ue0',
+                                     
+'background_calendars_mode':'list',
+                                     'list_element':'upcoming_events_list',
+                                     'menu_element':'upcoming_events_menu',
+                                     
+'plans_url':'http:\/\/www.planscalendar.com/demo/plans.cgi',
+                                     'cal_ids':'0,1,2',
+                                     'merge_days':false,
+                                     'include_details':false,
+                                     'days_before':'30',
+                                     'days_after':'30'});
+                                     
+// important!  text and numeric arguments must be in quotes. boolean (true/false) arguments have no quotes.
+
+ue0.load();
+//-->
+</script>
+
+
+<h1>Upcoming events demo begin </h1>
+
+<div id="upcoming_events_menu">
+</div>
+
+<ul id="upcoming_events_list" class="upcoming_events">
+</ul>
+
+
+<div id="debug_info"></div>
+
+
+<h1>Upcoming events demo end </h1>
+
+</body>
+</html>

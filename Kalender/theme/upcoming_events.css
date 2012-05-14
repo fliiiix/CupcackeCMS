@@ -1,0 +1,121 @@
+body {
+  background-color: #fff;  
+  font-family: arial, sans-serif;
+  margin-left:5px;
+  margin-right:5px;
+}
+
+
+#debug_info {
+  padding:5px;
+  clear:both;
+  border:solid 1px #aaa;
+}
+
+
+/* styles for list mode */
+ul.upcoming_events {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+  margin:5px;
+}
+
+ul.upcoming_events li {
+  cursor:pointer;
+  cursor:hand;
+  margin:0;
+  padding:0;
+  margin-top:7px;
+  clear:left;
+  font-size:small;
+}
+
+ul.upcoming_events li a{
+  text-decoration:none;
+  color:#000;
+  margin:2px;
+  float:left;
+}
+
+
+ul.upcoming_events li .date{
+	text-align:right;
+	display:block;
+	padding:0;
+	line-height:auto;
+	float:left;
+	clear:left;
+}
+
+ul.upcoming_events li .event_icon{
+	border:0;
+	position:relative;
+	top:5px;
+}
+
+ul.upcoming_events li .title {
+  border:solid 1px #aaa;
+  text-align:left;
+  margin-left:5px;
+  padding:3px;
+  
+}
+
+/* styles for table mode */
+table.upcoming_events {
+  border:solid 1px #000;
+  margin:0;
+  padding:0;
+  margin:5px;
+}
+
+table.upcoming_events td {
+  margin:0;
+  padding:0;
+  clear:left;
+  font-size:small;
+  padding:5px;
+}
+
+table.upcoming_events td.merged_events.date{
+  white-space:nowrap;
+  vertical-align:top;
+}
+table.upcoming_events td.merged_events{
+}
+
+table.upcoming_events td .merged_event {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+
+table.upcoming_events td a{
+  text-decoration:none;
+  color:#000;
+  margin:2px;
+}
+
+
+table.upcoming_events td .date{
+  text-align:right;
+  float:left;
+  clear:left;
+}
+
+table.upcoming_events td .icon{
+  border:0;
+  margin-left:3px;
+  margin-right:3px;
+  _margin-left:0;
+  _margin-right:0;
+  vertical-align:middle;
+}
+
+table.upcoming_events td .title {
+  border:solid 1px #aaa;
+  text-align:left;
+  margin-left:5px;
+  padding:3px;
+  
+}
