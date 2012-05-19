@@ -69,7 +69,7 @@ CREATE TABLE kalenderEintrag
   datum DATE NOT NULL,
   titel VARCHAR(100) NOT NULL,
   beschreib LONGTEXT,
-  id_user,
+  id_user INTEGER(11),
   PRIMARY KEY(id),
   FOREIGN KEY(id_user) REFERENCES  user(id)
 );
