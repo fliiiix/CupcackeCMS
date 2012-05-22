@@ -8,8 +8,8 @@ CupcackeCMS
 * Bilderverwaltung (Upload, anzeigen)
 
 #Andere Opensource Projekte die Verwendet wurden
-https://github.com/twitter/bootstrap/ - Layout Grundlagen
-http://bootswatch.com/ - fürs Layout
+* https://github.com/twitter/bootstrap/ - Layout Grundlagen
+* http://bootswatch.com/ - fürs Layout
 
 #TO-DO
 1. welche lizenz?
