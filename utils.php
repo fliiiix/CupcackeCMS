@@ -2,12 +2,12 @@
 # Sammlung von nützlichen Funktionen für CupcackeCMS
 
 function db_connect (){
-	mysql_connect("localhost", "db_user", "passwort") or die(mysql_error());
-    mysql_select_db("datenbankname") or die(mysql_error());
+	mysql_connect("localhost", "linux4ever", "") or die(mysql_error());
+    mysql_select_db("cupkackecms") or die(mysql_error());
 }
 
 function login_user ($username,$password){
-$ergebnis = mysql_query("SELECT id FROM users WHERE eMail=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = TRUE");
+$ergebnis = mysql_query("SELECT id FROM user WHERE eMail=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = TRUE");
 	if (!$ergebnis)
       return "Datenbank-Fehler!";
 	else {
