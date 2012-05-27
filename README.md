@@ -7,10 +7,12 @@ CupcackeCMS
 * Kalender
 * Bilderverwaltung (Upload, anzeigen)
 
+#Andere Opensource Projekte die Verwendet wurden
+* https://github.com/twitter/bootstrap/ - Layout Grundlagen
+* http://bootswatch.com/ - fürs Layout
+
 #TO-DO
 1. welche lizenz?
-2. Zeitplan
-3. Pflichtenheft
 
 #Ziel Bestimmung
 
@@ -34,28 +36,6 @@ http://www.colourlovers.com/palette/148712/www.gamebookers.com
 Für Farben sind diese Faben zu verwenden ausser es geht nicht anderst!
 
 #Produktfunktionen
-
-##Sitemap
-Hauptseite                    Kalender
-,----------,                ,-----------,
-'          '                '           '
-'          '................'           '
-'----------'     .          '-----------'
-                 .
-                 .nur für angemeldete
-                 .Benuzer mit genügend Rechten
-                 .
-                 .   Bilder Gallerie
-                 ... ,----------,
-                 .   '          '
-                 .   '          '
-                 .   '----------'
-                 .    
-                 .    AdminPanel
-                 ... ,----------,
-                     '          '
-                     '          '
-                     '----------'
                      
 #Rechte:
 | Wer      |Kalender      |BilderGallerie |  AdminPanel|
@@ -115,6 +95,3 @@ Funktionen:
 - Useranlegen
 - Rechte vergeben
 - Algemeine eistellungen (was auch immer :P)
-
-#Linksammlung:
-http://www.drweb.de/magazin/css-layouts-und-templates/
