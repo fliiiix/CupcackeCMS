@@ -14,16 +14,16 @@
 window.locale = {
     "fileupload": {
         "errors": {
-            "maxFileSize": "File is too big",
-            "minFileSize": "File is too small",
-            "acceptFileTypes": "Filetype not allowed",
+            "maxFileSize": "Diese Datei ist zu gross",
+            "minFileSize": "Diese Datei ist zu klein",
+            "acceptFileTypes": "Dieser Dateityp ist nicht erlaubt",
             "maxNumberOfFiles": "Max number of files exceeded",
             "uploadedBytes": "Uploaded bytes exceed file size",
             "emptyResult": "Empty file upload result"
         },
         "error": "Error",
         "start": "Start",
-        "cancel": "Cancel",
-        "destroy": "Delete"
+        "cancel": "Abbrechen",
+        "destroy": "Löschen"
     }
 };

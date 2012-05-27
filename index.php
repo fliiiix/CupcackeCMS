@@ -8,9 +8,9 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/jquery.fileupload-ui.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
     <style>
       body {
         padding-top: 90px; /* 90px to make the container go all the way to the bottom of the topbar */
@@ -23,11 +23,11 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
   </head>
 
   <body>
@@ -59,7 +59,7 @@
 		    <input type="password" name="password" id="password" class="span2" style="float:left; width:100px;"/>
 			
 		    <div class="btn-group" style="float:left;">
-                        <input type="submit" value="Einloggen" id="login_button" name="login_button" class="btn btn-primary"/>
+                        <input type="submit" value="Einloggen" id="login_button" name="login_button" class="btn btn-primary" style="border: 0;"/>
 	                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 	                <ul class="dropdown-menu">
 	                   <li><a href="recover_password.php">Passwort vergessen</a></li>
@@ -82,12 +82,12 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
-                    <span>Add files...</span>
+                    <span>Bilder hinzufügen</span>
                     <input type="file" name="files[]" multiple>
                 </span>
                 <button type="submit" class="btn btn-primary start">
                     <i class="icon-upload icon-white"></i>
-                    <span>Start upload</span>
+                    <span>Upload starten</span>
                 </button>
                 <!--<button type="reset" class="btn btn-warning cancel">
                     <i class="icon-ban-circle icon-white"></i>
@@ -95,7 +95,7 @@
                 </button>-->
                 <button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
+                    <span>Löschen</span>
                 </button>
                 <input type="checkbox" class="toggle">
             </div>
@@ -212,9 +212,9 @@
 <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
-<!-- Bootstrap JS and Bootstrap Image Gallery are not required, but included for the demo -->
-<script src="http://blueimp.github.com/cdn/js/bootstrap.min.js"></script>
-<script src="http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
+<!-- Bootstrap JS and Bootstrap Image Gallery -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-image-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->

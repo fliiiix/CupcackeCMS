@@ -14,7 +14,7 @@ error_reporting(E_ALL | E_STRICT);
 
 require('upload.class.php');
 
-$upload_handler = new UploadHandler();
+$upload_handler = new UploadHandler(array( 'accept_file_types' => '/\.(gif|jpe?g|png)$/i'));
 
 header('Pragma: no-cache');
 header('Cache-Control: no-store, no-cache, must-revalidate');
