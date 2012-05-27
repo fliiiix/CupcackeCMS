@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 27. Mai 2012 um 12:41
+-- Erstellungszeit: 27. Mai 2012 um 12:49
 -- Server Version: 5.1.62
 -- PHP-Version: 5.3.6-13ubuntu3.7
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `nachname` varchar(100) NOT NULL,
   `vorname` varchar(100) NOT NULL,
   `email` tinytext NOT NULL,
-  `pw_hash` varchar(120) NOT NULL,
+  `pw_hash` varchar(128) NOT NULL,
   `aktiv` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
