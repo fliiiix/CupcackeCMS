@@ -97,7 +97,8 @@ Account erstellen
       <td>&nbsp;<input name="password_verify" type="password" <?php if (isset($password)) echo "value =\"" . $password_verify . "\""; ?> ></td>
     </tr>
     <tr>
-    <td colspan="2" align="right"><input name="account_erstellen" type="submit" value="Account erstellen"></td>
+    <td colspan="2" align="right"><!--<input name="account_erstellen" type="submit" value="Account erstellen">-->
+           <a href="#" class="btn btn-success">Account erstellen</a></td>
     </tr>
   </table>
 </form>
