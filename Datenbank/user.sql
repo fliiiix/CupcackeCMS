@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 27. Mai 2012 um 12:49
+-- Erstellungszeit: 27. Mai 2012 um 13:24
 -- Server Version: 5.1.62
 -- PHP-Version: 5.3.6-13ubuntu3.7
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `cupkackecms`
+-- Datenbank: `cupcackecms`
 --
 
 -- --------------------------------------------------------
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `nachname`, `vorname`, `email`, `pw_hash`, `aktiv`) VALUES
-(1, 'User', 'test', 'test@test.de', '1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53 286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb6', b'1');
+(1, 'User', 'test', 'test@test.de', '1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53 286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f', b'1');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

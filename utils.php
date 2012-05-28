@@ -3,11 +3,11 @@
 
 function db_connect (){
 	mysql_connect("localhost", "linux4ever", "") or die(mysql_error());
-    mysql_select_db("cupkackecms") or die(mysql_error());
+    mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
 function login_user ($username,$password){
-$ergebnis = mysql_query("SELECT id FROM user WHERE eMail=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = TRUE");
+$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = 1");
 	if (!$ergebnis)
       return "Datenbank-Fehler!";
 	else {
