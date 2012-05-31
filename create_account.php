@@ -75,6 +75,7 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
 <br>
 <?php }?>
 Account erstellen
+<form method="post">
 <table border="0">
     <tr>
       <td>&nbsp;Vorname:</td>
@@ -97,8 +98,7 @@ Account erstellen
       <td>&nbsp;<input name="password_verify" type="password" <?php if (isset($password)) echo "value =\"" . $password_verify . "\""; ?> ></td>
     </tr>
     <tr>
-    <td colspan="2" align="right"><!--<input name="account_erstellen" type="submit" value="Account erstellen">-->
-           <a href="#" class="btn btn-success">Account erstellen</a></td>
+    <td colspan="2" align="right"><input name="account_erstellen" type="submit" value="Account erstellen"></td>
     </tr>
   </table>
 </form>

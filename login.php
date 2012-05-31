@@ -24,7 +24,7 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
   <form method="post" action="">
     <strong class="title">Login</strong><br />
     <?php if (isset($errormsg)){
-    echo $errormsg; }?>
+    echo $errormsg . "<br/>"; }?>
     <label for="username">Benutzername</label><br />
     <input type="text" name="username" id="username" /><br />
     <label for="password">Passwort</label><br />

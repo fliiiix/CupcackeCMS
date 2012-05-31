@@ -2,12 +2,12 @@
 # Sammlung von nützlichen Funktionen für CupcackeCMS
 
 function db_connect (){
-	mysql_connect("localhost", "linux4ever", "") or die(mysql_error());
+	mysql_connect("localhost", "root", "") or die(mysql_error());
     mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
 function login_user ($username,$password){
-$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv = 1");
+$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv =" . 1);
 	if (!$ergebnis)
       return "Datenbank-Fehler!";
 	else {
@@ -18,8 +18,8 @@ $ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape
 		  $cookie_content = rand(0,getrandmax());
 		  $ergebnis = mysql_query("SELECT * FROM cookie_mapping WHERE cookie_content=" . $cookie_content);
 		  if (mysql_num_rows($ergebnis) == 0) {
-		    mysql_query("INSERT INTO cookie_mapping (user_id,random) VALUES (" . $user_id . "," . $cookie_random . ")");
-		    setcookie("CupcackeCMS_Cookie",$cookie_random,time()+3600);
+		    mysql_query("INSERT INTO cookie_mapping (user_id,cookie_content) VALUES (" . $user_id . "," . $cookie_content . ")");
+		    setcookie("CupcackeCMS_Cookie",$cookie_content,time()+3600);
 		    return;
 		  }
 		}
