@@ -1,4 +1,4 @@
-<php
+<?php
 require_once('utils.php');
 // nicht berechtigte Nutzer rauswerfen
 if (!isset($_COOKIE["CupcakeCMS_Cookie"])){

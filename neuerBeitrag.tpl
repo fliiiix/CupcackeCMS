@@ -1,3 +1,4 @@
+<fieldset style="width:60px;">
 <h1>Neuer Beitrag</h1>
 <br />
 <div style="clear:both;">
@@ -11,10 +12,11 @@
 </div>
 
 <div style="clear:both;">
-   <label style="float:left; width:130px;" for="beitragText" class="control-label">Titel</label>
+   <label style="float:left; width:130px;" for="beitragText" class="control-label">Text:</label>
    <textarea rows="8" cols="100" style="width:300px;" id="beitragtext" name="beitragText"></textarea> 
 </div>
-<a href="bilderGalerie.php" class="btn btn-success">Save</a>
+<a href="bilderGalerie.php" class="btn btn-success" style="float:right;">Save</a>
+<br />
 <br />
 <!-- The file upload form used as target for the file upload widget -->
     <form style="clear:both;" id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
@@ -24,7 +26,7 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
-                    <span>Bilder hinzufügen</span>
+                    <span>Bilder hinzufügen</span><fildset>
                     <input type="file" name="files[]" multiple>
                 </span>
                 <button type="submit" class="btn btn-primary start">
@@ -83,3 +85,4 @@
             <i class="icon-arrow-right icon-white"></i>
         </a>
     </div>
+</fieldset>
