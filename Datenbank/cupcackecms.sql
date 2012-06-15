@@ -73,12 +73,13 @@ CREATE TABLE `user` (
   `vorname` varchar(100) NOT NULL,
   `email` tinytext NOT NULL,
   `pw_hash` varchar(128) NOT NULL,
-  `aktiv` bit(1) NOT NULL,
+  `aktiv` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 INSERT INTO `user` (`id`, `nachname`, `vorname`, `email`, `pw_hash`, `aktiv`) VALUES
-(2,	'Mensch',	'Test',	'test@test.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	'1');
+(2,	'Mensch',	'Test',	'test@test.de',	'4f00a559fad352d044ebd522987580fa01611022d993fe09915b575e14841e181cfbf84cf8b148f797a6b252e9cf1d8b0f0c456b7717857ff80dba9876d9753f',	0),
+(3,	'Hallo',	'Halli',	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	0);
 
 DROP TABLE IF EXISTS `user_rolle`;
 CREATE TABLE `user_rolle` (
@@ -89,4 +90,4 @@ CREATE TABLE `user_rolle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2012-06-04 18:16:43
+-- 2012-06-15 23:56:08
