@@ -1,5 +1,3 @@
-//in work layout ist völlig falsch
-
 CupcackeCMS
 ===========
 #Schwerpunkte der Seite:
@@ -29,11 +27,7 @@ CupcackeCMS
 2. Bilder Posts in Kalender ersichtlich machen für angemeldete Benuzer
 
 ##Kannkriteren
-1. Cooles Layout ;)
-
-#Farben
-http://www.colourlovers.com/palette/148712/www.gamebookers.com
-Für Farben sind diese Faben zu verwenden ausser es geht nicht anderst!
+1. Cooles Layout ;) (darum Bootstrap)
 
 #Produktfunktionen
                      
@@ -76,18 +70,8 @@ nicht sichtbar
 Titel
 Untertitel       //optional wird nur angezeigt wenn vorhanden
 Textbeschreibung //optional wird nur angezeigt wenn vorhanden
-    |--------------------------------------------|
-    |                                            |
-    |                                            |
-    |                                            |
-    |                                            |
- <  |                 Bild                       |  >
-    |                                            |
-    |                                            |
-    |                                            |
-    |                                            |
-    |--------------------------------------------|
-Die < und > Pfeile sollen irgend wie die Möglichkeit zeigen ein Bild vor oder zurück zu springen (eventuell mit JavaScript oder ähndlichem)
+
+//TODO eventuell mach ich mal n bild ;)
 
 ###Adminpanel
 Nur für den Admin :P sichtbar.
