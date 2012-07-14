@@ -56,21 +56,9 @@ CREATE TABLE `kalenderEintrag` (
 
 DROP TABLE IF EXISTS `pw_forgot`;
 CREATE TABLE `pw_forgot` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
   `link_component` varchar(128) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `rolle`;
-CREATE TABLE `rolle` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `beschreib` tinytext,
-  `aktiv` bit(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `user`;
@@ -78,23 +66,15 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nachname` varchar(100) NOT NULL,
   `vorname` varchar(100) NOT NULL,
+  `rolle` int(1) NOT NULL,
   `email` tinytext NOT NULL,
   `pw_hash` varchar(128) NOT NULL,
   `aktiv` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `user` (`id`, `nachname`, `vorname`, `email`, `pw_hash`, `aktiv`) VALUES
-(2,	'Mensch',	'Test',	'test@test.de',	'4f00a559fad352d044ebd522987580fa01611022d993fe09915b575e14841e181cfbf84cf8b148f797a6b252e9cf1d8b0f0c456b7717857ff80dba9876d9753f',	1),
-(3,	'Hallo',	'Halli',	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	0);
+INSERT INTO `user` (`id`, `nachname`, `vorname`, `rolle`, `email`, `pw_hash`, `aktiv`) VALUES
+(3,	'Hallo',	'Halli',	1,	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	1),
+(4,	'Testmensch',	'Dieter',	2,	'dieter@test.de',	'd7b784d5dd5a950223102a439bfeca948c1c1c25c7215c41b110e01a7d7d05d5b2845fc87b0cf2c84ecafff5bad24732e942d6b804a21855ef9691df9ae7e652',	2);
 
-DROP TABLE IF EXISTS `user_rolle`;
-CREATE TABLE `user_rolle` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) DEFAULT NULL,
-  `id_rolle` int(12) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
--- 2012-06-20 22:05:20
+-- 2012-07-14 14:49:25

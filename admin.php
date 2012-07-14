@@ -8,7 +8,11 @@ if (isset($_GET["del"])){
 }
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
-if (isset($email) && isset($email_retype) && isset($rolle) && isset($create_user)){
+if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"])){
+  $email = $_POST["email"];
+  $email_retype = $_POST["email_retype"];
+  $nachname = $_POST["nachname"];
+  $vorname = $_POST["vorname"];
   if ($email != $email_retype){
     $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
   } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -17,6 +21,33 @@ if (isset($email) && isset($email_retype) && isset($rolle) && isset($create_user
     $query = mysql_query("SELECT * FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\"");
     if (mysql_num_rows($query) > 0){
       $error_msg = "Diese E-Mail-Adresse existiert leider schon";
+    } else {
+      mysql_query("INSERT INTO user (vorname, nachname, email) VALUES("\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"")");
+      mysql_query("DELETE FROM email_verify WHERE user_id=" . $valid_user_id);
+      $repeat = true;
+      do{
+        $link_component = hash("haval128,3",rand(0,getrandmax()),false);
+        $ergebnis = mysql_query("SELECT * FROM email_verify WHERE link_component=\"" . $link_component . "\"");
+        if (mysql_num_rows($ergebnis) == 0){
+          $repeat = false;
+          mysql_query("INSERT INTO email_verify (user_id, link_component) VALUES("$valid_user_id . ",\"" . $link_component . "\")");
+        }
+      }while($repeat);
+      $headers = "From: noreply@fliegenberg.de" . "\n" .
+      "X-Mailer: PHP/" . phpversion() . "\n" .
+      "Mime-Version: 1.0" . "\n" . 
+      "Content-Type: text/plain; charset=UTF-8" . "\n" .
+      "Content-Transfer-Encoding: 8bit" . "\r\n";
+      $message = "Hallo " . $vorname . " " . $nachname . ", \r\n" .
+      "\r\n" .
+      "ein Administrator hat dir einen Account für Fliegenberg.de erstellt." . "\r\n" . 
+      "Klicke auf den folgenden Link, um dein Passwort zu setzen und den Account zu aktivieren: \r\n".
+      "\r\n".
+      "https://fliegenberg.de/create_account.php?key=" . $link_component . "\r\n" . 
+      "Wenn du dir keinen Account erstellen möchtest lasse diesen Link einfach verfallen. \r\n".
+      "Mit freundlichen Grüßen\r\n".
+      "Dein Fliegenberg-Team";
+      mail($email, "Account für Fliegenberg.de", $message, $headers);
     }
   }
 }
@@ -101,6 +132,8 @@ $(document).ready(function() {
       </td>
       <td style="vertical-align: top;"><b>Status</b>
       </td>
+      <td style="vertical-align: top;"><b>Rolle</b>
+      </td>
       <td style="vertical-align: top;">
       </td>
       <td style="vertical-align: top;">
@@ -132,6 +165,12 @@ $(document).ready(function() {
   echo "<div style='color:green'>✔</div>";
   break;
 }?>
+      </td>
+      <td style="vertical-align: top;"><?php if($row["rolle"] == 1){
+        echo "Nutzer";
+      } else {
+        echo "Administrator";
+      }?>
       </td>
       <td style="vertical-align: top;">
         <?php if ($row["aktiv"] == 1 || $row["aktiv"] == 2){ ?>
