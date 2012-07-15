@@ -1,6 +1,9 @@
 fuel/app/logs/*/*/*
 fuel/app/cache/*/*
 
+*.pydevproject
+.project
+.metadata
 bin/**
 tmp/**
 tmp/**/*
