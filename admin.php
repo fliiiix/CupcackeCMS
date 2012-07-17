@@ -9,10 +9,10 @@ if (isset($_GET["del"])){
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
 if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"])){
-  $email = $_POST["email"];
-  $email_retype = $_POST["email_retype"];
-  $nachname = $_POST["nachname"];
-  $vorname = $_POST["vorname"];
+  $email = mysql_real_escape_string($_POST["email"]);
+  $email_retype = mysql_real_escape_string($_POST["email_retype"]);
+  $nachname = mysql_real_escape_string($_POST["nachname"]);
+  $vorname = mysql_real_escape_string($_POST["vorname"]);
   if ($email != $email_retype){
     $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
   } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -22,15 +22,14 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
     if (mysql_num_rows($query) > 0){
       $error_msg = "Diese E-Mail-Adresse existiert leider schon";
     } else {
-      mysql_query("INSERT INTO user (vorname, nachname, email) VALUES("\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"")");
-      mysql_query("DELETE FROM email_verify WHERE user_id=" . $valid_user_id);
+      mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"," . 0 . ")");
       $repeat = true;
       do{
         $link_component = hash("haval128,3",rand(0,getrandmax()),false);
         $ergebnis = mysql_query("SELECT * FROM email_verify WHERE link_component=\"" . $link_component . "\"");
         if (mysql_num_rows($ergebnis) == 0){
           $repeat = false;
-          mysql_query("INSERT INTO email_verify (user_id, link_component) VALUES("$valid_user_id . ",\"" . $link_component . "\")");
+          mysql_query("INSERT INTO email_verify (user_id, link_component) VALUES(" . $valid_user_id . ",\"" . $link_component . "\")");
         }
       }while($repeat);
       $headers = "From: noreply@fliegenberg.de" . "\n" .
@@ -72,12 +71,12 @@ if (isset($_GET["cs"])){
 }
 
 # Query für die ganze Tabelle
-$query = mysql_query("SELECT id,vorname,nachname,email,aktiv FROM user");
+$query = mysql_query("SELECT id,vorname,nachname,rolle,aktiv FROM user");
 ?>
 <html><head>
   <title>CupcackeCMS - Admin-Interface</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="../js/jquery.js"></script>
+  <script type="text/javascript" src="../js/jquery.min.js"></script>
   <style type="text/css">
 
   #legende {
@@ -168,7 +167,8 @@ $(document).ready(function() {
       </td>
       <td style="vertical-align: top;"><?php if($row["rolle"] == 1){
         echo "Nutzer";
-      } else {
+      }
+      if($row["rolle"] == 2){
         echo "Administrator";
       }?>
       </td>
