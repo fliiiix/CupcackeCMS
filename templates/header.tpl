@@ -34,6 +34,7 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
     <!-- Le fav and touch icons
     <link rel="shortcut icon" href="/assets/ico/favicon.ico">
@@ -89,4 +90,4 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
       </div>
     </div>
 
-    <div class="container">
+<div class="container">

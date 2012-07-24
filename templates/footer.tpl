@@ -1,8 +1,10 @@
     </div> <!-- /container -->
-		<!-- Le Script -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<!-- Bootstrap JS and Bootstrap Image Gallery -->
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/bootstrap-image-gallery.min.js"></script>
+		    <script src="js/bootstrap.min.js"></script>
+    		<script src="js/bootstrap-image-gallery.min.js"></script>
+    		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+		    <!--[if lt IE 9]>
+		      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		    <![endif]-->
   </body>
 </html>
