@@ -1,4 +1,4 @@
-<?php
+e<?php
 require_once('utils.php');
 # Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
 # Wenn alle Daten stimmen zum Admin-Interface weiterleiten

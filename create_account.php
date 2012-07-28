@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <?php
+db_connect();
 require_once('utils.php');
+
+// Kontrolle, ob der Key-Parameter gesetzt ist
+if (!isset($_GET["key"])){
+	$invalid_key = "1";
+}
+// Kontrolle, ob der Key aus der URL in der Datenbank vorhanden ist
+if (isset($_GET["key"])){
+	$key = mysql_real_escape_string($_GET["key"]);
+	$query = mysql_query("SELECT * FROM email_verify WHERE random=" . $key)){
+	if (!$row = mysql_fetch_array($ergebnis)){
+	  $invalid_key = "1";
+	}
+}
+
 if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POST["account_erstellen"])) {
 	// Accunt will erstellt werden…
 	$password = $_POST["password"];
@@ -8,7 +23,6 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
 	$email = $_POST["email"];
 	$nachname = $_POST["nachname"];
 	$vorname = $_POST["vorname"];
-	db_connect();
 	if (3 > strlen($vorname)){
 	  $errormsg = "Bitte gebe einen Vornamen, der länger als 3 Zeichen ist ein";
 	  $vorname = "";

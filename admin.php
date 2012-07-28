@@ -2,6 +2,32 @@
 <?php
 require_once('utils.php');
 db_connect();
+
+// Nutzer ohne Cookie rauswerfen
+if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
+  header("Location: index.php");
+  exit;
+} else {
+  setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcakeCMS_Cookie"],time()+3600);
+}
+
+// Cookie des Nutzers überprüfen
+$ergebnis = mysql_query("SELECT user_id,rolle from cookie_mapping WHERE random=" . intval($_COOKIE["CupcakeCMS_Cookie"]));
+$row = mysql_fetch_array($ergebnis);
+if ($row["rolle"] == 3){
+  $userid = $row["id_user"];
+} else {
+  header("Location: index.php");
+  exit();
+}
+
+// Logout
+if (isset($_GET["logout"])){
+  mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $userid);
+  setcookie("CupcackeCMS_Cookie","",-1);
+  header("Location: index.php");
+  exit();
+}
 # Nutzer löschen, falls der entsprechende Button geklickt wird
 if (isset($_GET["del"])){
   mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
@@ -23,13 +49,15 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       $error_msg = "Diese E-Mail-Adresse existiert leider schon";
     } else {
       mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"," . 0 . ")");
+      $query = mysql_query("SELECT id FROM user WHERE email =" . $email);
+      $row = mysql_fetch_array($query);
       $repeat = true;
       do{
         $link_component = hash("haval128,3",rand(0,getrandmax()),false);
         $ergebnis = mysql_query("SELECT * FROM email_verify WHERE link_component=\"" . $link_component . "\"");
         if (mysql_num_rows($ergebnis) == 0){
           $repeat = false;
-          mysql_query("INSERT INTO email_verify (user_id, link_component) VALUES(" . $valid_user_id . ",\"" . $link_component . "\")");
+          mysql_query("INSERT INTO email_verify (user_id, random) VALUES(" . $row["id"] . ",\"" . $link_component . "\")");
         }
       }while($repeat);
       $headers = "From: noreply@fliegenberg.de" . "\n" .
@@ -50,6 +78,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
     }
   }
 }
+
 # Nutzer (de)aktivieren, falls der entsprechende Button geklickt wird
 if (isset($_GET["cs"])){
   $query = mysql_query("SELECT aktiv FROM user WHERE id=" . mysql_real_escape_string($_GET["cs"]));
@@ -73,7 +102,8 @@ if (isset($_GET["cs"])){
 # Query für die ganze Tabelle
 $query = mysql_query("SELECT id,vorname,nachname,rolle,aktiv FROM user");
 ?>
-<html><head>
+<html>
+<head>
   <title>CupcackeCMS - Admin-Interface</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" src="../js/jquery.min.js"></script>
