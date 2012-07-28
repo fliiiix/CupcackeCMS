@@ -1,5 +1,5 @@
 <?php
-require_once('../utils.php');
+require_once('utils.php');
 # Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
 # Wenn alle Daten stimmen zum Admin-Interface weiterleiten
 if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["login_button"])) {

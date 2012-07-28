@@ -1,91 +1,67 @@
-<h1>Neuer Beitrag</h1>
-<br />
-<div style="clear:both;">
-   <label style="float:left; width:130px;" for="beitragTitel" class="control-label">Titel:</label>
-   <input type="text" style="float:left; width:300px;" class="span2" id="beitragTitel" name="beitragTitel">
-</div>
-
-<div style="clear:both;">
-   <label style="float:left; width:130px;" for="beitragUnterTitel" class="control-label">Untertitel:</label>
-   <input type="text" style="float:left; width:300px;" class="span2" id="beitragUnterTitel" name="beitragUnterTitel">
-</div>
-
-<div style="clear:both;">
-   <label style="float:left; width:130px;" for="beitragText" class="control-label">Text:</label>
-   <textarea rows="8" cols="100" style="width:300px;" id="beitragtext" name="beitragText"></textarea> 
-</div>
-<a href="bilderGalerie.php" class="btn btn-success" style="float:right;">Save</a>
-<br />
-<br />
-<!-- The file upload form used as target for the file upload widget -->
-    <form style="clear:both;" id="fileupload" action="/server/php/" method="POST" enctype="multipart/form-data">
-        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row fileupload-buttonbar">
-            <div class="span7">
-                <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
-                    <span>Bilder hinzufügen</span><fildset>
-                    <input type="file" name="files[]" multiple>
-                </span>
-                <button type="submit" class="btn btn-primary start">
-                    <i class="icon-upload icon-white"></i>
-                    <span>Upload starten</span>
-                </button>
-                <!--<button type="reset" class="btn btn-warning cancel">
-                    <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel upload</span>
-                </button>-->
-                <button type="button" class="btn btn-danger delete">
-                    <i class="icon-trash icon-white"></i>
-                    <span>Löschen</span>
-                </button>
-                <input type="checkbox" class="toggle">
-            </div>
-            <!-- The global progress information -->
-            <div class="span5 fileupload-progress fade">
-                <!-- The global progress bar -->
-                <div class="progress progress-success progress-striped active">
-                    <div class="bar" style="width:0%;"></div>
-                </div>
-                <!-- The extended global progress information -->
-                <div class="progress-extended">&nbsp;</div>
-            </div>
+<link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
+<div class="form-horizontal well">    
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="mainUpload" action="bilderGalerie.php" method="POST">
+        <div class="control-group">
+            <label for="beitragTitel" class="span3">Titel:</label>
+            <input type="text" id="beitragTitel" name="beitragTitel">
         </div>
-        <!-- The loading indicator is shown during file processing -->
-        <div class="fileupload-loading"></div>
-        <br>
-        <!-- The table listing the files available for upload/download -->
-        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
-    </form>
- </div>
- <!-- modal-gallery is the modal dialog used for the image gallery -->
- <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-        <a class="btn modal-download" target="_blank">
-            <i class="icon-download"></i>
-            <span>Download</span>
-        </a>
-        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
-            <i class="icon-play icon-white"></i>
-            <span>Slideshow</span>
-        </a>
-        <a class="btn btn-info modal-prev">
-            <i class="icon-arrow-left icon-white"></i>
-            <span>Previous</span>
-        </a>
-        <a class="btn btn-primary modal-next">
-            <span>Next</span>
-            <i class="icon-arrow-right icon-white"></i>
-        </a>
-    </div>
 
-    <!-- The template to display files available for upload -->
+        <div class="control-group">
+            <label for="beitragUnterTitel" class="span3">Untertitel:</label>
+            <input type="text" id="beitragUnterTitel" name="beitragUnterTitel">
+        </div>
+
+        <div class="control-group">
+            <label class="span3" for="beitragText">Text:</label>
+            <textarea class="span6" rows="5" id="beitragtext" name="beitragText"></textarea>
+        </div>
+        <div class="control-group">
+            <span class="span3"><input type="submit" value="Speichern" class="btn btn-primary start"></span>
+        </div>
+    </form>
+    <form id="fileupload" action="server/upload.php" method="POST" enctype="multipart/form-data">
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="control-group fileupload-buttonbar">
+        <div class="span7">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button">
+                    <i class="icon-plus icon-white"></i>
+                    <span>Bilder ausw&auml;hlen...</span>
+                    <input type="file" name="files[]" multiple="">
+            </span>
+            <button type="submit" class="btn btn-primary start">
+                <i class="icon-upload icon-white"></i>
+                <span>Start upload</span>
+            </button>
+            <button type="reset" class="btn btn-warning cancel">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Cancel upload</span>
+            </button>
+            <button type="button" class="btn btn-danger delete">
+                <i class="icon-trash icon-white"></i>
+                <span>L&ouml;schen</span>
+            </button>
+            <input type="checkbox" class="toggle">
+        </div>
+        <!-- The global progress information -->
+        <div class="span3 fileupload-progress fade">
+            <!-- The global progress bar -->
+            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width:0%;"></div>
+            </div>
+            <!-- The extended global progress information -->
+            <div class="progress-extended">&nbsp;</div>
+        </div>
+    </div>
+    <!-- The loading indicator is shown during file processing -->
+    <div class="fileupload-loading"></div>
+    <!-- The table listing the files available for upload/download -->
+    <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+    </form>
+</div>
+</div>
+<!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -96,7 +72,7 @@
             <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
             <td>
-                <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
             </td>
             <td class="start">{% if (!o.options.autoUpload) { %}
                 <button class="btn btn-primary">
@@ -153,6 +129,9 @@
 <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
+<!-- Bootstrap JS and Bootstrap Image Gallery are not required, but included for the demo -->
+<script src="http://blueimp.github.com/cdn/js/bootstrap.min.js"></script>
+<script src="http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
