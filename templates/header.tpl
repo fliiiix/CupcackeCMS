@@ -7,7 +7,7 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
   echo "zeile 7";
   setcookie("CupcackeCMS_Cookie","",-1);
     if (!$errormsg = login_user($_POST["username"],$_POST["password"])){
-    header("Location: admin.php");
+    header("Location: ../admin.php");
     exit();
   }
 }
