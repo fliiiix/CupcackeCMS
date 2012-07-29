@@ -12,10 +12,10 @@ if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
 }
 
 // Cookie des Nutzers überprüfen
-$ergebnis = mysql_query("SELECT user_id,rolle from cookie_mapping WHERE random=" . intval($_COOKIE["CupcakeCMS_Cookie"]));
+$ergebnis = mysql_query("SELECT user_id,rolle FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcakeCMS_Cookie"]));
 $row = mysql_fetch_array($ergebnis);
 if ($row["rolle"] == 3){
-  $userid = $row["id_user"];
+  $userid = $row["user_id"];
 } else {
   header("Location: index.php");
   exit();
