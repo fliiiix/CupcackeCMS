@@ -1,23 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
 require_once('utils.php');
 db_connect();
 
 // Nutzer ohne Cookie rauswerfen
 if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
+  echo "Zeile 7";
   header("Location: index.php");
   exit;
 } else {
-  setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcakeCMS_Cookie"],time()+3600);
+  setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcackeCMS_Cookie"],time()+3600);
 }
 
 // Cookie des Nutzers überprüfen
-$ergebnis = mysql_query("SELECT user_id,rolle FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcakeCMS_Cookie"]));
-$row = mysql_fetch_array($ergebnis);
-if ($row["rolle"] == 3){
-  $userid = $row["user_id"];
-} else {
+$query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
+$row = mysql_fetch_array($query);
+if (!$userid = $row["user_id"]){
   header("Location: index.php");
+  exit();
+}
+$query = mysql_query("SELECT rolle FROM user WHERE id=" . $userid);
+$row = mysql_fetch_array($query);
+if ($row["rolle"] == 1){
+  echo "Zeile 25";
+  header("Location: user.php");
   exit();
 }
 
@@ -28,6 +33,9 @@ if (isset($_GET["logout"])){
   header("Location: index.php");
   exit();
 }
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<?php
 # Nutzer löschen, falls der entsprechende Button geklickt wird
 if (isset($_GET["del"])){
   mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
@@ -100,7 +108,7 @@ if (isset($_GET["cs"])){
 }
 
 # Query für die ganze Tabelle
-$query = mysql_query("SELECT id,vorname,nachname,rolle,aktiv FROM user");
+$query = mysql_query("SELECT * FROM user");
 ?>
 <html>
 <head>
