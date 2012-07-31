@@ -2,7 +2,7 @@
 require_once('utils.php');
 db_connect();
 
-// Nutzer ohne Cookie rauswerfen
+# Nutzer ohne Cookie rauswerfen
 if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
   echo "Zeile 7";
   header("Location: index.php");
@@ -11,22 +11,22 @@ if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
   setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcackeCMS_Cookie"],time()+3600);
 }
 
-// Cookie des Nutzers überprüfen
+# Cookie des Nutzers überprüfen
 $query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
 $row = mysql_fetch_array($query);
 if (!$userid = $row["user_id"]){
   header("Location: index.php");
   exit();
 }
+# Rolle des Nutzers überprüfen. Ist er nutzer kommt er auf die Nutzer-Seite, ist er Admin wird er zur admin.php weitergeleitet
 $query = mysql_query("SELECT rolle FROM user WHERE id=" . $userid);
 $row = mysql_fetch_array($query);
 if ($row["rolle"] == 1){
-  echo "Zeile 25";
   header("Location: user.php");
   exit();
 }
 
-// Logout
+# Logout
 if (isset($_GET["logout"])){
   mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $userid);
   setcookie("CupcackeCMS_Cookie","",-1);
@@ -39,6 +39,27 @@ if (isset($_GET["logout"])){
 # Nutzer löschen, falls der entsprechende Button geklickt wird
 if (isset($_GET["del"])){
   mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
+}
+
+# Nutzer (de)aktivieren, falls der entsprechende Button geklickt wird
+if (isset($_GET["cs"])){
+
+  $query = mysql_query("SELECT aktiv FROM user WHERE id=" . mysql_real_escape_string($_GET["cs"]));
+  $row = mysql_fetch_array($query);
+  switch ($row["aktiv"]) {
+    case (0):
+      $new = "";
+      break;
+    
+    case(1):
+      $new = 2;
+      break;
+
+    case(2):
+      $new = 1;
+      break;
+  }
+  mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . mysql_real_escape_string($_GET["cs"]));
 }
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
@@ -85,26 +106,6 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       mail($email, "Account für Fliegenberg.de", $message, $headers);
     }
   }
-}
-
-# Nutzer (de)aktivieren, falls der entsprechende Button geklickt wird
-if (isset($_GET["cs"])){
-  $query = mysql_query("SELECT aktiv FROM user WHERE id=" . mysql_real_escape_string($_GET["cs"]));
-  $row = mysql_fetch_array($query);
-  switch ($row["aktiv"]) {
-    case (0):
-      $new = "";
-      break;
-    
-    case(1):
-      $new = 2;
-      break;
-
-    case(2):
-      $new = 1;
-      break;
-  }
-  mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . mysql_real_escape_string($_GET["cs"]));
 }
 
 # Query für die ganze Tabelle
