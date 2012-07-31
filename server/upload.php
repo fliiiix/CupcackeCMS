@@ -1,4 +1,6 @@
 <?php
+session_start();
+error_reporting(E_ALL | E_STRICT);
 /*
  * jQuery File Upload Plugin PHP Class 5.11.2
  * https://github.com/blueimp/jQuery-File-Upload
@@ -9,6 +11,10 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
+function db_connect (){
+    mysql_connect("localhost", "root", "warhammer40k") or die(mysql_error());
+    mysql_select_db("cms") or die(mysql_error());
+}
 
 class UploadHandler
 {
@@ -67,13 +73,13 @@ class UploadHandler
 
     protected function getFullUrl() {
         $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-      	return
-    		($https ? 'https://' : 'http://').
-    		(!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
-    		(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
-    		($https && $_SERVER['SERVER_PORT'] === 443 ||
-    		$_SERVER['SERVER_PORT'] === 80 ? '' : ':'.$_SERVER['SERVER_PORT']))).
-    		substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+        return
+            ($https ? 'https://' : 'http://').
+            (!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
+            (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
+            ($https && $_SERVER['SERVER_PORT'] === 443 ||
+            $_SERVER['SERVER_PORT'] === 80 ? '' : ':'.$_SERVER['SERVER_PORT']))).
+            substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
     }
 
     protected function set_file_delete_url($file) {
@@ -262,32 +268,32 @@ class UploadHandler
     }
 
     protected function orient_image($file_path) {
-      	$exif = @exif_read_data($file_path);
+        $exif = @exif_read_data($file_path);
         if ($exif === false) {
             return false;
         }
-      	$orientation = intval(@$exif['Orientation']);
-      	if (!in_array($orientation, array(3, 6, 8))) {
-      	    return false;
-      	}
-      	$image = @imagecreatefromjpeg($file_path);
-      	switch ($orientation) {
-        	  case 3:
-          	    $image = @imagerotate($image, 180, 0);
-          	    break;
-        	  case 6:
-          	    $image = @imagerotate($image, 270, 0);
-          	    break;
-        	  case 8:
-          	    $image = @imagerotate($image, 90, 0);
-          	    break;
-          	default:
-          	    return false;
-      	}
-      	$success = imagejpeg($image, $file_path);
-      	// Free up memory (imagedestroy does not delete files):
-      	@imagedestroy($image);
-      	return $success;
+        $orientation = intval(@$exif['Orientation']);
+        if (!in_array($orientation, array(3, 6, 8))) {
+            return false;
+        }
+        $image = @imagecreatefromjpeg($file_path);
+        switch ($orientation) {
+              case 3:
+                $image = @imagerotate($image, 180, 0);
+                break;
+              case 6:
+                $image = @imagerotate($image, 270, 0);
+                break;
+              case 8:
+                $image = @imagerotate($image, 90, 0);
+                break;
+            default:
+                return false;
+        }
+        $success = imagejpeg($image, $file_path);
+        // Free up memory (imagedestroy does not delete files):
+        @imagedestroy($image);
+        return $success;
     }
 
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null) {
@@ -322,9 +328,9 @@ class UploadHandler
             }
             $file_size = filesize($file_path);
             if ($file_size === $file->size) {
-            	if ($this->options['orient_image']) {
-            		$this->orient_image($file_path);
-            	}
+                if ($this->options['orient_image']) {
+                    $this->orient_image($file_path);
+                }
                 $file->url = $this->options['upload_url'].rawurlencode($file->name);
                 foreach($this->options['image_versions'] as $version => $options) {
                     if ($this->create_scaled_image($file->name, $options)) {
@@ -350,13 +356,34 @@ class UploadHandler
     public function get() {
         $file_name = isset($_REQUEST['file']) ?
             basename(stripslashes($_REQUEST['file'])) : null;
-        if ($file_name) {
-            $info = $this->get_file_object($file_name);
-        } else {
-            $info = $this->get_file_objects();
+        //dear felix do your stuff her
+        db_connect();
+        $query = "SELECT * FROM bild WHERE id_beitrag=\"1\"";
+        $result = mysql_query($query);
+        while ($row = mysql_fetch_array($result)) {
+
         }
-        header('Content-type: application/json');
-        echo json_encode($info);
+            //$test = $_SESSION['test'];
+            if ($file_name != null) {
+                $_SESSION['result'] = $_REQUEST['file']['name'] . $_SESSION['result'];
+            }
+            else{
+                $_SESSION['result'] = "*" . "error" . $_SESSION['result'];
+            }
+
+            //$_FILES["file"]["name"]
+             
+            //$row['uploadName'] != null ||
+           // if (true == true) {
+               if ($file_name) {
+                    $info = $this->get_file_object($file_name);
+                } 
+                else {
+                    $info = $this->get_file_objects();
+                }
+                header('Content-type: application/json');
+                echo json_encode($info);
+            //}
     }
 
     public function post() {
@@ -434,7 +461,6 @@ class UploadHandler
     }
 
 }
-error_reporting(E_ALL | E_STRICT);
 
 $upload_handler = new UploadHandler();
 

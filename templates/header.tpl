@@ -6,9 +6,19 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
   db_connect();
   echo "haaaaaalo!!!";
   setcookie("CupcackeCMS_Cookie","",-1);
+<<<<<<< HEAD
+    if (!$errormsg = login_user($_POST["username"],$_POST["password"])){
+    header("Location: ../admin.php");
+=======
   if (!$errormsg = login_user($_POST["username"],$_POST["password"])){
+<<<<<<< HEAD
 //    header("Location: admin.php");
 //    exit();
+=======
+    header("Location: admin.php");
+>>>>>>> 9fd7e9feab6411e0ca7a45ba3ffe65e29903015b
+    exit();
+>>>>>>> c85b40f99bd048ba923f8dcb93f86e0a001bd54b
   }
 }
 ?>
