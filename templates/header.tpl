@@ -1,24 +1,13 @@
 <?php
-require_once('utils.php');
+require_once("../utils.php");
 # Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
 # Wenn alle Daten stimmen zum Admin-Interface weiterleiten
 if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["login_button"])) {
   db_connect();
-  echo "haaaaaalo!!!";
   setcookie("CupcackeCMS_Cookie","",-1);
-<<<<<<< HEAD
-    if (!$errormsg = login_user($_POST["username"],$_POST["password"])){
-    header("Location: ../admin.php");
-=======
   if (!$errormsg = login_user($_POST["username"],$_POST["password"])){
-<<<<<<< HEAD
-//    header("Location: admin.php");
-//    exit();
-=======
     header("Location: admin.php");
->>>>>>> 9fd7e9feab6411e0ca7a45ba3ffe65e29903015b
     exit();
->>>>>>> c85b40f99bd048ba923f8dcb93f86e0a001bd54b
   }
 }
 ?>
@@ -79,7 +68,7 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["logi
               <li id="login">
 	         <form method="post" action="" class="navbar-form">
 		    <?php if (isset($errormsg)){
-		    echo $errormsg; }?>
+		    echo $errormsg;}?>
 		    <p class="navbar-text" style="float:left;">Benutzername:&nbsp;&nbsp;&nbsp;</p> 
 		    <input type="text" name="username" id="username" class="span2" style="float:left; width:120px;"/>
 
