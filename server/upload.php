@@ -12,7 +12,7 @@ error_reporting(E_ALL | E_STRICT);
  * http://www.opensource.org/licenses/MIT
  */
 function db_connect (){
-    mysql_connect("localhost", "root", "warhammer40k") or die(mysql_error());
+    mysql_connect("localhost", "root", "passwort") or die(mysql_error());
     mysql_select_db("cms") or die(mysql_error());
 }
 

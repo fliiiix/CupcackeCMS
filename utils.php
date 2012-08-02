@@ -9,7 +9,8 @@ function login_user ($username,$password){
 	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 2);
 	if (!$ergebnis){
 		return "Datenbank-Fehler!";
-	} else {
+	} 
+	else {
 		echo "<!DOCTYPE html Zeile 13>";
 		if ($row = mysql_fetch_array($ergebnis)) {
 			$user_id = $row["id"];
@@ -23,11 +24,13 @@ function login_user ($username,$password){
 					return;
 				}
 			}
-		} else {
+		} 
+		else {
 			return "Falscher Benutzername oder falsches Passwort!:-)";
 		}
-	} else {
+	} 
+	/*else {
 		return "Datenbank-Fehler!";
-	}	
+	}*/	
 }
 ?>
