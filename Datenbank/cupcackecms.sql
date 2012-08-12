@@ -1,4 +1,4 @@
--- Adminer 3.3.3 MySQL dump
+-- Adminer 3.5.1 MySQL dump
 
 SET NAMES utf8;
 SET foreign_key_checks = 0;
@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS `pw_forgot`;
 CREATE TABLE `pw_forgot` (
   `link_component` varchar(128) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `user`;
@@ -69,10 +69,10 @@ CREATE TABLE `user` (
   `pw_hash` varchar(128) NOT NULL,
   `aktiv` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `user` (`id`, `nachname`, `vorname`, `rolle`, `email`, `pw_hash`, `aktiv`) VALUES
-(3,	'Hallo',	'Halli',	3,	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	1),
+(3,	'Hallo',	'Halli',	2,	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	2),
 (4,	'Testmensch',	'Dieter',	2,	'dieter@test.de',	'd7b784d5dd5a950223102a439bfeca948c1c1c25c7215c41b110e01a7d7d05d5b2845fc87b0cf2c84ecafff5bad24732e942d6b804a21855ef9691df9ae7e652',	2);
 
--- 2012-07-28 13:03:38
+-- 2012-08-12 17:44:52
