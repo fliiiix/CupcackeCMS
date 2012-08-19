@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*
  * jQuery File Upload Plugin PHP Class 5.11.2
  * https://github.com/blueimp/jQuery-File-Upload
@@ -382,8 +383,9 @@ class UploadHandler
             $info = $this->get_file_objects();
         }
 
+
         db_connect();
-        $query = "SELECT * FROM bild WHERE id_beitrag=\"1\"";
+        $query = "SELECT * FROM bild WHERE id_beitrag=\"" . $_SESSION["id_beitrag"] . "\"";
         $result = mysql_query($query);
         while ($row = mysql_fetch_array($result)) 
         { 
