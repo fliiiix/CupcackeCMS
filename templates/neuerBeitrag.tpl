@@ -20,7 +20,7 @@
             <span class="span3"><input type="submit" value="Speichern" class="btn btn-primary start"></span>
         </div>
     </form>
-    <form id="fileupload" action="server/upload.php" method="POST" enctype="multipart/form-data">
+    <form id="fileupload" action="server/" method="POST" enctype="multipart/form-data">
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="control-group fileupload-buttonbar">
         <div class="span7">

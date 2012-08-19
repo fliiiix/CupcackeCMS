@@ -6,14 +6,18 @@ include 'templates/header.tpl';
 <?php
 error_reporting(E_ALL | E_STRICT);
 
+/*echo "<br \>ding<br \>";
+print_r($info);
+echo count($info);*/
+
 $_SESSION['id_beitrag'] = 1;
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
-    $beitragTitel = $_POST["beitragTitel"];
+    /*$beitragTitel = $_POST["beitragTitel"];
     $beitragUnterTitel = $_POST["beitragUnterTitel"];   
     $beitragText = $_POST["beitragText"];
     
     echo $beitragTitel . "+" . $beitragUnterTitel . "+" .  $beitragText . "++" . $_SESSION['result'];//. "**" . $_SESSION['ding'];
-
+    echo "ist die session =\"" . $_SESSION['dings'];*/
     //$_SESSION['folderName'] = "neu";
 }
 ?>
