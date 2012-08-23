@@ -1,17 +1,16 @@
 <?php
 # Sammlung von nützlichen Funktionen für CupcackeCMS
 function db_connect (){
-	mysql_connect("localhost", "root", "") or die(mysql_error());
+	mysql_connect("localhost", "root") or die(mysql_error());
     mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
-function login_user ($username,$password){
-	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($username) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 2);
+function login_user ($email,$password){
+	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 2);
 	if (!$ergebnis){
 		return "Datenbank-Fehler!";
 	} 
 	else {
-		echo "<!DOCTYPE html Zeile 13>";
 		if ($row = mysql_fetch_array($ergebnis)) {
 			$user_id = $row["id"];
 			mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $user_id);
@@ -24,13 +23,9 @@ function login_user ($username,$password){
 					return;
 				}
 			}
-		} 
-		else {
-			return "Falscher Benutzername oder falsches Passwort!:-)";
+		} else {
+			return "Falscher Benutzername oder falsches Passwort";
 		}
 	} 
-	/*else {
-		return "Datenbank-Fehler!";
-	}*/	
 }
 ?>
