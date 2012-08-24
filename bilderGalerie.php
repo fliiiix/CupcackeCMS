@@ -19,6 +19,7 @@ print_r($info);
 echo count($info);*/
 
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
+    db_connect();
     /*$beitragTitel = $_POST["beitragTitel"];
     $beitragUnterTitel = $_POST["beitragUnterTitel"];   
     $beitragText = $_POST["beitragText"];

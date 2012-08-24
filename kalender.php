@@ -21,7 +21,7 @@ $options['month_link'] 	= '<a href="'.$_SERVER['PHP_SELF'].'?month=%d&amp;year=%
 $total_days = date('t', mktime(0, 0, 0, $month, 1, $year));
 $day_offset = date('w', mktime(0, 0, 0, $month, 1, $year));
 list($n_month, $n_year, $n_day) = split(', ', strftime('%m, %Y, %d'));
-$day_highlight = (($n_month == $month) &amp;&amp; ($n_year == $year));
+$day_highlight = (($n_month == $month) . "&amp;&amp;" . ($n_year == $year));
 list($n_prev_month, $n_prev_year) = split(', ', strftime('%m, %Y', mktime(0, 0, 0, $month-1, 1, $year)));
 $prev_month_link = sprintf($options['month_link'], $n_prev_month, $n_prev_year, $prev_symbol);
 list($n_next_month, $n_next_year) = split(', ', strftime('%m, %Y', mktime(0, 0, 0, $month+1, 1, $year)));
