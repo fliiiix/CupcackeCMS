@@ -4,13 +4,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta http-equiv="content-language" content="de" />
   <meta name="generated" content="15.03.2009" />
-  <meta name="author" content="Alexander Bogomolov" />
-  <meta name="robots" content="index,follow" />
-  <meta name="title" content="Kalender mit PHP erstellen" />
-  <meta name="keywords" content="Erstellen Sie einen ganz individuellen Kalender für ihre Webseite." />
-  <meta name="description" content="" />
-
-  <title>Kalender mit PHP erstellen</title>
+  <meta name="title" content="Kalender" />
+  <title>Kalender</title>
 </head>
 <body>
 <?php
