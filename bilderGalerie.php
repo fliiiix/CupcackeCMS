@@ -3,14 +3,13 @@
 session_start();
 error_reporting(E_ALL | E_STRICT);
 
+//sesion für beitrags id setzten
 if (isset($_GET["id"])) {
 	$beitragsID = $_GET["id"];
 }
-else
-{
-	$beitragsID = 0;
-}
+else { $beitragsID = 0; }
 $_SESSION['id_beitrag'] = $beitragsID;
+
 include 'templates/header.tpl'; 
 echo($beitragsID);
 
@@ -20,13 +19,12 @@ echo count($info);*/
 
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
     db_connect();
-    /*$beitragTitel = $_POST["beitragTitel"];
+    $beitragTitel = $_POST["beitragTitel"];
     $beitragUnterTitel = $_POST["beitragUnterTitel"];   
     $beitragText = $_POST["beitragText"];
     
-    echo $beitragTitel . "+" . $beitragUnterTitel . "+" .  $beitragText . "++" . $_SESSION['result'];//. "**" . $_SESSION['ding'];
-    echo "ist die session =\"" . $_SESSION['dings'];*/
-    //$_SESSION['folderName'] = "neu";
+    $createStatement = "INSERT INTO beitrag (titel, untertitel, inhalt, id_Owner, Aktiv)";
+    //echo $beitragTitel . "+" . $beitragUnterTitel . "+" .  $beitragText . "++" . $_SESSION['result'];
 }
 ?>
 <a href="bilderGalerie.php?neu=true">link</a>

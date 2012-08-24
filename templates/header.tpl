@@ -1,16 +1,20 @@
-<!DOCTYPE html>
 <?php
 require_once("utils.php");
-# Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
-# Wenn alle Daten stimmen zum Admin-Interface weiterleiten
+
+
+// Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
+// Wenn alle Daten stimmen zum Admin-Interface weiterleiten
 if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_button"])) {
-  echo "Zeile 6";
   db_connect();
   setcookie("CupcackeCMS_Cookie","",0);
-  if (!$errormsg = login_user($_POST["email"],$_POST["password"])){
+
+  $ergebnis = login_user($_POST["email"],$_POST["password"]);
+  if ($ergebnis == "true"){
     header("Location: admin.php");
     exit();
   }
+  else
+  { echo($ergebnis); }
 }
 ?>
 <!DOCTYPE html>

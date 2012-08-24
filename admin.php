@@ -4,9 +4,8 @@ db_connect();
 
 # Nutzer ohne Cookie rauswerfen
 if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
-  echo "Zeile 7";
   header("Location: index.php");
-  exit;
+  exit();
 } else {
   setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcackeCMS_Cookie"],time()+3600);
 }
@@ -18,6 +17,7 @@ if (!$userid = $row["user_id"]){
   header("Location: index.php");
   exit();
 }
+
 # Rolle des Nutzers überprüfen. Ist er nutzer kommt er auf die Nutzer-Seite, ist er Admin wird er zur admin.php weitergeleitet
 $query = mysql_query("SELECT rolle FROM user WHERE id=" . $userid);
 $row = mysql_fetch_array($query);
