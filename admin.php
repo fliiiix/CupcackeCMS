@@ -115,7 +115,7 @@ $query = mysql_query("SELECT * FROM user");
 <head>
   <title>CupcackeCMS - Admin-Interface</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="/assets/js/jquery.js"></script>
+  <script type="text/javascript" src="../assets/js/jquery.js"></script>
   <style type="text/css">
 
   #legende {
