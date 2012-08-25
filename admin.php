@@ -63,21 +63,21 @@ if (isset($_GET["cs"])){
 }
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
-if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"])){
-  $email = mysql_real_escape_string($_POST["email"]);
-  $email_retype = mysql_real_escape_string($_POST["email_retype"]);
-  $nachname = mysql_real_escape_string($_POST["nachname"]);
-  $vorname = mysql_real_escape_string($_POST["vorname"]);
-  if ($email != $email_retype){
-    $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
-  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"]) && isset($_POST["vorname"]) && isset($_POST["nachname"])){
+  if ($_POST["email"] != $_POST["email_retype"]){
+    $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben" . $_POST["rolle"];
+  } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
     $error_msg = "Bitte eine valide E-Mail-Adresse eingeben";
   } else {
-    $query = mysql_query("SELECT * FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\"");
+    $email = mysql_real_escape_string($_POST["email"]);
+    $nachname = mysql_real_escape_string($_POST["nachname"]);
+    $vorname = mysql_real_escape_string($_POST["vorname"]);
+    $rolle = intval($_POST["rolle"]);
+    $query = mysql_query("SELECT * FROM user WHERE email=\"" . $email . "\"");
     if (mysql_num_rows($query) > 0){
       $error_msg = "Diese E-Mail-Adresse existiert leider schon";
     } else {
-      mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"," . 0 . ")");
+      mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"," . $rolle . ")");
       $query = mysql_query("SELECT id FROM user WHERE email =" . $email);
       $row = mysql_fetch_array($query);
       $repeat = true;
@@ -88,7 +88,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
           $repeat = false;
           mysql_query("INSERT INTO email_verify (user_id, random) VALUES(" . $row["id"] . ",\"" . $link_component . "\")");
         }
-      }while($repeat);
+      } while($repeat);
       $headers = "From: noreply@fliegenberg.de" . "\n" .
       "X-Mailer: PHP/" . phpversion() . "\n" .
       "Mime-Version: 1.0" . "\n" . 
@@ -145,14 +145,20 @@ $(document).ready(function() {
   </script>
 </head><body>
 <div id="create_user">
+  <?php if (isset($error_msg)){
+    echo "<b style=\"color:red\">" . $error_msg . "</b><br />";
+  }
+  ?>
   <a href="#">Neuen Nutzer erstellen</a>
   <div>
-    <form>
+    <form method="post">
     <b>E-Mail-Adresse des Nutzers:</b> <input name="email" type="text" maxlength="256"?><br />
     <b>E-Mail-Adresse des Nutzers bestätigen:</b> <input name="email_retype" type="text" maxlength="256"?><br />
+    <b>Vorname des Nutzers:</b> <input name="vorname" type="text" maxlength="256"?><br />
+    <b>Nachname des Nutzers:</b> <input name="nachname" type="text" maxlength="256"?><br />
     <b>Rolle des Nutzers:</b> <select size="1" name="rolle">
-    <option>Nutzer</option>
-    <option>Admin</option>
+    <option value="1">Nutzer</option>
+    <option value="2">Admin</option>
   </select> <a href="#"><i>Hilfe: Wer hat welche Rechte?</i></a><br />
   <input type="submit" value="Nutzer erstellen" name="create_user">
   </form>
