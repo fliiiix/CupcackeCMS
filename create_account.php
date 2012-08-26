@@ -7,6 +7,7 @@ require_once('utils.php');
 if (!isset($_GET["key"])){
 	$invalid_key = "1";
 }
+
 // Kontrolle, ob der Key aus der URL in der Datenbank vorhanden ist
 if (isset($_GET["key"])){
 	$key = mysql_real_escape_string($_GET["key"]);

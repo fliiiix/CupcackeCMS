@@ -78,18 +78,19 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       $error_msg = "Diese E-Mail-Adresse existiert leider schon";
     } else {
       mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname  . "\",\"" .  $email . "\"," . $rolle . ")");
-      $query = mysql_query("SELECT id FROM user WHERE email =" . $email);
+      $query = mysql_query("SELECT id FROM user WHERE email=\"" . $email . "\"");
       $row = mysql_fetch_array($query);
+      $new_user_id = $row["id"];
       $repeat = true;
       do{
-        $link_component = hash("haval128,3",rand(0,getrandmax()),false);
-        $ergebnis = mysql_query("SELECT * FROM email_verify WHERE link_component=\"" . $link_component . "\"");
+        $random = hash("haval128,3",rand(0,getrandmax()),false);
+        $ergebnis = mysql_query("SELECT * FROM email_verify WHERE random=\"" . $random . "\"");
         if (mysql_num_rows($ergebnis) == 0){
+          mysql_query("INSERT INTO email_verify (user_id, random) VALUES(" . $new_user_id . ",\"" . $random . "\")");
           $repeat = false;
-          mysql_query("INSERT INTO email_verify (user_id, random) VALUES(" . $row["id"] . ",\"" . $link_component . "\")");
         }
       } while($repeat);
-      $headers = "From: noreply@fliegenberg.de" . "\n" .
+      $headers = "From: noreply@fridgeboard.de" . "\n" .
       "X-Mailer: PHP/" . phpversion() . "\n" .
       "Mime-Version: 1.0" . "\n" . 
       "Content-Type: text/plain; charset=UTF-8" . "\n" .
@@ -97,13 +98,13 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       $message = "Hallo " . $vorname . " " . $nachname . ", \r\n" .
       "\r\n" .
       "ein Administrator hat dir einen Account für Fliegenberg.de erstellt." . "\r\n" . 
-      "Klicke auf den folgenden Link, um dein Passwort zu setzen und den Account zu aktivieren: \r\n".
+      "Klicke auf den folgenden Link, um deine Daten zu überprüfen, dein Passwort zu setzen und den Account zu aktivieren: \r\n".
       "\r\n".
-      "https://fliegenberg.de/create_account.php?key=" . $link_component . "\r\n" . 
+      "http://" . $_SERVER['SERVER_NAME'] . "/create_account.php?key=" . $random . "\r\n" . 
       "Wenn du dir keinen Account erstellen möchtest lasse diesen Link einfach verfallen. \r\n".
       "Mit freundlichen Grüßen\r\n".
       "Dein Fliegenberg-Team";
-      mail($email, "Account für Fliegenberg.de", $message, $headers);
+      mail($email, "Account für " . $_SERVER['SERVER_NAME'] . " bestätigen", $message, $headers);
     }
   }
 }
@@ -115,7 +116,7 @@ $query = mysql_query("SELECT * FROM user");
 <head>
   <title>CupcackeCMS - Admin-Interface</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="../assets/js/jquery.js"></script>
+  <script type="text/javascript" src="/CupcackeCMS/assets/js/jquery.js"></script>
   <style type="text/css">
 
   #legende {
