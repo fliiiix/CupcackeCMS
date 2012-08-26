@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
-db_connect();
 require_once('utils.php');
+db_connect();
 
 // Kontrolle, ob der Key-Parameter gesetzt ist
 if (!isset($_GET["key"])){
@@ -11,7 +11,7 @@ if (!isset($_GET["key"])){
 // Kontrolle, ob der Key aus der URL in der Datenbank vorhanden ist
 if (isset($_GET["key"])){
 	$key = mysql_real_escape_string($_GET["key"]);
-	$query = mysql_query("SELECT * FROM email_verify WHERE random=" . $key)){
+	$query = mysql_query("SELECT * FROM email_verify WHERE random=\"" . $key . "\"");
 	if (!$row = mysql_fetch_array($ergebnis)){
 	  $invalid_key = "1";
 	}
@@ -88,7 +88,10 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
  <?php if (isset($errormsg)){ 
  	echo $errormsg;?>
 <br>
-<?php }?>
+<?php }
+if ($invalid_key == 1){
+	echo "<b style=\"color:red\">Ihr Account-Bestätigungs-Link ist fehlerhaft oder abgelaufen</b>";
+} else { ?>
 Account erstellen
 <form method="post">
 <table border="0">
@@ -117,5 +120,7 @@ Account erstellen
     </tr>
   </table>
 </form>
+<?php
+} ?>
 	</body>
 </html>
