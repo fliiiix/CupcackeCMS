@@ -3,6 +3,8 @@
 require_once('utils.php');
 db_connect();
 
+$invalid_key = 0;
+
 // Kontrolle, ob der Key-Parameter gesetzt ist
 if (!isset($_GET["key"])){
 	$invalid_key = "1";
@@ -49,7 +51,7 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
 	else {
 		$query = mysql_query("INSERT INTO user (vorname,nachname,pw_hash) VALUES(\"" . mysql_real_escape_string($_POST["vorname"]) . "\",\"" . mysql_real_escape_string($_POST["nachname"]) . "\",\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\") WHERE id=" . $valid_user_id);
 		    if (!$query){
-		    	$errormsg = "User konnte nicht gespeichert werden!"
+		    	$errormsg = "User konnte nicht gespeichert werden!";
 		    }
 		    else {
 			  echo "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
@@ -92,7 +94,7 @@ Account erstellen
       <td><?php if ($rolle == 1){
       	echo "Nutzer";
       } else {
-      	echo "Administrator;"
+      	echo "Administrator";
       }
       ?></td>
     </tr>
