@@ -54,6 +54,7 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
 		    	$errormsg = "User konnte nicht gespeichert werden!";
 		    }
 		    else {
+		    	mysql_query("DELETE FROM email_verify WHERE random=" . mysql_real_escape_string($_GET["key"]));
 			  echo "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
 		    }
 	}
