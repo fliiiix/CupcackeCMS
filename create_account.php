@@ -8,72 +8,52 @@ if (!isset($_GET["key"])){
 	$invalid_key = "1";
 }
 
-// Kontrolle, ob der Key aus der URL in der Datenbank vorhanden ist
+// Kontrolle, ob der Key aus der URL in der Datenbank vorhanden ist, wenn ja Vornamen, Nachnamen und E-Mail-Adresse abfragen und in Variablen schreiben
 if (isset($_GET["key"])){
 	$key = mysql_real_escape_string($_GET["key"]);
 	$query = mysql_query("SELECT * FROM email_verify WHERE random=\"" . $key . "\"");
-	if (!$row = mysql_fetch_array($ergebnis)){
+	if (mysql_num_rows($query) == 0){
 	  $invalid_key = "1";
+	} else{
+		$row = mysql_fetch_array($query);
+		$valid_user_id = $row["user_id"];
+		$query = mysql_query("SELECT vorname,nachname,email,rolle FROM user WHERE id=" . $valid_user_id);
+		$row = mysql_fetch_array($query);
+		$preset_vorname = $row["vorname"];
+		$preset_nachname = $row["nachname"];
+		$email = $row["email"];
+		$rolle = $row["rolle"];
 	}
 }
 
 if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POST["account_erstellen"])) {
 	// Accunt will erstellt werden…
-	$password = $_POST["password"];
-	$password_verify = $_POST["password_verify"];	
-	$email = $_POST["email"];
-	$nachname = $_POST["nachname"];
-	$vorname = $_POST["vorname"];
-	if (3 > strlen($vorname)){
+	if (3 > strlen($_POST["vorname"])){
 	  $errormsg = "Bitte gebe einen Vornamen, der länger als 3 Zeichen ist ein";
-	  $vorname = "";
 	}
-	elseif(3 > strlen($nachname)){
+	elseif(3 > strlen($_POST["nachname"])){
 	  $errormsg = "Bitte gebe einen Nachnamen, der länger als 3 Zeichen ist ein";
-	  $nachname = "";
 	}
-	elseif(8 > strlen($password)){
+	elseif(8 > strlen($_POST["password"])){
 	  $errormsg = "Bitte gebe ein Passwort, das länger als 7 Zeichen ist ein";
-	  $password = "";
-	  $password_verify = "";
 	}
-	elseif(8 > strlen($email)){
-	  $errormsg = "Bitte gebe eine E-Mail-Adresse, die länger als 7 Zeichen ist";
-	  $email = "";
-	}
-	elseif($password != $password_verify){
+	elseif($_POST["password"] != $_POST["password_verify"]){
 	  $errormsg = "Bitte gebe zwei übereinstimmende Passwörter ein";
-	  $password = "";
-	  $password_verify = "";
 	}
-	elseif($nachname != mysql_real_escape_string($nachname)){
+	elseif($_POST["nachname"] != mysql_real_escape_string($_POST["nachname"])){
 	  $errormsg = "Bitte gebe einen Nachnamen, in dem keine invaliden Zeichen vorkommen ein";
-	  $nachname = "";
 	}
-	elseif($vorname != mysql_real_escape_string($vorname)){
+	elseif($_POST["vorname"] != mysql_real_escape_string($_POST["vorname"])){
 	  $errormsg = "Bitte gebe einen Vornamen, in dem keine invaliden Zeichen vorkommen ein";
-	  $vorname = "";
-	}
-	elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-	  $errormsg = "Bitte gebe eine valide E-Mail-Adresse ein";
-	  $email = "";
 	}
 	else {
-	    $ergebnis = mysql_query("SELECT * FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\"");
-	    if (!$ergebnis)
-	      $errormsg = "Query-Fail!";
-	    else {
-          if (mysql_num_rows($ergebnis) > 0)
-	        $errormsg = "Diese E-Mail-Adresse existiert leider schon";
-		  else {
-		    $ergebnis = mysql_query("INSERT INTO user (vorname,nachname,email,pw_hash) VALUES(\"" . mysql_real_escape_string($vorname) . "\",\"" . mysql_real_escape_string($nachname) . "\",\"" . mysql_real_escape_string($email) . "\",\"" . hash("whirlpool", $password, false) . "\")");
-		    if (!$ergebnis)
-		      $errormsg = "User konnte nicht gespeichert werden!"; 
+		$query = mysql_query("INSERT INTO user (vorname,nachname,pw_hash) VALUES(\"" . mysql_real_escape_string($_POST["vorname"]) . "\",\"" . mysql_real_escape_string($_POST["nachname"]) . "\",\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\") WHERE id=" . $valid_user_id);
+		    if (!$query){
+		    	$errormsg = "User konnte nicht gespeichert werden!"
+		    }
 		    else {
 			  echo "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
 		    }
-	      }
-	    }
 	}
 }
 ?>
@@ -97,23 +77,32 @@ Account erstellen
 <table border="0">
     <tr>
       <td>&nbsp;Vorname:</td>
-      <td>&nbsp;<input name="vorname" type="text" maxlength="30" <?php if (isset($vorname)) echo "value =\"" . $vorname . "\""; ?> ></td>
+      <td>&nbsp;<input name="vorname" type="text" maxlength="30" value="<?php echo $preset_vorname; ?>" ></td>
     </tr>
     <tr>
       <td>&nbsp;Nachname:</td>
-      <td>&nbsp;<input name="nachname" type="text" maxlength="30" <?php if (isset($nachname)) echo "value =\"" . $nachname . "\""; ?> ></td>
+      <td>&nbsp;<input name="nachname" type="text" maxlength="30" value="<?php echo $preset_nachname; ?>" ></td>
     </tr>
     <tr>
       <td>&nbsp;E-Mail:</td>
-      <td>&nbsp;<input name="email" type="text" maxlength="256" <?php if (isset($email)) echo "value=\"" . $email . "\""; ?> ></td>
+      <td><?php echo $email; ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;Rolle:</td>
+      <td><?php if ($rolle == 1){
+      	echo "Nutzer";
+      } else {
+      	echo "Administrator;"
+      }
+      ?></td>
     </tr>
     <tr>
       <td>&nbsp;Passwort:</td>
-      <td>&nbsp;<input name="password" type="password" <?php if (isset($password)) echo "value =\"" . $password . "\""; ?> ></td>
+      <td>&nbsp;<input name="password" type="password"></td>
     </tr>
     <tr>
       <td>&nbsp;Passwort bestätigen:</td>
-      <td>&nbsp;<input name="password_verify" type="password" <?php if (isset($password)) echo "value =\"" . $password_verify . "\""; ?> ></td>
+      <td>&nbsp;<input name="password_verify" type="password"></td>
     </tr>
     <tr>
     <td colspan="2" align="right"><input name="account_erstellen" type="submit" value="Account erstellen"></td>
