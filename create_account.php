@@ -28,7 +28,7 @@ if (isset($_GET["key"])){
 	}
 }
 
-if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POST["account_erstellen"])) {
+if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POST["account_erstellen"])) {
 	// Accunt will erstellt werden…
 	if (3 > strlen($_POST["vorname"])){
 	  $errormsg = "Bitte gebe einen Vornamen, der länger als 3 Zeichen ist ein";
@@ -49,13 +49,14 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["email
 	  $errormsg = "Bitte gebe einen Vornamen, in dem keine invaliden Zeichen vorkommen ein";
 	}
 	else {
-		$query = mysql_query("INSERT INTO user (vorname,nachname,pw_hash) VALUES(\"" . mysql_real_escape_string($_POST["vorname"]) . "\",\"" . mysql_real_escape_string($_POST["nachname"]) . "\",\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\") WHERE id=" . $valid_user_id);
+		#$query = mysql_query("UPDATE INTO user (vorname,nachname,pw_hash) VALUES(\"" . mysql_real_escape_string($_POST["vorname"]) . "\",\"" . mysql_real_escape_string($_POST["nachname"]) . "\",\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\") WHERE id=" . $valid_user_id);
+		$query = mysql_query("UPDATE user SET vorname=\"" . mysql_real_escape_string($_POST["vorname"]) . "\", nachname=\"" . mysql_real_escape_string($_POST["nachname"]) . "\", pw_hash=\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\" WHERE id=" . $valid_user_id);
 		    if (!$query){
 		    	$errormsg = "User konnte nicht gespeichert werden!";
 		    }
 		    else {
 		    	mysql_query("DELETE FROM email_verify WHERE random=" . mysql_real_escape_string($_GET["key"]));
-			  echo "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
+			  $success_message = "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
 		    }
 	}
 }
@@ -108,11 +109,14 @@ Account erstellen
       <td>&nbsp;<input name="password_verify" type="password"></td>
     </tr>
     <tr>
-    <td colspan="2" align="right"><input name="account_erstellen" type="submit" value="Account erstellen"></td>
+    <td colspan="2" align="right"><input name="account_erstellen" id="account_erstellen" type="submit" value="Account erstellen"></td>
     </tr>
   </table>
 </form>
 <?php
+if (isset($success_message)){
+	echo $success_message;
+}
 } ?>
 	</body>
 </html>
