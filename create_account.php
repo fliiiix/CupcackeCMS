@@ -49,14 +49,15 @@ if (isset($_POST["vorname"]) && isset($_POST["nachname"]) && isset($_POST["passw
 	  $errormsg = "Bitte gebe einen Vornamen, in dem keine invaliden Zeichen vorkommen ein";
 	}
 	else {
-		#$query = mysql_query("UPDATE INTO user (vorname,nachname,pw_hash) VALUES(\"" . mysql_real_escape_string($_POST["vorname"]) . "\",\"" . mysql_real_escape_string($_POST["nachname"]) . "\",\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\") WHERE id=" . $valid_user_id);
-		$query = mysql_query("UPDATE user SET vorname=\"" . mysql_real_escape_string($_POST["vorname"]) . "\", nachname=\"" . mysql_real_escape_string($_POST["nachname"]) . "\", pw_hash=\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\" WHERE id=" . $valid_user_id);
+		# Passwort, Vor- und Nachnamen in die Datenbank speichern, wenn geändert und Nutzer aktivieren
+		$query = mysql_query("UPDATE user SET vorname=\"" . mysql_real_escape_string($_POST["vorname"]) . "\", nachname=\"" . mysql_real_escape_string($_POST["nachname"]) . "\", pw_hash=\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"]), false) . "\", aktiv=2 WHERE id=" . $valid_user_id);
 		    if (!$query){
 		    	$errormsg = "User konnte nicht gespeichert werden!";
 		    }
 		    else {
-		    	mysql_query("DELETE FROM email_verify WHERE random=" . mysql_real_escape_string($_GET["key"]));
-			  $success_message = "Der User wurde erfolgreich erstellt. <a href=\"index.php\">Zurück zur Startseite</a>";
+		    	# Key aus der Datenbank löschen, damit er nciht noch einmal verwendet werden kann
+		    	mysql_query("DELETE FROM email_verify WHERE random=\"" . mysql_real_escape_string($_GET["key"]) . "\"");
+		    	$success_message = "<b style=\"color:green\">Der User wurde erfolgreich erstellt.</b><br /><a href=\"index.php\">Zurück zur Startseite</a>";
 		    }
 	}
 }
