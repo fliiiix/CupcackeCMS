@@ -6,7 +6,7 @@ function db_connect (){
 }
 
 function login_user ($email,$password){
-	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 1);
+	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 2);
 	if ($ergebnis){
 		if ($row = mysql_fetch_array($ergebnis)) {
 			$user_id = $row["id"];
@@ -18,9 +18,9 @@ function login_user ($email,$password){
 				setcookie("CupcackeCMS_Cookie",$cookie_content,time()+3600);
 				return true;
 			}
-			else { return "Falscher Benutzername oder falsches Passwort"; }
+			else { return "Falscher Benutzername oder falsches Passwort oder deaktivierter Account"; }
 		} 
-		else { return "Falscher Benutzername oder falsches Passwort"; }
+		else { return "Falscher Benutzername oder falsches Passwort oder deaktivierter Account"; }
 	} 
 	else { return "Datenbank-Fehler!"; } 
 }
