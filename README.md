@@ -5,9 +5,10 @@ CupcackeCMS
 * Kalender
 * Bilderverwaltung (Upload, anzeigen)
 
-#Andere Opensource Projekte die Verwendet wurden
+#Quellen
 * https://github.com/twitter/bootstrap/ - Layout Grundlagen
 * http://bootswatch.com/ - fürs Layout
+* http://glyphicons.com/
 
 #TO-DO
 1. welche lizenz?
