@@ -83,7 +83,7 @@ Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und 
   </table>
 </form>
 <?php } else {?>
-Die E-Mail zum Ändern deines Passworts wurde versendet.<br>
+Die E-Mail zum Ändern deines Passworts wurde versandt.<br>
 <a href="index.php">Zurück zur Hauptseite</a>
 <?php } ?>
 	</body>

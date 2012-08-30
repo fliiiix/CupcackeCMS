@@ -259,17 +259,17 @@ Hallo <?php echo $username; ?>!
       <td style="vertical-align: top;"><?php switch($row["aktiv"]){
   # Account ist noch nicht bestätigt
   case (0):
-  echo "<div style='color:orange'><b>?</b></div>";
+  echo "<img src='./img/questionmark.png'>";
   break;
 
   # Account ist deaktiviert
   case (1):
-  echo "<div style='color:red'>✘</div>";
+  echo "<img src='./img/cross.png'>";
   break;
 
   # Account ist aktiv
   case (2):
-  echo "<div style='color:green'>✔</div>";
+  echo "<img src='./img/accepted.png'>";
   break;
 }?>
       </td>
@@ -314,9 +314,9 @@ Hallo <?php echo $username; ?>!
 <br />
 <div id="legende">
 Legende:<br />
-<span style='color:orange'><b>?</b></span> = Account noch nicht vom Nutzer bestätigt<br />
-<span div style='color:red'>✘</span> = Account deaktiviert<br />
-<span style='color:green'>✔</span> = Account aktiv<br />
+<img src='./img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
+<img src='./img/cross.png'> = Account deaktiviert<br />
+<img src='./img/accepted.png'> = Account aktiv<br />
 </div>
 </body>
 </html>
