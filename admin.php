@@ -102,7 +102,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
           $repeat = false;
         }
       } while($repeat);
-      $headers = "From: noreply@fridgeboard.de" . "\n" .
+      $headers = "From: noreply@fliegenberg.de" . "\n" .
       "X-Mailer: PHP/" . phpversion() . "\n" .
       "Mime-Version: 1.0" . "\n" . 
       "Content-Type: text/plain; charset=UTF-8" . "\n" .
