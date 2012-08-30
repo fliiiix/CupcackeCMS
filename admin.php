@@ -18,13 +18,11 @@ if (!$userid = $row["user_id"]){
   exit();
 }
 
-# Rolle des Nutzers überprüfen. Ist er nutzer kommt er auf die Nutzer-Seite, ist er Admin wird er zur admin.php weitergeleitet
-$query = mysql_query("SELECT rolle FROM user WHERE id=" . $userid);
+# Nutzernamen des Nutzers feststellen
+$valid_user_id = $row["user_id"];
+$query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
 $row = mysql_fetch_array($query);
-if ($row["rolle"] == 1){
-  header("Location: user.php");
-  exit();
-}
+$username = $row["vorname"] . " " . $row["nachname"];
 
 # Logout
 if (isset($_GET["logout"])){
@@ -36,15 +34,15 @@ if (isset($_GET["logout"])){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
-# Nutzer löschen, falls der entsprechende Button geklickt wird
+# Nutzer löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET["del"])){
   mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
 }
 
-# Nutzer (de)aktivieren, falls der entsprechende Button geklickt wird
+# Nutzer (de)aktivieren, wenn der entsprechende Button geklickt wird
 if (isset($_GET["cs"])){
-
-  $query = mysql_query("SELECT aktiv FROM user WHERE id=" . mysql_real_escape_string($_GET["cs"]));
+  $change_status = mysql_real_escape_string($_GET["cs"]);
+  $query = mysql_query("SELECT aktiv FROM user WHERE id=" . $change_status);
   $row = mysql_fetch_array($query);
   switch ($row["aktiv"]) {
     case (0):
@@ -59,7 +57,21 @@ if (isset($_GET["cs"])){
       $new = 1;
       break;
   }
-  mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . mysql_real_escape_string($_GET["cs"]));
+  mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . $change_status);
+}
+
+# Nutzer zum Admin bzw. zum User machen, wenn der entsprechende Button geklickt wird
+if (isset($_GET["ru"])){
+  $rank_user= mysql_real_escape_string($_GET["ru"]);
+  $query = mysql_query("SELECT rolle FROM user WHERE id=" . $rank_user);
+  $row = mysql_fetch_array($query);
+  if ($row["rolle"] == 1){
+    $new = 2;
+  }
+  if ($row["rolle"] == 2){
+    $new = 1;
+  }
+  mysql_query("UPDATE user SET rolle =" . $new . " WHERE id=" . $rank_user);
 }
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
@@ -110,7 +122,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
 }
 
 # Query für die ganze Tabelle
-$query = mysql_query("SELECT * FROM user");
+$query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
 ?>
 <html>
 <head>
@@ -186,7 +198,7 @@ $(document).ready(function() {
             </ul>
       <ul class="nav pull-right">
               <li id="login">
-Hallo username!
+Hallo <?php echo $username; ?>!
         </li>
     </ul>
           </div><!--/.nav-collapse -->
@@ -226,6 +238,8 @@ Hallo username!
       <td style="vertical-align: top;"><b>Status</b>
       </td>
       <td style="vertical-align: top;"><b>Rolle</b>
+      </td>
+      <td style="vertical-align: top;">
       </td>
       <td style="vertical-align: top;">
       </td>
@@ -279,6 +293,19 @@ Hallo username!
       </td>
       <td>
         <input name="delete_user" type="submit" onclick="window.location.href = '?del=<?php echo $row["id"];?>';" value="Nutzer löschen">
+      </td>
+      <td>
+        <input name="rank_user" type="submit" onclick="window.location.href = '?ru=<?php echo $row["id"];?>';" value="Zum
+        <?php
+        # Nutzer ist Admin
+        if($row["rolle"] == 2){
+          echo "Nutzer";
+        }
+        # Nutzer ist normaler Nutzer
+        if($row["rolle"] == 1){
+          echo "Administrator";
+        }
+        ?> machen">
       </td>
     </tr>
     <?php } ?>
