@@ -26,7 +26,7 @@ $username = $row["vorname"] . " " . $row["nachname"];
 
 # Logout
 if (isset($_GET["logout"])){
-  mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $userid);
+  mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
   setcookie("CupcackeCMS_Cookie","",-1);
   header("Location: index.php");
   exit();
@@ -128,7 +128,7 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
 <head>
   <title>CupcackeCMS - Admin-Interface</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="/CupcackeCMS/assets/js/jquery.js"></script>
+  <script type="text/javascript" src="./assets/js/jquery.js"></script>
   <style type="text/css">
 
   #legende {
@@ -198,7 +198,7 @@ $(document).ready(function() {
             </ul>
       <ul class="nav pull-right">
               <li id="login">
-Hallo <?php echo $username; ?>!
+Hallo <?php echo $username; ?>! <a href="?logout">Logout</a>
         </li>
     </ul>
           </div><!--/.nav-collapse -->

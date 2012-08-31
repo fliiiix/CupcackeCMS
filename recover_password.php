@@ -4,9 +4,30 @@
 <!--
 	Seite, die es dem Nutzer ermöglicht sich einen Link zum Zurücksetzen seines Passworts an seine E-Mail-Adresse senden zu lassen
 -->
-<title>CupcackeCMS - Passwort zurücksetzen</title>
+<title>Passwort zurücksetzen</title>
 <script type="text/javascript" src="js/jquery.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <!-- Le styles -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 90px; /* 90px to make the container go all the way to the bottom of the topbar */
+    }
+  </style>
+
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <!-- Le fav and touch icons -->
+  <link rel="shortcut icon" href="/assets/ico/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
 <?php
 require_once('utils.php');
 if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
@@ -32,7 +53,7 @@ if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
 			$ergebnis = mysql_query("SELECT * FROM pw_forgot WHERE link_component=\"" . $link_component . "\"");
 			if (mysql_num_rows($ergebnis) == 0){
 			  $repeat = false;
-			  mysql_query("INSERT INTO pw_forgot (user_id, link_component) VALUES(" . $valid_user_id . ",\"" . $link_component . "\")");
+			  mysql_query("INSERT INTO pw_forgot (user_id, link_component) VALUES(" . $valid_user_id . ", \"" . $link_component . "\")");
 			}
 		}while($repeat);
 		$headers = "From: noreply@fliegenberg.de" . "\n" .
@@ -55,8 +76,23 @@ if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
 	}
   }
 ?>
-	</head>
-	<body>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="index.php">Fliegenberg</a>
+          <div class="nav-collapse">
+    </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
 <?php
 if (!isset($valid_user_id)){
 if (isset($errormsg)){ ?>
@@ -83,8 +119,7 @@ Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und 
   </table>
 </form>
 <?php } else {?>
-Die E-Mail zum Ändern deines Passworts wurde versandt.<br>
-<a href="index.php">Zurück zur Hauptseite</a>
+<b style="color:green">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt</b>
 <?php } ?>
 	</body>
 </html>

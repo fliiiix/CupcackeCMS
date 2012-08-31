@@ -27,7 +27,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
       if (strlen($_POST["password"]) < 8){
         $errormsg = "Bitte gebe ein Passwort, das länger als 7 Zeichen ist ein";
       } else {
-        mysql_query("UPDATE user WHERE id=" . $valid_user_id . "SET pw_hash=\"" . hash("whirlpool",$_POST["password"],false));
+        mysql_query("UPDATE user WHERE id=" . $valid_user_id . " SET pw_hash=\"" . hash("whirlpool",$_POST["password"],false));
         mysql_query("DELETE FROM pw_forgot WHERE link_component=\"" . $key . "\"");
         $success_msg = 1;
       }
@@ -74,9 +74,6 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
           </a>
           <a class="brand" href="index.php">Fliegenberg</a>
           <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="index.php">Home</a></li>
-            </ul>
     </ul>
           </div><!--/.nav-collapse -->
         </div>

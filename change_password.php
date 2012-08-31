@@ -53,7 +53,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 ?>
 <html>
 <head>
-<title>Fliegenberg - Passwort ändern</title>
+<title>Passwort ändern</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
