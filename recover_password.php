@@ -45,7 +45,7 @@ if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
 		           "jemand hat auf fliegenberg.de ein neues Passwort für deinen Account angefordert." . "\r\n" . 
 				   "Kein Problem, hier kommt ein Link, mit dem du ein neues Passwort setzen kannst: \r\n".
 				   "\r\n".
-				   "http://" . $_SERVER['SERVER_NAME'] . "/change_password.php?key=" . $link_component . "\r\n" . 
+				   "http://" . $_SERVER['SERVER_NAME'] . "/reset_password.php?key=" . $link_component . "\r\n" . 
 				   "\r\n" .
 				   "Wenn du keine Änderung deines Passworts veranlasst hast, dann ignoriere diese Mail bitte einfach. \r\n".
 				   "\r\n".
