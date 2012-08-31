@@ -2,7 +2,7 @@
 //Sammlung von nützlichen Funktionen für CupcackeCMS
 function db_connect (){
 	mysql_connect("localhost", "root", "") or die(mysql_error());
-        mysql_select_db("cupcackecms") or die(mysql_error());
+    mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
 function login_user ($email,$password){
