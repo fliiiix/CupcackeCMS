@@ -1,34 +1,22 @@
 <?php
 error_reporting(E_ALL | E_STRICT);
 include 'templates/header.tpl'; 
+require_once('utils.php');
 db_connect();
 
-# Nutzer ohne Cookie rauswerfen
-if (!isset($_COOKIE["CupcackeCMS_Cookie"])){
-  header("Location: index.php");
-  exit();
-} else {
-  setcookie("CupcackeCMS_Cookie",$_COOKIE["CupcackeCMS_Cookie"],time()+3600);
-}
-
-# Cookie des Nutzers überprüfen
-$query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
-$row = mysql_fetch_array($query);
-if (!$userid = $row["user_id"]){
+# Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
+$valid_user_id = verify_user();
+if ($valid_user_id == false){
   header("Location: index.php");
   exit();
 }
 
 # Nutzernamen des Nutzers feststellen
-$valid_user_id = $row["user_id"];
-$query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
-$row = mysql_fetch_array($query);
-$username = $row["vorname"] . " " . $row["nachname"];
+$username = current_username($valid_user_id);
 
 # Logout
 if (isset($_GET["logout"])){
-  mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
-  setcookie("CupcackeCMS_Cookie","",-1);
+  logout();
   header("Location: index.php");
   exit();
 }
@@ -147,7 +135,7 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
   </style>
   <script type="text/javascript">
 	$(document).ready(function() {
-	  $("#create_user > a").click(function() { 
+	  $("#create_user > input").click(function() { 
 	    $(this).next("div").slideToggle();
 	  });
 	});
@@ -155,9 +143,8 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
 <div id="create_user">
   <?php if (isset($error_msg)){
     echo "<b style=\"color:red\">" . $error_msg . "</b><br />";
-  }
-  ?>
-  <a href="#">Neuen Nutzer erstellen</a>
+  }?>
+  <input id="create_user" name="create_user" class="btn btn-primary" onclick="window.location.href = '#'" value="Neuen Nutzer erstellen" type="submit">
   <div>
     <form method="post">
     <b>E-Mail-Adresse des Nutzers:</b> <input name="email" type="text" maxlength="256"?><br />

@@ -1,10 +1,13 @@
 <?php
 //Sammlung von nützlichen Funktionen für CupcackeCMS
+
+# Mit der Datenbank 
 function db_connect (){
 	mysql_connect("localhost", "root", "") or die(mysql_error());
-        mysql_select_db("cupcackecms") or die(mysql_error());
+	mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
+# Login-Funktion für die Startseite
 function login_user ($email,$password){
 	$ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\" AND pw_hash=\"" . hash("whirlpool",$password,false) . "\" AND aktiv=" . 2);
 	if ($ergebnis){
@@ -23,5 +26,34 @@ function login_user ($email,$password){
 		else { return "Falscher Benutzername oder falsches Passwort oder deaktivierter Account"; }
 	} 
 	else { return "Datenbank-Fehler!"; } 
+}
+
+# Logout-Funktion für alle Backend-Seiten
+function logout ($valid_user_id){
+	mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
+	setcookie("CupcackeCMS_Cookie","",-1);
+}
+
+# Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
+function verify_user(){
+	if (isset($_COOKIE["CupcackeCMS_Cookie"])){
+		$query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
+		if ($row = mysql_fetch_array($query)){
+			$valid_user_id = $row["user_id"];
+			return $valid_user_id;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
+
+# Namen des momentan eingeloggten Users zurückgeben
+function current_username($valid_user_id){
+	$query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
+	$row = mysql_fetch_array($query);
+	$username = $row["vorname"] . " " . $row["nachname"];
+	return $username;
 }
 ?>
