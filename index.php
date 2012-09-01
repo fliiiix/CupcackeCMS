@@ -1,5 +1,7 @@
-<?php include 'templates/header.tpl'; ?>
-    	<p>Hier kommt irgend eine Text</p>
+<?php 
+$current_site = "Hauptseite";
+include 'templates/header.tpl'; ?>
+    	<p>Hier kommt irgend ein Text hin</p>
     	<img alt="bildhalt" src="googleWallet.png">
     	<hr />
     	<h3>Nächste Events:</h3>
