@@ -1,4 +1,6 @@
 <?php
+$current_site = "Passwort wiederherstellen";
+include 'templates/header.tpl';
 require_once('utils.php');
 db_connect();
 
@@ -35,52 +37,6 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
   }
 }
 
-?>
-
-<html>
-<head>
-  <title>Passwort ändern</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="/CupcackeCMS/assets/js/jquery.js"></script>
-  <!-- Le styles -->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
-  <link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
-  <style>
-    body {
-      padding-top: 90px; /* 90px to make the container go all the way to the bottom of the topbar */
-    }
-  </style>
-
-  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-
-  <!-- Le fav and touch icons -->
-  <link rel="shortcut icon" href="/assets/ico/favicon.ico">
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
-</head><body>
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="index.php">Fliegenberg</a>
-          <div class="nav-collapse">
-    </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-</body>
-<?php
 if (isset($invalid_key)){?>
   <b style="color:red">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</b>
 <?php
@@ -109,5 +65,5 @@ if (isset($invalid_key)){?>
 <?php 
 }
 }
+include 'templates/footer.tpl';
 ?>
-</html>

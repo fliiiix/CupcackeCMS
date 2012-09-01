@@ -1,5 +1,6 @@
 <?php
 error_reporting(E_ALL | E_STRICT);
+$current_site = "Admin-Panel";
 include 'templates/header.tpl'; 
 require_once('utils.php');
 db_connect();
@@ -140,6 +141,7 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
 	  });
 	});
   </script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <div id="create_user">
   <?php if (isset($error_msg)){
     echo "<b style=\"color:red\">" . $error_msg . "</b><br />";
@@ -252,4 +254,3 @@ Legende:<br />
 <img src='./img/accepted.png'> = Account aktiv<br />
 </div>
 <?php include 'templates/footer.tpl'; ?>
-

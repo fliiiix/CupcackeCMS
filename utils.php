@@ -1,11 +1,15 @@
 <?php
 //Sammlung von nützlichen Funktionen für CupcackeCMS
 
-# Mit der Datenbank 
+# Mit der Datenbank verbinden
 function db_connect (){
 	mysql_connect("localhost", "root", "") or die(mysql_error());
 	mysql_select_db("cupcackecms") or die(mysql_error());
 }
+
+# Name der Webseite für das <title>-Tag
+global $site_name;
+$site_name = "CupcackeCMS";
 
 # Login-Funktion für die Startseite
 function login_user ($email,$password){
