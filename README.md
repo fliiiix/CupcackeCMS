@@ -1,6 +1,6 @@
 ﻿CupcackeCMS
 ===========
-by fliiiix ([Twitter](http://twitter.com/NichtAnonymHier)) and linux4ever([Twitter](http://twitter.com/linux4ever2), [Homepage](http://l3r.de))
+by fliiiix and linux4ever([Twitter](http://twitter.com/linux4ever2), [Homepage](http://l3r.de))
 #Schwerpunkte der Seite:
 * EASY TO USE
 * Kalender
