@@ -59,19 +59,14 @@ if (isset($errormsg)){ ?>
   <?php }?>
 <h1>Passwort zurücksetzen</h1>
 <b>Du hast dein Passwort vergessen? Kein Problem!</b><br>
-Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und wir schicken dir einen Link zum Zurücksetzen des Passworts für deinen Account an deine E-Mail-Adresse.<br>
+Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und wir schicken dir einen Link zum Zurücksetzen des Passworts für deinen Account an deine E-Mail-Adresse.
 <br>
-<form name="form1" method="post" action="">
-  <table border="0">
-    <tr>
-      <td>&nbsp;E-Mail-Adresse:</td>
-      <td>&nbsp;<input name="email" id="email "type="text" maxlength="30"></td>
-    </tr>
-    <tr>
-    <td colspan="2" align="right"><input name="passwort_reset" type="submit" value="Passwort zurücksetzen"></td>
-    </tr>
-  </table>
-</form>
+<br>
+<div>
+	<input class="input" style="margin-bottom:0px;" name="email" id="email" type="text" placeholder="E-Mail-Adresse">
+	<input class="btn btn-primary" name="passwort_reset" type="submit" value="Passwort zurücksetzen">
+</div>
+
 <?php } else {?>
 <b style="color:green">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt</b>
 <?php } 
