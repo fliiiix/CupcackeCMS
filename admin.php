@@ -17,7 +17,7 @@ $username = current_username($valid_user_id);
 
 # Logout
 if (isset($_GET["logout"])){
-  logout();
+  logout($valid_user_id);
   header("Location: index.php");
   exit();
 }

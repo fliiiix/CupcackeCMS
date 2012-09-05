@@ -35,9 +35,9 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
       }
     }
   }
-}
-
-if (isset($invalid_key)){?>
+}?>
+<h2> Passwort zurücksetzen</h2>
+<?php if (isset($invalid_key)){?>
   <b style="color:red">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</b>
 <?php
 } else {

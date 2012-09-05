@@ -57,8 +57,8 @@ if (isset($errormsg)){ ?>
 </table>
 <br>
   <?php }?>
-<h1>Passwort zurücksetzen</h1>
-<b>Du hast dein Passwort vergessen? Kein Problem!</b><br>
+<h2>Passwort zurücksetzen</h2>
+Du hast dein Passwort vergessen? Kein Problem!<br>
 Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und wir schicken dir einen Link zum Zurücksetzen des Passworts für deinen Account an deine E-Mail-Adresse.
 <br>
 <br>
