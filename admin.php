@@ -68,7 +68,7 @@ if(count($_GET) != 0) { header("Location: admin.php"); }
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
 if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"]) && isset($_POST["vorname"]) && isset($_POST["nachname"])){
   if ($_POST["email"] != $_POST["email_retype"]){
-    $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben" . $_POST["rolle"];
+    $error_msg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
   } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
     $error_msg = "Bitte eine valide E-Mail-Adresse eingeben";
   } else {
@@ -103,7 +103,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       "ein Administrator hat dir einen Account für Fliegenberg.de erstellt." . "\r\n" . 
       "Klicke auf den folgenden Link, um deine Daten zu überprüfen, dein Passwort zu setzen und den Account zu aktivieren: \r\n".
       "\r\n".
-      "http://" . $_SERVER['SERVER_NAME'] . "/create_account.php?key=" . $random . "\r\n" . 
+      "http://" . $_SERVER['SERVER_NAME'] . "/email_verify.php?key=" . $random . "\r\n" . 
       "Wenn du dir keinen Account erstellen möchtest lasse diesen Link einfach verfallen. \r\n".
       "Mit freundlichen Grüßen\r\n".
       "Dein Fliegenberg-Team";

@@ -5,6 +5,9 @@ SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+CREATE DATABASE `cupcackecms` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `cupcackecms`;
+
 DROP TABLE IF EXISTS `beitrag`;
 CREATE TABLE `beitrag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -24,6 +27,14 @@ CREATE TABLE `bild` (
   `speicherName` varchar(50) NOT NULL,
   `uploadName` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `change_email`;
+CREATE TABLE `change_email` (
+  `user_id` int(11) NOT NULL,
+  `random` varchar(128) NOT NULL,
+  `new_email` tinytext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -71,9 +82,5 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `user` (`id`, `nachname`, `vorname`, `rolle`, `email`, `pw_hash`, `aktiv`) VALUES
-(3,	'Hallo',	'Halli',	2,	'halli@hallo.de',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	2),
-(4,	'Testmensch',	'Dieter',	2,	'dieter@test.de',	'd7b784d5dd5a950223102a439bfeca948c1c1c25c7215c41b110e01a7d7d05d5b2845fc87b0cf2c84ecafff5bad24732e942d6b804a21855ef9691df9ae7e652',	2),
-(5,	'1234',	'1234',	2,	'1234@user.com',	'2f9959b230a44678dd2dc29f037ba1159f233aa9ab183ce3a0678eaae002e5aa6f27f47144a1a4365116d3db1b58ec47896623b92d85cb2f191705daf11858b8',	1);
 
--- 2012-08-25 23:16:39
+-- 2012-09-07 12:40:26

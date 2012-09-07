@@ -8,8 +8,7 @@ function db_connect (){
 }
 
 # Name der Webseite für das <title>-Tag
-global $site_name;
-$site_name = "CupcackeCMS";
+$GLOBALS["site_name"] = "CupcackeCMS";
 
 # Login-Funktion für die Startseite
 function login_user ($email,$password){
