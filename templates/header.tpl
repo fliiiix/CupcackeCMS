@@ -1,5 +1,12 @@
 <?php
 require_once("utils.php");
+
+#die logout funktion
+if(isset($_GET['logout']))
+{
+       logout( verify_user());
+}
+
 // Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
 // Wenn alle Daten stimmen zum Admin-Interface weiterleiten
 if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_button"])) {
@@ -28,17 +35,14 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 90px; /* 90px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
+     <link href="assets/css/docs.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
 
     <!-- Le fav and touch icons
     <link rel="shortcut icon" href="/assets/ico/favicon.ico">
@@ -64,30 +68,25 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               <li><a href="index.php">Home</a></li>
               <li><a href="kalender.php">Kalender</a></li>
               <?php 
-              	//if user login okey
-              	echo "<li><a href=\"bilderGalerie.php\">Bilder Galerie</a></li>";
+              	if(verify_user() != false)
+		{
+              		echo "<li><a href=\"bilderGalerie.php\">Bilder Galerie</a></li>";
+		}
               ?>
             </ul>
 	    <ul class="nav pull-right">
-              <li id="login">
-	         <form method="post" action="" class="navbar-form">
-		    <?php if (isset($errormsg)){
-		    echo $errormsg;}?>
-		    <p class="navbar-text" style="float:left;">Email:&nbsp;&nbsp;&nbsp;</p> 
-		    <input type="text" name="email" id="email" class="span2" style="float:left; width:120px;"/>
-
-		    <p class="navbar-text" style="float:left;">&nbsp;&nbsp;&nbsp;Passwort:&nbsp;&nbsp;&nbsp;</p> 
-		    <input type="password" name="password" id="password" class="span2" style="float:left; width:100px;"/>
-			
-		    <div class="btn-group" style="float:left;">
-                    <input type="submit" value="Einloggen" id="login_button" name="login_button" class="btn btn-primary" style="border:0px;"/>
-	                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-	                <ul class="dropdown-menu">
-	                   <li><a href="recover_password.php">Passwort vergessen</a></li>
-	               </ul>
-	            </div><!-- /btn-group -->
-	         </form>
-	      </li>
+              <?php
+                  $result =  verify_user();
+                  if($result == false)
+                 {
+                     include 'templates/login.tpl'; 
+                 }
+                else
+		{
+			echo("Du bist eingelogt " . current_username($result));
+			echo " <a class=\"btn btn-primary\" href=\"?logout\">Logout</a>";
+		}
+                ?>
 	  </ul>
           </div><!--/.nav-collapse -->
         </div>

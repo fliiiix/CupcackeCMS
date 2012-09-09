@@ -6,21 +6,17 @@ require_once('utils.php');
 db_connect();
 
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
-$valid_user_id = verify_user();
-if ($valid_user_id == false){
+if (verify_user() == false){
   header("Location: index.php");
   exit();
+}
+else
+{
+    $valid_user_id = verify_user();
 }
 
 # Nutzernamen des Nutzers feststellen
 $username = current_username($valid_user_id);
-
-# Logout
-if (isset($_GET["logout"])){
-  logout($valid_user_id);
-  header("Location: index.php");
-  exit();
-}
 
 # Nutzer löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET["del"])){

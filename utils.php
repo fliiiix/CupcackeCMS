@@ -39,11 +39,11 @@ function logout ($valid_user_id){
 
 # Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
 function verify_user(){
-	if (isset($_COOKIE["CupcackeCMS_Cookie"])){
+    db_connect ();
+     if (isset($_COOKIE["CupcackeCMS_Cookie"])){
 		$query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
 		if ($row = mysql_fetch_array($query)){
-			$valid_user_id = $row["user_id"];
-			return $valid_user_id;
+			return $row["user_id"];
 		} else {
 			return false;
 		}
