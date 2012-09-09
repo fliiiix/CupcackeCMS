@@ -6,11 +6,6 @@ by fliiiix and linux4ever([Twitter](http://twitter.com/linux4ever2), [Homepage](
 * Kalender
 * Bilderverwaltung (Upload, anzeigen)
 
-#Quellen
-* https://github.com/twitter/bootstrap/ - Layout Grundlagen
-* http://bootswatch.com/ - fürs Layout
-* http://glyphicons.com/
-
 #TO-DO
 1. welche lizenz?
 
@@ -34,13 +29,13 @@ by fliiiix and linux4ever([Twitter](http://twitter.com/linux4ever2), [Homepage](
 #Produktfunktionen
                      
 #Rechte:
-| Wer      |Kalender      |BilderGallerie |  AdminPanel|
-|:--------:|:------------:|:-------------:|:----------:|
-|jeder     | Ansehen      | darf nichts   |darf nichts |
-|user      | X            | X             |darf nichts |
-|admin     | X            | X             |X           |
-|betrachter| Ansehen      | Ansehen       |darf nichts |
-X Bearbeiten, Löschen, Editieren
+	| Wer      |Kalender      |BilderGallerie |  AdminPanel|
+	|:--------:|:------------:|:-------------:|:----------:|
+	|jeder     | Ansehen      | darf nichts   |darf nichts |
+	|user      | X            | X             |darf nichts |
+	|admin     | X            | X             |X           |
+	|betrachter| Ansehen      | Ansehen       |darf nichts |
+	X Bearbeiten, Löschen, Editieren
 
 ###Haubtseite
 Funktionen:
@@ -75,9 +70,8 @@ Textbeschreibung //optional wird nur angezeigt wenn vorhanden
 
 //TODO eventuell mach ich mal n bild ;)
 
-###Adminpanel
-Nur für den Admin :P sichtbar.
-Funktionen:
-- Useranlegen
-- Rechte vergeben
-- Algemeine eistellungen (was auch immer :P)
+----
+#Quellen
+* https://github.com/twitter/bootstrap/ - Layout Grundlagen
+* http://bootswatch.com/ - fürs Layout
+* http://glyphicons.com/
