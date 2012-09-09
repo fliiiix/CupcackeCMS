@@ -1,10 +1,9 @@
 <?php
 require_once("utils.php");
 
-#die logout funktion
-if(isset($_GET['logout']))
-{
-       logout( verify_user());
+# Wenn der Logout-Button gerückt wird den Nutzer ausloggen
+if(isset($_GET['logout'])){
+  logout( verify_user());
 }
 
 // Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
@@ -13,13 +12,11 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
   db_connect();
   setcookie("CupcackeCMS_Cookie","",0);
 
-  $ergebnis = login_user($_POST["email"],$_POST["password"]);
-  if ($ergebnis == "true"){
+  $login = login_user($_POST["email"],$_POST["password"]);
+  if ($login == "true"){
     header("Location: admin.php");
     exit();
   }
-  else
-  { echo($ergebnis); }
 }
 ?>
 <!DOCTYPE html>

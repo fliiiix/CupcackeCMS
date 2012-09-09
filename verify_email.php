@@ -31,7 +31,7 @@ if ($invalid_key == 1){
 	echo "<b style=\"color:red\">Dein E-Mail-Bestätigungs-Link ist fehlerhaft oder abgelaufen</b>";
 }
 if (isset($success_msg)){
-	echo "<b style=\"color:green\">Deine E-Mail-Adresse wurde erfolgreich bestätigt</b>";
+	echo "<b style=\"color:green\">Deine neue E-Mail-Adresse wurde erfolgreich bestätigt</b>";
 }
 include 'templates/footer.tpl';
 ?>

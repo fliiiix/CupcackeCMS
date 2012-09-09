@@ -24,9 +24,9 @@ function login_user ($email,$password){
 				setcookie("CupcackeCMS_Cookie",$cookie_content,time()+3600);
 				return true;
 			}
-			else { return "Falscher Benutzername oder falsches Passwort oder deaktivierter Account"; }
+			else { return "Falscher Benutzername, falsches Passwort oder deaktivierter Account."; }
 		} 
-		else { return "Falscher Benutzername oder falsches Passwort oder deaktivierter Account"; }
+		else { return "Falscher Benutzername, falsches Passwort oder deaktivierter Account."; }
 	} 
 	else { return "Datenbank-Fehler!"; } 
 }
