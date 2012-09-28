@@ -104,6 +104,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       "Mit freundlichen Grüßen\r\n".
       "Dein Fliegenberg-Team";
       mail($email, "Account für " . $_SERVER['SERVER_NAME'] . " bestätigen", $message, $headers);
+      $succes_msg = "Die Bestätigungs-Mail für den Account wurde erfolgreich versandt"
     }
   }
 }
@@ -140,7 +141,7 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <div id="create_user">
   <?php if (isset($error_msg)){
-    echo "<b style=\"color:red\">" . $error_msg . "</b><br />";
+    echo "<div class=\"alert\"><b style=\"color:red\">" . $error_msg . "</b></div>";
   }?>
   <input id="create_user" name="create_user" class="btn btn-primary" onclick="window.location.href = '#'" value="Neuen Nutzer erstellen" type="submit">
   <div>

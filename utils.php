@@ -59,4 +59,70 @@ function current_username($valid_user_id){
 	$username = $row["vorname"] . " " . $row["nachname"];
 	return $username;
 }
+
+function calendar($month,$year){
+	$current_m = $month;
+	$current_y = $year;
+	$current_m_name = date("F", mktime(0, 0, 0, $current_m, 1, $current_y));
+	$current_m_first_wd = date("w", mktime(0, 0, 0, $current_m, 1, $current_y));
+	$current_m_last_d = date("d", mktime(0, 0, 0, $current_m+1, 0, $current_y));
+	$output  = '<table>';
+	$output .= '  <tr>';
+	$output .= '    <td colspan="7">' . $current_m_name . '</td>';
+ 	$output .= '  </tr>';
+ 	$output .= '  <tr>';
+	$output .= '    <td>Mo</td>';
+  	$output .= '    <td>Di</td>';
+  	$output .= '    <td>Mi</td>';
+  	$output .= '    <td>Do</td>';
+  	$output .= '    <td>Fr</td>';
+  	$output .= '    <td>Sa</td>';
+  	$output .= '    <td>So</td>';
+  	$output .= '  </tr>';
+  	$output .= '  <tr>';
+  	if ($current_m_first_wd > 1) {
+  		$output .= '<td colspan="' . ($current_m_first_wd - 1) . '">&nbsp;</td>';
+  	}
+  	for ($act_day=1, $act_wd=$current_m_first_wd; $act_day <= $current_m_last_d; $act_day++, $act_wd++) {
+  		$output .= '<td>' . $act_day . '</td>';
+  		if ($act_wd == 7) {
+  			$output .= '</tr>';
+  			if ($act_day < $current_m_last_d) {
+  				$output .= '<tr>';
+  			}
+  			$act_wd = 0;
+  		}
+  	}
+  	if ($act_wd > 1){
+  		$output .= '<td colspan="' . (7 - $act_wd) . '">&nbsp;</td></tr>';
+  	}
+  	$output .='</table>';
+  	return array('html' => $output, 'current_m' => $current_m, 'current_y' => $current_y);
+}
+
+function calendar_link($dir, $current_m, $current_y){
+	$output = '<a href="?m=';
+	if ($dir == 'f') {
+		$arrows = '>>>';
+		if ($current_m == 12) {
+			$next_m = 1;
+			$next_y = $current_y++;
+		} else {
+			$next_m = $current_m++;
+			$next_y = $current_y;
+		}
+	}
+	if ($dir == 'b') {
+		$arrows = '<<<';
+		if ($current_m == 1) {
+			$next_m = 12;
+			$next_y = $current_y - 1;
+		} else {
+			$next_m = $current_m - 1;
+			$next_y = $current_y;
+		}
+	}
+	$output .= $next_m . '&y=' . $next_y . '">' . $arrows . '</a>';
+	return $output;
+}
 ?>
