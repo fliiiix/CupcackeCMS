@@ -60,12 +60,15 @@ function current_username($valid_user_id){
 	return $username;
 }
 
+# Kalender-Funktion
 function calendar($month,$year){
 	$current_m = $month;
 	$current_y = $year;
+	# Namen des angezeigten Monats feststellen, ersten Wochentag dieses Monats feststellen, letzten Tag dieses Monats feststellen
 	$current_m_name = date("F", mktime(0, 0, 0, $current_m, 1, $current_y));
 	$current_m_first_wd = date("w", mktime(0, 0, 0, $current_m, 1, $current_y));
 	$current_m_last_d = date("d", mktime(0, 0, 0, $current_m+1, 0, $current_y));
+	# Tabellen-Stuff (Wochentages-Leiste)
 	$output  = '<table>';
 	$output .= '  <tr>';
 	$output .= '    <td colspan="7">' . $current_m_name . '</td>';
@@ -80,19 +83,25 @@ function calendar($month,$year){
   	$output .= '    <td>So</td>';
   	$output .= '  </tr>';
   	$output .= '  <tr>';
+  	# Leere Tabellen-Felder ausgeben, wenn der erste Tag des Monats kein Montag ist
   	if ($current_m_first_wd > 1) {
   		$output .= '<td colspan="' . ($current_m_first_wd - 1) . '">&nbsp;</td>';
   	}
+  	# Die einzelnen Tabellen-Felder mit den Tages-Daten generieren
   	for ($act_day=1, $act_wd=$current_m_first_wd; $act_day <= $current_m_last_d; $act_day++, $act_wd++) {
+  		# Datum ausgeben
   		$output .= '<td>' . $act_day . '</td>';
+  		# Zeile nach einem Sonntag beenden
   		if ($act_wd == 7) {
   			$output .= '</tr>';
+  			# Wenn der Monat noch nicht zu Ende ist noch eine neue Zeile öffnen
   			if ($act_day < $current_m_last_d) {
   				$output .= '<tr>';
   			}
   			$act_wd = 0;
   		}
   	}
+  	# Wenn der letzte Tag des Monats kein Sonntag ist am Ende der Tabellen-Zeile noch leere Zellen einfügen
   	if ($act_wd > 1){
   		$output .= '<td colspan="' . (7 - $act_wd) . '">&nbsp;</td></tr>';
   	}
