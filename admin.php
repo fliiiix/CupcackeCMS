@@ -104,7 +104,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
       "Mit freundlichen Grüßen\r\n".
       "Dein Fliegenberg-Team";
       mail($email, "Account für " . $_SERVER['SERVER_NAME'] . " bestätigen", $message, $headers);
-      $succes_msg = "Die Bestätigungs-Mail für den Account wurde erfolgreich versandt"
+      $succes_msg = "Die Bestätigungs-Mail für den Account wurde erfolgreich versandt";
     }
   }
 }
