@@ -9,13 +9,6 @@ if (isset($_GET['m']) && (isset($_GET['y']))) {
 } else {
 	$calendar = calendar(date('m'),date('Y'));
   echo $calendar['html'];
-}?>
-<table>
-	<tr>
-		<td><?php echo calendar_link('b', $calendar['current_m'], $calendar['current_y']);?></td>
-		<td><?php echo calendar_link('f', $calendar['current_m'], $calendar['current_y']);?></td>
-	</tr>
-</table>
-<?php
+}
 include 'templates/footer.tpl';
 ?>

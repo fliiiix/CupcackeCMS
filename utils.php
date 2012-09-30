@@ -74,15 +74,19 @@ function calendar($month,$year){
 	$output .= '    <td colspan="7" style="border-top: 0px solid black; font-weight:bold;">' . $current_m_name . '</td>';
  	$output .= '  </tr>';
  	$output .= '  <tr>';
-	$output .= '    <td>Mo</td>';
-  	$output .= '    <td>Di</td>';
-  	$output .= '    <td>Mi</td>';
-  	$output .= '    <td>Do</td>';
-  	$output .= '    <td>Fr</td>';
-  	$output .= '    <td>Sa</td>';
-  	$output .= '    <td>So</td>';
+	$output .= '    <td><b>Mo</b></td>';
+  	$output .= '    <td><b>Di</b></td>';
+  	$output .= '    <td><b>Mi</b></td>';
+  	$output .= '    <td><b>Do</b></td>';
+  	$output .= '    <td><b>Fr</b></td>';
+  	$output .= '    <td><b>Sa</b></td>';
+  	$output .= '    <td><b>So</b></td>';
   	$output .= '  </tr>';
   	$output .= '  <tr>';
+  	# Sonntags-Bugfix
+  	if ($current_m_first_wd == 0) {
+  		$current_m_first_wd = 7;
+  	}
   	# Leere Tabellen-Felder ausgeben, wenn der erste Tag des Monats kein Montag ist
   	if ($current_m_first_wd > 1) {
   		$output .= '<td colspan="' . ($current_m_first_wd - 1) . '">&nbsp;</td>';
@@ -105,24 +109,29 @@ function calendar($month,$year){
   	if ($act_wd > 1){
   		$output .= '<td colspan="' . (7 - $act_wd) . '">&nbsp;</td></tr>';
   	}
-  	$output .='</table>';
+  	$output .= '  <tr>';
+  	$output .= '    <td colspan="3">' . calendar_link('b',$current_m,$current_y) . '</td>';
+  	$output .= '    <td>&nbsp;</td>';
+  	$output .= '    <td colspan="3" style="text-align:right">' . calendar_link('f',$current_m,$current_y) . '</td>';
+  	$output .= '  </tr>';
+  	$output .= '</table>';
   	return array('html' => $output, 'current_m' => $current_m, 'current_y' => $current_y);
 }
 
 function calendar_link($dir, $current_m, $current_y){
 	$output = '<a href="?m=';
 	if ($dir == 'f') {
-		$arrows = '>>>';
+		$arrows = '<i class="icon-circle-arrow-right"></i>';
 		if ($current_m == 12) {
 			$next_m = 1;
-			$next_y = $current_y++;
+			$next_y = $current_y + 1;
 		} else {
-			$next_m = $current_m++;
+			$next_m = $current_m + 1;
 			$next_y = $current_y;
 		}
 	}
 	if ($dir == 'b') {
-		$arrows = '<<<';
+		$arrows = '<i class="icon-circle-arrow-left"></i>';
 		if ($current_m == 1) {
 			$next_m = 12;
 			$next_y = $current_y - 1;
