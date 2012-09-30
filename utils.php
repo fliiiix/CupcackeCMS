@@ -69,9 +69,9 @@ function calendar($month,$year){
 	$current_m_first_wd = date("w", mktime(0, 0, 0, $current_m, 1, $current_y));
 	$current_m_last_d = date("d", mktime(0, 0, 0, $current_m+1, 0, $current_y));
 	# Tabellen-Stuff (Wochentages-Leiste)
-	$output  = '<table>';
+	$output  = '<table class="table" style="width: 100px; margin-bottom: 0px;">';
 	$output .= '  <tr>';
-	$output .= '    <td colspan="7">' . $current_m_name . '</td>';
+	$output .= '    <td colspan="7" style="border-top: 0px solid black; font-weight:bold;">' . $current_m_name . '</td>';
  	$output .= '  </tr>';
  	$output .= '  <tr>';
 	$output .= '    <td>Mo</td>';

@@ -14,7 +14,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
 
   $login = login_user($_POST["email"],$_POST["password"]);
   if ($login == "true"){
-    header("Location: admin.php");
+    header("Location: index.php");
     exit();
   }
 }
@@ -59,32 +59,32 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="index.php">Fliegenberg</a>
+          <a class="brand" style="float:left; margin-left: 0px;" href="index.php">Fliegenberg</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li><a href="index.php">Home</a></li>
-              <li><a href="kalender.php">Kalender</a></li>
+              <li><a href="index.php">Startseite</a></li>
+              <li><a href="kalender.php">Termine</a></li>
               <?php 
-              	if(verify_user() != false)
-		{
+              	if(verify_user() != false){
               		echo "<li><a href=\"bilderGalerie.php\">Bilder Galerie</a></li>";
-		}
+                  echo "<li><a href=\"admin.php\">User Verwaltung</a></li>";
+		            }
               ?>
             </ul>
-	    <ul class="nav pull-right">
-              <?php
-                  $result =  verify_user();
-                  if($result == false)
-                 {
-                     include 'templates/login.tpl'; 
-                 }
-                else
-		{
-			echo("Hallo " . current_username($result));
-			echo " <a class=\"btn btn-primary\" href=\"?logout\">Logout</a>";
-		}
-                ?>
-	  </ul>
+      	    <ul class="nav pull-right">
+            <?php
+              $result =  verify_user();
+              if($result == false)
+              {
+                  include 'templates/login.tpl'; 
+              }
+              else
+              {
+                  echo("Hallo " . current_username($result));
+                  echo " <a class=\"btn btn-primary\" href=\"?logout\">Logout</a>";
+              }
+            ?>
+      	  </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
