@@ -38,14 +38,14 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 }?>
 <h2> Passwort zurücksetzen</h2>
 <?php if (isset($invalid_key)){?>
-  <b style="color:red">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</b>
+  <div class="alert"<b style="color:red">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</b></div>
 <?php
 } else {
   if (isset($success_msg)){ ?>
-    <b style="color:green">Dein Passwort wurde erfolgreich geändert</b>
+  <div class="alert"><b style="color:green">Dein Passwort wurde erfolgreich geändert</b></div>
   <?php } else {
   if (isset($errormsg)){
-    echo "<b style=\"color:red\">" . $errormsg . "</b>";
+    echo '<div class="alert"><b style="color:red">" . $errormsg . "</b></div>';
   }?>
 <form name="form1" method="post" action="<?php if (isset ($_GET["key"])) echo "?key=" . $_GET["key"]; ?>">
   <table border="0">

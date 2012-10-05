@@ -57,6 +57,7 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
+  `title` varchar(100) NOT NULL,
   `description` longtext NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
@@ -101,4 +102,4 @@ INSERT INTO `user` (`id`, `nachname`, `vorname`, `rolle`, `email`, `pw_hash`, `a
 (5,	'1234',	'1234',	2,	'1234@user.com',	'746ca0eb7ca8f4c249bce17a59e6a3c901e9c26d62e81e062c8897e7800c620045f254338ecde34299c116daf16df5eaa0324411e63dbe5cffc607c273b81249',	2),
 (6,	'Fischer',	'Konrad',	2,	'kon.fischer@ymail.com',	'1ce87e773445695711406c8b2e3f7a92105dd9beb88b3908195011a20200aa53286e5a661426485588d4c9fa4e61a3198da1f7b913caa54483ddeb609da435f5',	2);
 
--- 2012-10-04 18:02:53
+-- 2012-10-05 20:03:10

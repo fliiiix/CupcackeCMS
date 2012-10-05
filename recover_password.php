@@ -3,7 +3,7 @@ $current_site = "Passwort zurücksetzen";
 include 'templates/header.tpl';
 require_once('utils.php');
 
-if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
+if (isset($_POST["email"]) && isset($_POST["password_reset"])){
   if ($_POST["email"] == ""){
 	  $errormsg = "Bitte eine E-Mail-Adresse eingeben";
 	}
@@ -50,12 +50,8 @@ if (isset($_POST["email"]) && isset($_POST["passwort_reset"])){
   }
 if (!isset($valid_user_id)){
 if (isset($errormsg)){ ?>
-<table border="1" bordercolor="#FF0000">
-  <tr>
-    <td><?php echo $errormsg; ?></td>
-  </tr>
-</table>
-<br>
+<div class="alert"><b style="color:red"><?php echo $errormsg; ?></b></div>
+<br />
   <?php }?>
 <h2>Passwort zurücksetzen</h2>
 Du hast dein Passwort vergessen? Kein Problem!<br>
@@ -63,11 +59,13 @@ Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und 
 <br>
 <br>
 <div>
-	<input class="input" style="margin-bottom:0px;" name="email" id="email" type="text" placeholder="E-Mail-Adresse">
-	<input class="btn btn-primary" name="passwort_reset" type="submit" value="Passwort zurücksetzen">
+    <form method="post">
+        <input class="input" style="margin-bottom:0px;" name="email" id="email" type="text" placeholder="E-Mail-Adresse">
+        <input class="btn btn-primary" name="password_reset" type="submit" value="Passwort zurücksetzen">
+    </form>
 </div>
 
 <?php } else {?>
-<b style="color:green">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt</b>
+<div class="alert"><b style="color:green">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt</b></div>
 <?php } 
 include 'templates/footer.tpl';?>
