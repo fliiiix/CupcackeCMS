@@ -1,6 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <?php
+$current_site = "Passwort ändern";
 require_once("utils.php");
+include 'templates/header.tpl';
 if (isset($_GET["key"])){
   db_connect();
   $ergebnis = mysql_query("SELECT user_id from pw_forgot WHERE link_component=\"" . mysql_real_escape_string($_GET["key"]) . "\"");
@@ -50,17 +52,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
     }
   }
 }
-?>
-<html>
-<head>
-<title>Passwort ändern</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-</head>
-<body>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	</head>
-	<body>
-<?php 
+# Wenn der Key invalid ist
 if (isset($invalid_key)){
 ?>
 Dieser Link ist entweder falsch oder wurde schon benutzt, um ein Passwort zurückzusetzen.<br>
@@ -97,6 +89,6 @@ Hier kannst du ein neues Passwort für deinen Account festlegen:<br>
   </table>
 </form>
 <?php }
-}?>
-</body>
-</html>
+}
+include 'templates/footer.tpl';
+?>
