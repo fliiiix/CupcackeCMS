@@ -27,15 +27,6 @@ by fliiiix and linux4ever([Twitter](http://twitter.com/linux4ever2), [Homepage](
 1. Cooles Layout ;) (darum Bootstrap)
 
 #Produktfunktionen
-                     
-#Rechte:
-	| Wer      |Kalender      |BilderGallerie |  AdminPanel|
-	|:--------:|:------------:|:-------------:|:----------:|
-	|jeder     | Ansehen      | darf nichts   |darf nichts |
-	|user      | X            | X             |darf nichts |
-	|admin     | X            | X             |X           |
-	|betrachter| Ansehen      | Ansehen       |darf nichts |
-	X Bearbeiten, Löschen, Editieren
 
 ###Haubtseite
 Funktionen:
@@ -72,6 +63,8 @@ Textbeschreibung //optional wird nur angezeigt wenn vorhanden
 
 ----
 #Quellen
-* https://github.com/twitter/bootstrap/ - Layout Grundlagen
-* http://bootswatch.com/ - fürs Layout
-* http://glyphicons.com/
+* [Bootstrap](https://github.com/twitter/bootstrap/) - Layout Grundlagen
+* [Bootswatch](http://bootswatch.com/) - fürs Layout
+* [Glyphicons](http://glyphicons.com/) - Symbole
+* [Bootstrap-Timepicker](http://jdewit.github.com/bootstrap-timepicker/) - Uhrzeit-Auswahl
+* [Bootstrap-Datepicker](http://www.eyecon.ro/bootstrap-datepicker/) - Datums-Auswahl

@@ -66,8 +66,9 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               <li><a href="kalender.php">Termine</a></li>
               <?php 
               	if(verify_user() != false){
-              		echo "<li><a href=\"bilderGalerie.php\">Bilder Galerie</a></li>";
-                  echo "<li><a href=\"admin.php\">User Verwaltung</a></li>";
+                echo "<li><a href=\"bilderGalerie.php\">Bildergalerie</a></li>";
+                echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
+                echo "<li><a href=\"kalender_admin.php\">Terminverwaltung</a></li>";
 		            }
               ?>
             </ul>

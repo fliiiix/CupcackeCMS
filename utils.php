@@ -107,7 +107,7 @@ function calendar($month,$year){
   	}
   	# Wenn der letzte Tag des Monats kein Sonntag ist am Ende der Tabellen-Zeile noch leere Zellen einfügen
   	if ($act_wd > 1){
-  		$output .= '<td colspan="' . (7 - $act_wd) . '">&nbsp;</td></tr>';
+  		$output .= '<td colspan="' . (8 - $act_wd) . '">&nbsp;</td></tr>';
   	}
   	$output .= '  <tr>';
   	$output .= '    <td colspan="3">' . calendar_link('b',$current_m,$current_y) . '</td>';
