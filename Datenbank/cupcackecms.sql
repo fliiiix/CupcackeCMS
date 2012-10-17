@@ -61,18 +61,7 @@ CREATE TABLE `events` (
   `description` longtext NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `last_editor` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `kalenderEintrag`;
-CREATE TABLE `kalenderEintrag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datum` date NOT NULL,
-  `titel` varchar(100) NOT NULL,
-  `beschreib` longtext,
-  `id_user` int(11) DEFAULT NULL,
+  `last_editor` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,4 +86,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2012-10-05 22:57:28
+-- 2012-10-14 11:00:01

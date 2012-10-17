@@ -2,7 +2,7 @@
 $current_site = "Hauptseite";
 include 'templates/header.tpl'; 
 if (isset($login)){
-	echo "<div class=\"alert\">" . $login . " Hast du dein <a href=\"recover_password.php\">Passwort vergessen</a>?</div>";
+	echo '<div class="alert alert-error"> <button type="button" class="close" data-dismiss="alert">×</button>' . $login . ' Hast du dein <a href="recover_password.php">Passwort vergessen</a>?</div>';
 }
 ?>
 <div class="span12"><h1>Titel</h1></div>

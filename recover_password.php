@@ -50,7 +50,7 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])){
   }
 if (!isset($valid_user_id)){
 if (isset($errormsg)){ ?>
-<div class="alert"><b style="color:red"><?php echo $errormsg; ?></b></div>
+<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button><?php echo $errormsg; ?></div>
 <br />
   <?php }?>
 <h2>Passwort zurücksetzen</h2>
@@ -66,6 +66,6 @@ Gebe einfach hier deine E-Mail-Adresse mit der du dich registriert hast ein und 
 </div>
 
 <?php } else {?>
-<div class="alert"><b style="color:green">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt</b></div>
+<div class="alert alert-success">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt <a href="index.php">Zurück zur Startseite</a></div>
 <?php } 
 include 'templates/footer.tpl';?>

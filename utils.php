@@ -7,6 +7,12 @@ function db_connect (){
 	mysql_select_db("cupcackecms") or die(mysql_error());
 }
 
+# Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
+function new_db_o() {
+$db = @new mysqli('localhost', 'root', '', 'cupcackecms');
+return $db;
+}
+
 # Name der Webseite für das <title>-Tag
 $GLOBALS["site_name"] = "CupcackeCMS";
 
@@ -118,6 +124,7 @@ function calendar($month,$year){
   	return array('html' => $output, 'current_m' => $current_m, 'current_y' => $current_y);
 }
 
+# Funktion, die die Vor- und Zurück-Buttons unter dem Kalender generiert
 function calendar_link($dir, $current_m, $current_y){
 	$output = '<a href="?m=';
 	if ($dir == 'f') {
@@ -142,5 +149,24 @@ function calendar_link($dir, $current_m, $current_y){
 	}
 	$output .= $next_m . '&y=' . $next_y . '">' . $arrows . '</a>';
 	return $output;
+}
+
+# Funktion zu Konvertierung des europäischen Datums-Formats in das von MySQL
+function date_to_mysql($input){
+    $a = explode('.', $input);
+    return sprintf('%04d-%02d-%02d', $a[2], $a[1], $a[0]);
+}
+
+# Funktion zur Kovertierung vom MySQL-Datum-Format in das europäische
+function mysql_to_date($input){
+    $a = explode('-', $input);
+    return sprintf('%02d.%02d.%04d', $a[2], $a[1], $a[0]);
+}
+
+# Funktion, die den entsprechenden Nutzernamen zu einer ID ausgibt
+function get_username ($id){
+    $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $id);
+    $row = mysql_fetch_array($query);
+    return $row['vorname'] . ' ' . $row['nachname'];
 }
 ?>
