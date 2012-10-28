@@ -13,13 +13,13 @@ if (isset($login)){
 <div class="span2">
 	<?php
 		require_once('utils.php');
-		db_connect();
+		$db = new_db_o();
 		if (isset($_GET['m']) && (isset($_GET['y']))) {
-			$calendar = calendar(intval($_GET['m']), intval($_GET['y']));
-		  echo $calendar['html'];
+			$calendar = calendar(intval($_GET['m']), intval($_GET['y']), $db);
+		  echo $calendar;
 		} else {
-			$calendar = calendar(date('m'),date('Y'));
-		  echo $calendar['html'];
+			$calendar = calendar(date('m'),date('Y'), $db);
+		  echo $calendar;
 		}
 	?>
 </div>

@@ -30,7 +30,7 @@ $ergebnis->bind_result($output_date, $output_title, $output_description, $output
     while ($ergebnis->fetch()) {
         echo '<tr><td>' . mysql_to_date($output_date);
         if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
-            echo '<br />von ' . $output_start_time . ' bis ' . $output_end_time;
+            echo '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
         }
         echo '</td><td>' . $output_title . '</td><td>';
         if (isset($output_description)) {

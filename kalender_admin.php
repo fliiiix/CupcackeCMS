@@ -25,8 +25,8 @@ if (isset($_POST['create_event'])) {
 
         // Start- und Endzeit sind zusätzlich zu den Pflichtfeldern angegeben
         if (isset($_POST['start_time']) && $_POST['end_time']) {
-            $event_start_time = mysql_real_escape_string($_POST['start_time']);
-            $event_end_time = mysql_real_escape_string($_POST['end_time']);
+            $event_start_time = mysql_real_escape_string($_POST['start_time']) . ':00';
+            $event_end_time = mysql_real_escape_string($_POST['end_time']) . ':00';
 
             // Zusätzlich ist noch die Beschreibung angegeben
             if (isset($_POST['event_description'])) {
@@ -66,7 +66,6 @@ $sql = 'SELECT `date`, `title`, `description`, `start_time`, `end_time`, `last_e
 $ergebnis = $db->prepare($sql);
 $ergebnis->execute();
 $ergebnis->bind_result($output_date, $output_title, $output_description, $output_start_time, $output_end_time, $output_last_editor);
-
 ?>
 <script src="assets/js/bootstrap-datepicker.js"></script>
 <script src="assets/js/bootstrap-timepicker.js"></script>
@@ -118,7 +117,7 @@ $ergebnis->bind_result($output_date, $output_title, $output_description, $output
                     <td>
                         Startzeit:
                         <div class="input-append bootstrap-timepicker-component">
-                            <input type="text" class="timepicker-default input-small" name="start_time">
+                            <input type="text" class="timepicker-default input-small" name="start_time" id="start_time">
                             <span class="add-on">
                                 <i class="icon-time"></i>
                             </span>
@@ -130,7 +129,7 @@ $ergebnis->bind_result($output_date, $output_title, $output_description, $output
                     <td>
                         Endzeit:
                         <div class="input-append bootstrap-timepicker-component">
-                            <input type="text" class="timepicker-default input-small" name="end_time">
+                            <input type="text" class="timepicker-default input-small" name="end_time" id="end_time">
                             <span class="add-on">
                                 <i class="icon-time"></i>
                             </span>
@@ -164,11 +163,11 @@ $ergebnis->bind_result($output_date, $output_title, $output_description, $output
             <?php
             while ($ergebnis->fetch()) {
                 echo '<tr><td>' . mysql_to_date($output_date);
-                if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00'){
-                    echo '<br />von ' . $output_start_time . ' bis ' . $output_end_time;
+                if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
+                    echo '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
                 }
                 echo '</td><td>' . $output_title . '</td><td>';
-                if (isset($output_description)){
+                if (isset($output_description)) {
                     echo $output_description;
                 } else {
                     echo '&nbsp;';
