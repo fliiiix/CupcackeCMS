@@ -1,33 +1,39 @@
+<!--<script src="assets/js/bootstrap-carousel.js"></script>
+
+<div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+    <div class="active item">…</div>
+    <div class="item">…</div>
+    <div class="item">…</div>
+    </div>
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>-->
+
 <?php 
 session_start();
-error_reporting(E_ALL | E_STRICT);
-
-//sesion für beitrags id setzten
-if (isset($_GET["id"])) {
-	$beitragsID = $_GET["id"];
-}
-else { $beitragsID = 0; }
-$_SESSION['id_beitrag'] = $beitragsID;
-
-include 'templates/header.tpl'; 
-echo($beitragsID);
-
-/*echo "<br \>ding<br \>";
-print_r($info);  
-echo count($info);*/
+require ('utils.php');
+include 'templates/header.tpl';
 
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
     db_connect();
-    $beitragTitel = $_POST["beitragTitel"];
-    $beitragUnterTitel = $_POST["beitragUnterTitel"];   
-    $beitragText = $_POST["beitragText"];
-    
-    $createStatement = "INSERT INTO beitrag (titel, untertitel, inhalt, id_Owner, Aktiv)";
-    //echo $beitragTitel . "+" . $beitragUnterTitel . "+" .  $beitragText . "++" . $_SESSION['result'];
+    //tofix ownder id fehlt 
+    $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv) 
+        VALUES("' . $_POST["beitragTitel"] . '","' . $_POST["beitragUnterTitel"] . '","' . $_POST["beitragText"] . '","' . $_SESSION["uploadFolder"] . '","' . 1 . '","' . 1 . '")';
+    if (mysql_query($query) == FALSE) {
+        die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
+    }
 }
 ?>
-<a href="bilderGalerie.php?neu=true">link</a>
-<?php if(isset($_GET["neu"]) && $_GET["neu"] == "true") {
+<a href="bilderGalerie.php?neu">link</a>
+<?php 
+if(isset($_GET["neu"])) {
+    $_SESSION["uploadFolder"] = guid();
     include 'templates/neuerBeitrag.tpl';
-}?>
+}
+if(isset($_GET["old"])) {
+    $_SESSION["uploadFolder"] = $_GET["old"];
+    include 'templates/neuerBeitrag.tpl';
+}
+?>
 <?php include 'templates/footer.tpl'; ?>

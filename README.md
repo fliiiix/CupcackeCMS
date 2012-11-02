@@ -61,6 +61,11 @@ Textbeschreibung //optional wird nur angezeigt wenn vorhanden
 
 //TODO eventuell mach ich mal n bild ;)
 
+
+##fehler und wie beheben
+Bilderuplaod zeigt "Error: Empty file upload result"
+-> https://github.com/blueimp/jQuery-File-Upload/issues/377 install php5-gd
+
 ----
 #Quellen
 * [Bootstrap](https://github.com/twitter/bootstrap/) - Layout Grundlagen

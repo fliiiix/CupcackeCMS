@@ -1,34 +1,21 @@
--- Adminer 3.5.1 MySQL dump
+-- Adminer 3.6.1 MySQL dump
 
 SET NAMES utf8;
 SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP DATABASE IF EXISTS `cupcackecms`;
-CREATE DATABASE `cupcackecms` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `cupcackecms`;
-
-DROP TABLE IF EXISTS `beitrag`;
-CREATE TABLE `beitrag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `titel` varchar(100) NOT NULL,
-  `untertitel` varchar(100) DEFAULT NULL,
-  `inhalt` text,
-  `id_Owner` int(11) DEFAULT NULL,
-  `Aktiv` bit(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `bild`;
-CREATE TABLE `bild` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_beitrag` int(11) DEFAULT NULL,
-  `speicherName` varchar(50) NOT NULL,
-  `uploadName` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `bilderBeitrag`;
+CREATE TABLE `bilderBeitrag` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `titel` mediumtext NOT NULL,
+  `unterTitel` mediumtext NOT NULL,
+  `text` mediumtext NOT NULL,
+  `uploadFolderName` text NOT NULL,
+  `ownerId` int(11) NOT NULL,
+  `aktiv` bit(1) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `change_email`;
@@ -86,4 +73,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2012-10-14 11:00:01
+-- 2012-11-02 23:15:42
