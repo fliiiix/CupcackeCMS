@@ -197,17 +197,17 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
             switch ($row["aktiv"]) {
                 # Account ist noch nicht bestätigt
                 case (0):
-                    echo "<img src='./img/questionmark.png'>";
+                    echo "<img src='./assets/img/questionmark.png'>";
                     break;
 
                 # Account ist deaktiviert
                 case (1):
-                    echo "<img src='./img/cross.png'>";
+                    echo "<img src='./assets/img/cross.png'>";
                     break;
 
                 # Account ist aktiv
                 case (2):
-                    echo "<img src='./img/accepted.png'>";
+                    echo "<img src='./assets/img/accepted.png'>";
                     break;
             }
             ?>
@@ -259,8 +259,8 @@ $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
 <br />
 <div id="legende">
     Legende:<br />
-    <img src='./img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
-    <img src='./img/cross.png'> = Account deaktiviert<br />
-    <img src='./img/accepted.png'> = Account aktiv<br />
+    <img src='./assets/img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
+    <img src='./assets/img/cross.png'> = Account deaktiviert<br />
+    <img src='./assets/img/accepted.png'> = Account aktiv<br />
 </div>
 <?php include 'templates/footer.tpl'; ?>
