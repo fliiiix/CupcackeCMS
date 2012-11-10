@@ -4,17 +4,17 @@
     <form id="mainUpload" action="bilderGalerie.php" method="POST">
         <div class="control-group">
             <label for="beitragTitel" class="span3">Titel:</label>
-            <input type="text" id="beitragTitel" name="beitragTitel">
+            <input type="text" id="beitragTitel" name="beitragTitel" value="<?php if(isset($beitragTitel)){echo $beitragTitel; }?>">
         </div>
 
         <div class="control-group">
             <label for="beitragUnterTitel" class="span3">Untertitel:</label>
-            <input type="text" id="beitragUnterTitel" name="beitragUnterTitel">
+            <input type="text" id="beitragUnterTitel" name="beitragUnterTitel" value="<?php if(isset($beitragUnterTitel)){echo $beitragUnterTitel; }?>">
         </div>
 
         <div class="control-group">
             <label class="span3" for="beitragText">Text:</label>
-            <textarea class="span6" rows="5" id="beitragtext" name="beitragText"></textarea>
+            <textarea class="span6" rows="5" id="beitragtext" name="beitragText"><?php if(isset($beitragtext)){echo $beitragtext; }?></textarea>
         </div>
         <div class="control-group">
             <span class="span3"><input type="submit" value="Speichern" class="btn btn-primary start"></span>
@@ -34,10 +34,10 @@
                 <i class="icon-upload icon-white"></i>
                 <span>Start upload</span>
             </button>
-            <button type="reset" class="btn btn-warning cancel">
+            <!--<button type="reset" class="btn btn-warning cancel">
                 <i class="icon-ban-circle icon-white"></i>
                 <span>Cancel upload</span>
-            </button>
+            </button>-->
             <button type="button" class="btn btn-danger delete">
                 <i class="icon-trash icon-white"></i>
                 <span>L&ouml;schen</span>

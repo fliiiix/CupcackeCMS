@@ -5,11 +5,12 @@ require_once('utils.php');
 $db = new_db_o();
 
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
-if (verify_user() == false) {
+$result = verify_user();
+if ($result == false) {
     header("Location: index.php");
     exit();
 } else {
-    $valid_user_id = verify_user();
+    $valid_user_id = $result;
 }
 
 # Nutzernamen des Nutzers feststellen

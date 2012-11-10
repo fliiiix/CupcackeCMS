@@ -8,7 +8,6 @@ function db_connect() {
 }
 
 # Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
-
 function new_db_o() {
     $db = @new mysqli('localhost', 'root', '', 'cupcackecms');
     return $db;
@@ -43,14 +42,12 @@ function login_user($email, $password) {
 }
 
 # Logout-Funktion für alle Backend-Seiten
-
 function logout($valid_user_id) {
     mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
     setcookie("CupcackeCMS_Cookie", "", -1);
 }
 
 # Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
-
 function verify_user() {
     db_connect();
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
@@ -66,7 +63,6 @@ function verify_user() {
 }
 
 # Namen des momentan eingeloggten Users zurückgeben
-
 function current_username($valid_user_id) {
     $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
     $row = mysql_fetch_array($query);
@@ -75,7 +71,6 @@ function current_username($valid_user_id) {
 }
 
 # Kalender-Funktion
-
 function calendar($month, $year, $db) {
     $current_m = $month;
     $current_y = $year;
@@ -214,7 +209,7 @@ function guid(){
                 .substr($charid,16, 4).$hyphen
                 .substr($charid,20,12)
                 .chr(125);// "}"
-        return $uuid;
+        return str_replace("{", "",str_replace("}", "", $uuid));
     }
 }
 

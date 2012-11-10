@@ -22,4 +22,5 @@ if (isset($_GET["logout"])){
 	setcookie("CupcackeCMS_Cookie","",-1);
 	header("Location: index.php");
 	exit();
+}
 ?>
