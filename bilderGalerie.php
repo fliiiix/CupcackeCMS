@@ -39,7 +39,6 @@ function getCarouselEnd($id)
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
     if($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
         db_connect();
-        //tofix ownder id fehlt 
         $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv) 
             VALUES("' . mysql_real_escape_string($_POST["beitragTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragUnterTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragText"]) . '","' . $_SESSION["uploadFolder"] . '","' . $valid_user_id . '","' . 1 . '")';
         if (mysql_query($query) == FALSE) {
@@ -67,7 +66,7 @@ if(isset($_GET["fail"])) {
     $beitragTitel = isset($_SESSION["beitragTitel"]) ? $_SESSION["beitragTitel"] : "";
     $beitragUnterTitel = isset($_SESSION["beitragUnterTitel"]) ? $_SESSION["beitragUnterTitel"] : "";
     $beitragtext = isset($_SESSION["beitragText"]) ? $_SESSION["beitragText"] : "";
-    echo '<div class="alert alert-error"><strong>Warning!</strong> Zum Speichern muss mindestens der Titel und ein Text Vorhanden sein.</div>';
+    echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button><strong>Warning!</strong> Zum Speichern muss mindestens der Titel und ein Text Vorhanden sein.</div>';
     include 'templates/neuerBeitrag.tpl';
 }
 ?>
