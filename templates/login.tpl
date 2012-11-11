@@ -9,9 +9,9 @@
 			    <input type="password" name="password" id="password" class="span2" style="float:left; width:100px;"/>
 				
 			    <div class="btn-group" style="float:left;">
-	                    <input type="submit" value="Einloggen" id="login_button" name="login_button" class="btn btn-primary"/>
+	                    <input type="submit" value="Einloggen" id="login_button" name="login_button" class="btn btn-primary" />
 		                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-		                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu">
 		                   <li><a href="recover_password.php">Passwort vergessen</a></li>
 		               </ul>
 		            </div><!-- /btn-group -->
