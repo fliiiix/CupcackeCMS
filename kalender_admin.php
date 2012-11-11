@@ -16,6 +16,10 @@ if ($result == false) {
 # Nutzernamen des Nutzers feststellen
 $username = current_username($valid_user_id);
 
+#$_GET leeren
+
+empty_get($_SERVER['PHP_SELF']);
+
 # Neuen Termin speichern, wenn alle Pflicht-Felder ausgefüllt sind, wenn Pflicht-Felder fehlen eine Fehlermeldung ausgeben
 if (isset($_POST['create_event'])) {
     if (!isset($_POST['event_title']) || !isset($_POST['event_date'])) {
@@ -51,6 +55,7 @@ if (isset($_POST['create_event'])) {
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('sssi', $event_date, $event_title, $event_description, $valid_user_id);
         }
+
         $eintrag->execute();
 
         // Prüfen ob der Eintrag efolgreich war
@@ -62,11 +67,20 @@ if (isset($_POST['create_event'])) {
     }
 }
 
+# Termin löschen, wenn der entsprechende Button geklickt wird
+if (isset($_GET['del'])) {
+    $del_event_id = mysql_real_escape_string($_GET['del']);
+    $sql = 'DELETE FROM `events` WHERE id = ?';
+    $query = $db->prepare($sql);
+    $query->bind_param('s', $del_event_id);
+    $query->execute();
+}
+
 // MySQL-Vorbereitung für die Termine-Tabelle
-$sql = 'SELECT `date`, `title`, `description`, `start_time`, `end_time`, `last_editor` FROM `events` ORDER BY `date`';
+$sql = 'SELECT `id`, `date`, `title`, `description`, `start_time`, `end_time`, `last_editor` FROM `events` ORDER BY `date`';
 $ergebnis = $db->prepare($sql);
 $ergebnis->execute();
-$ergebnis->bind_result($output_date, $output_title, $output_description, $output_start_time, $output_end_time, $output_last_editor);
+$ergebnis->bind_result($output_id, $output_date, $output_title, $output_description, $output_start_time, $output_end_time, $output_last_editor);
 ?>
 <script src="assets/js/bootstrap-datepicker.js"></script>
 <script src="assets/js/bootstrap-timepicker.js"></script>
@@ -160,20 +174,23 @@ $ergebnis->bind_result($output_date, $output_title, $output_description, $output
                 <td><b>Titel</b></td>
                 <td><b>Beschreibung</b></td>
                 <td><b>Zuletzt bearbeitet von</b></td>
+                <td>&nbsp;</td>
             </tr>
             <?php
             while ($ergebnis->fetch()) {
-                echo '<tr><td>' . mysql_to_date($output_date);
+                $output = '<tr><td>' . mysql_to_date($output_date);
                 if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
-                    echo '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
+                    $output .= '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
                 }
-                echo '</td><td>' . $output_title . '</td><td>';
+                $output .= '</td><td>' . $output_title . '</td><td>';
                 if (isset($output_description)) {
-                    echo $output_description;
+                    $output .= $output_description;
                 } else {
-                    echo '&nbsp;';
+                    $output .= '&nbsp;';
                 }
-                echo '</td><td>' . get_username($output_last_editor) . '</td></tr>';
+                $output .= '</td><td>' . get_username($output_last_editor) . '</td>';
+                $output .= '<td><input class="btn btn-danger" value="Löschen" type="submit" onclick="window.location.href = \'?del=' . $output_id . '\'"></td></tr>';
+                echo $output;
             }
             ?>
         </table>

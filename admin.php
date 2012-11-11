@@ -56,10 +56,8 @@ if (isset($_GET["ru"])) {
     mysql_query("UPDATE user SET rolle =" . $new . " WHERE id=" . $rank_user);
 }
 
-#get löschen
-if (count($_GET) != 0) {
-    header("Location: admin.php");
-}
+#$_GET leeren
+empty_get($_SERVER['PHP_SELF']);
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
 if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"]) && isset($_POST["vorname"]) && isset($_POST["nachname"])) {
