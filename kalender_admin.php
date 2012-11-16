@@ -17,11 +17,43 @@ if ($result == false) {
 $username = current_username($valid_user_id);
 
 #$_GET leeren
-
 empty_get($_SERVER['PHP_SELF']);
 
 # Neuen Termin speichern, wenn alle Pflicht-Felder ausgefüllt sind, wenn Pflicht-Felder fehlen eine Fehlermeldung ausgeben
-if (isset($_POST['create_event'])) {
+if (isset($_POST['create_event'])){
+    if(isset($_POST['event_title']) && $_POST['event_title'] != "" && isset($_POST['event_date'])&& $_POST['event_date'] != ""){
+        $event_title = mysql_real_escape_string($_POST['event_title']);
+        $event_date = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+        
+        if (isset($_POST['start_time']) && $_POST['end_time']) {
+            echo 'start und endzeit';
+            $event_start_time = mysql_real_escape_string($_POST['start_time']) . ':00';
+            $event_end_time = mysql_real_escape_string($_POST['end_time']) . ':00';
+        }
+        
+        if (isset($_POST['event_description'])){
+            echo 'descritpisdfjsdj startzeit:' . $event_end_time;
+            $event_description = mysql_real_escape_string($_POST['event_description']);
+        }
+        
+        $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `start_time`, `end_time`, `last_editor`) VALUES (?, ?, ?, ?, ?, ?)';
+        $eintrag = $db->prepare($sql);
+        $eintrag->bind_param('sssssi', $event_date, $event_title, $event_description, $event_start_time, $event_end_time, $valid_user_id);
+        
+        $eintrag->execute();
+        
+        // Prüfen ob der Eintrag efolgreich war
+        if ($eintrag->affected_rows == 1) {
+            $success_msg = 'Der neue Eintrag wurde hinzugef&uuml;gt.';
+        } else {
+            $error_msg = 'Der Eintrag konnte nicht hinzugef&uuml;gt werden.';
+        }
+    }
+    else {
+        $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
+    }
+}
+/*if (isset($_POST['create_event'])) {
     if (!isset($_POST['event_title']) || !isset($_POST['event_date'])) {
         $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
     } else {
@@ -65,7 +97,7 @@ if (isset($_POST['create_event'])) {
             $error_msg = 'Der Eintrag konnte nicht hinzugef&uuml;gt werden.';
         }
     }
-}
+}*/
 
 # Termin löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET['del'])) {
@@ -177,21 +209,21 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                 <td>&nbsp;</td>
             </tr>
             <?php
-            while ($ergebnis->fetch()) {
-                $output = '<tr><td>' . mysql_to_date($output_date);
-                if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
-                    $output .= '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
+                while ($ergebnis->fetch()) {
+                    $output = '<tr><td>' . mysql_to_date($output_date);
+                    if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
+                        $output .= '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
+                    }
+                    $output .= '</td><td>' . $output_title . '</td><td>';
+                    if (isset($output_description)) {
+                        $output .= $output_description;
+                    } else {
+                        $output .= '&nbsp;';
+                    }
+                    $output .= '</td><td>' . get_username($output_last_editor) . '</td>';
+                    $output .= '<td><input class="btn btn-danger" value="Löschen" type="submit" onclick="window.location.href = \'?del=' . $output_id . '\'"></td></tr>';
+                    echo $output;
                 }
-                $output .= '</td><td>' . $output_title . '</td><td>';
-                if (isset($output_description)) {
-                    $output .= $output_description;
-                } else {
-                    $output .= '&nbsp;';
-                }
-                $output .= '</td><td>' . get_username($output_last_editor) . '</td>';
-                $output .= '<td><input class="btn btn-danger" value="Löschen" type="submit" onclick="window.location.href = \'?del=' . $output_id . '\'"></td></tr>';
-                echo $output;
-            }
             ?>
         </table>
     </div>

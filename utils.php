@@ -8,7 +8,6 @@ function db_connect() {
 }
 
 # Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
-
 function new_db_o() {
     $db = @new mysqli('localhost', 'root', '', 'cupcackecms');
     return $db;
@@ -18,7 +17,6 @@ function new_db_o() {
 $GLOBALS["site_name"] = "CupcackeCMS";
 
 # Login-Funktion für die Startseite
-
 function login_user($email, $password) {
     $ergebnis = mysql_query("SELECT id FROM user WHERE email=\"" . mysql_real_escape_string($email) . "\" AND pw_hash=\"" . hash("whirlpool", $password, false) . "\" AND aktiv=" . 2);
     if ($ergebnis) {
@@ -43,14 +41,12 @@ function login_user($email, $password) {
 }
 
 # Logout-Funktion für alle Backend-Seiten
-
 function logout($valid_user_id) {
     mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
     setcookie("CupcackeCMS_Cookie", "", -1);
 }
 
 # Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
-
 function verify_user() {
     db_connect();
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
@@ -66,7 +62,6 @@ function verify_user() {
 }
 
 # Namen des momentan eingeloggten Users zurückgeben
-
 function current_username($valid_user_id) {
     $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
     $row = mysql_fetch_array($query);
@@ -75,7 +70,6 @@ function current_username($valid_user_id) {
 }
 
 # Kalender-Funktion
-
 function calendar($month, $year, $db) {
     $current_m = $month;
     $current_y = $year;
@@ -150,7 +144,6 @@ function calendar($month, $year, $db) {
 }
 
 # Funktion, die die Vor- und Zurück-Buttons unter dem Kalender generiert
-
 function calendar_link($dir, $current_m, $current_y) {
     $output = '<a href="?m=';
     if ($dir == 'f') {
@@ -178,21 +171,18 @@ function calendar_link($dir, $current_m, $current_y) {
 }
 
 # Funktion zu Konvertierung des europäischen Datums-Formats in das von MySQL
-
 function date_to_mysql($input) {
     $a = explode('.', $input);
     return sprintf('%04d-%02d-%02d', $a[2], $a[1], $a[0]);
 }
 
 # Funktion zur Kovertierung vom MySQL-Datum-Format in das europäische
-
 function mysql_to_date($input) {
     $a = explode('-', $input);
     return sprintf('%02d.%02d.%04d', $a[2], $a[1], $a[0]);
 }
 
 # Funktion, die den entsprechenden Nutzernamen zu einer ID ausgibt
-
 function get_username($id) {
     $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $id);
     $row = mysql_fetch_array($query);
@@ -200,7 +190,6 @@ function get_username($id) {
 }
 
 #guid halt
-
 function guid() {
     if (function_exists('com_create_guid')) {
         return com_create_guid();
@@ -220,11 +209,9 @@ function guid() {
 }
 
 # Funktion zum Leeren von $_GET
-
 function empty_get($site) {
     if (count($_GET) != 0) {
         header("Location: " . $site);
     }
 }
-
 ?>
