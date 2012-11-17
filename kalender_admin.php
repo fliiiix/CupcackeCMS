@@ -25,20 +25,21 @@ if (isset($_POST['create_event'])){
         $event_title = mysql_real_escape_string($_POST['event_title']);
         $event_date = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
         
-        if (isset($_POST['start_time']) && $_POST['end_time']) {
+        if (!($_POST['startTime'] == $_POST['endTime'])) {
             echo 'start und endzeit';
-            $event_start_time = mysql_real_escape_string($_POST['start_time']) . ':00';
-            $event_end_time = mysql_real_escape_string($_POST['end_time']) . ':00';
+            $event_startTime = mysql_real_escape_string($_POST['startTime']);
+            $event_endTime = mysql_real_escape_string($_POST['endTime']);
+        } else {
+            $event_startTime = '0';
+            $event_endTime = '0';
         }
         
         if (isset($_POST['event_description'])){
-            echo 'descritpisdfjsdj startzeit:' . $event_end_time;
             $event_description = mysql_real_escape_string($_POST['event_description']);
         }
-        
-        $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `start_time`, `end_time`, `last_editor`) VALUES (?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `startTime`, `endTime`, `lastEditor`) VALUES (?, ?, ?, ?, ?, ?)';
         $eintrag = $db->prepare($sql);
-        $eintrag->bind_param('sssssi', $event_date, $event_title, $event_description, $event_start_time, $event_end_time, $valid_user_id);
+        $eintrag->bind_param('sssssi', $event_date, $event_title, $event_description, $event_startTime, $event_endTime, $valid_user_id);
         
         $eintrag->execute();
         
@@ -53,51 +54,6 @@ if (isset($_POST['create_event'])){
         $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
     }
 }
-/*if (isset($_POST['create_event'])) {
-    if (!isset($_POST['event_title']) || !isset($_POST['event_date'])) {
-        $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
-    } else {
-        $event_title = mysql_real_escape_string($_POST['event_title']);
-        $event_date = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
-
-        // Start- und Endzeit sind zusätzlich zu den Pflichtfeldern angegeben
-        if (isset($_POST['start_time']) && $_POST['end_time']) {
-            $event_start_time = mysql_real_escape_string($_POST['start_time']) . ':00';
-            $event_end_time = mysql_real_escape_string($_POST['end_time']) . ':00';
-
-            // Zusätzlich ist noch die Beschreibung angegeben
-            if (isset($_POST['event_description'])) {
-                $event_description = mysql_real_escape_string($_POST['event_description']);
-                $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `start_time`, `end_time`, `last_editor`) VALUES (?, ?, ?, ?, ?, ?)';
-                $eintrag = $db->prepare($sql);
-                $eintrag->bind_param('sssssi', $event_date, $event_title, $event_description, $event_start_time, $event_end_time, $valid_user_id);
-
-                // oder auch nicht
-            } else {
-                $sql = 'INSERT INTO `events` (`date`, `title`, `start_time`, `end_time`, `last_editor`) VALUES (?, ?, ?, ?, ?)';
-                $eintrag = $db->prepare($sql);
-                $eintrag->bind_param('ssssi', $event_date, $event_title, $event_start_time, $event_end_time, $valid_user_id);
-            }
-        }
-
-        //Nur die Beschreibung ist zusätzlich zu den Pflichtfeldern angegeben
-        if (isset($_POST['event_description'])) {
-            $event_description = mysql_real_escape_string($_POST['event_description']);
-            $sql = 'INSERT INTO `events` (`date`, `title`, `description`,  `last_editor`) VALUES (?, ?, ?, ?)';
-            $eintrag = $db->prepare($sql);
-            $eintrag->bind_param('sssi', $event_date, $event_title, $event_description, $valid_user_id);
-        }
-
-        $eintrag->execute();
-
-        // Prüfen ob der Eintrag efolgreich war
-        if ($eintrag->affected_rows == 1) {
-            $success_msg = 'Der neue Eintrag wurde hinzugef&uuml;gt.';
-        } else {
-            $error_msg = 'Der Eintrag konnte nicht hinzugef&uuml;gt werden.';
-        }
-    }
-}*/
 
 # Termin löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET['del'])) {
@@ -109,10 +65,10 @@ if (isset($_GET['del'])) {
 }
 
 // MySQL-Vorbereitung für die Termine-Tabelle
-$sql = 'SELECT `id`, `date`, `title`, `description`, `start_time`, `end_time`, `last_editor` FROM `events` ORDER BY `date`';
+$sql = 'SELECT `id`, `date`, `title`, `description`, `startTime`, `endTime`, `lastEditor` FROM `events` ORDER BY `date`';
 $ergebnis = $db->prepare($sql);
 $ergebnis->execute();
-$ergebnis->bind_result($output_id, $output_date, $output_title, $output_description, $output_start_time, $output_end_time, $output_last_editor);
+$ergebnis->bind_result($output_id, $output_date, $output_title, $output_description, $output_startTime, $output_endTime, $output_lastEditor);
 ?>
 <script src="assets/js/bootstrap-datepicker.js"></script>
 <script src="assets/js/bootstrap-timepicker.js"></script>
@@ -164,7 +120,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     <td>
                         Startzeit:
                         <div class="input-append bootstrap-timepicker-component">
-                            <input type="text" class="timepicker-default input-small" name="start_time" id="start_time">
+                            <input type="text" class="timepicker-default input-small" name="startTime" id="startTime">
                             <span class="add-on">
                                 <i class="icon-time"></i>
                             </span>
@@ -176,7 +132,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     <td>
                         Endzeit:
                         <div class="input-append bootstrap-timepicker-component">
-                            <input type="text" class="timepicker-default input-small" name="end_time" id="end_time">
+                            <input type="text" class="timepicker-default input-small" name="endTime" id="endTime">
                             <span class="add-on">
                                 <i class="icon-time"></i>
                             </span>
@@ -211,8 +167,8 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
             <?php
                 while ($ergebnis->fetch()) {
                     $output = '<tr><td>' . mysql_to_date($output_date);
-                    if (!$output_start_time == '00:00:00' && !$output_end_time == '00:00:00') {
-                        $output .= '<br />von ' . $output_start_time . ' Uhr bis ' . $output_end_time . ' Uhr';
+                    if ($output_startTime != 0 && $output_endTime != 0) {
+                        $output .= '<br />von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr';
                     }
                     $output .= '</td><td>' . $output_title . '</td><td>';
                     if (isset($output_description)) {
@@ -220,7 +176,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     } else {
                         $output .= '&nbsp;';
                     }
-                    $output .= '</td><td>' . get_username($output_last_editor) . '</td>';
+                    $output .= '</td><td>' . get_username($output_lastEditor) . '</td>';
                     $output .= '<td><input class="btn btn-danger" value="Löschen" type="submit" onclick="window.location.href = \'?del=' . $output_id . '\'"></td></tr>';
                     echo $output;
                 }
