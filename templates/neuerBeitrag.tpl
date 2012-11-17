@@ -4,12 +4,12 @@
     <form id="mainUpload" action="bilderGalerie.php" method="POST">
         <div class="control-group">
             <label for="beitragTitel" class="span3">Titel:</label>
-            <input type="text" id="beitragTitel" name="beitragTitel" value="<?php if(isset($beitragTitel)){echo $beitragTitel; }?>">
+            <input style="width: 450px;" type="text" id="beitragTitel" name="beitragTitel" value="<?php if(isset($beitragTitel)){echo $beitragTitel; }?>">
         </div>
 
         <div class="control-group">
             <label for="beitragUnterTitel" class="span3">Untertitel:</label>
-            <input type="text" id="beitragUnterTitel" name="beitragUnterTitel" value="<?php if(isset($beitragUnterTitel)){echo $beitragUnterTitel; }?>">
+            <input style="width: 450px;" type="text" id="beitragUnterTitel" name="beitragUnterTitel" value="<?php if(isset($beitragUnterTitel)){echo $beitragUnterTitel; }?>">
         </div>
 
         <div class="control-group">

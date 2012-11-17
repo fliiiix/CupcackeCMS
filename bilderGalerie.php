@@ -4,13 +4,6 @@ require ('utils.php');
 $current_site = "Bildergalerie";
 include 'templates/header.tpl';
 
-if(!isset($_GET["neu"]) && !isset($_GET["fail"]))
-{
-    echo '<div class="span11">
-            <a href="bilderGalerie.php?neu" class="btn btn-primary">Neuer Beitrag</a><br>
-          </div>';
-}
-
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
 $result = verify_user();
 if ($result == false) {
@@ -18,6 +11,13 @@ if ($result == false) {
     exit();
 } else {
     $valid_user_id = $result;
+}
+
+if(!isset($_GET["neu"]) && !isset($_GET["fail"]) && !isset($_GET["old"]) && getUserRolle($valid_user_id) == 2)
+{
+    echo '<div class="span11">
+            <a href="bilderGalerie.php?neu" class="btn btn-primary">Neuer Beitrag</a><br>
+          </div>';
 }
 
 function getCarouselHead()
@@ -39,10 +39,19 @@ function getCarouselEnd($id)
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
     if($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
         db_connect();
-        $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv) 
+        if($_SESSION["editOld"] == TRUE){
+            $query = 'UPDATE bilderBeitrag SET titel="'.$_POST["beitragTitel"].'", unterTitel="'.$_POST["beitragUnterTitel"].'", text="'.$_POST["beitragText"].'" WHERE uploadFolderName="'.$_SESSION["uploadFolder"].'"';
+            $_SESSION["editOld"] = FALSE;
+            if (mysql_query($query) == FALSE) {
+                die('Der Post konnte nicht verändert werden werden: ' . mysql_error());
+            } 
+        }
+        else {
+            $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv) 
             VALUES("' . mysql_real_escape_string($_POST["beitragTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragUnterTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragText"]) . '","' . $_SESSION["uploadFolder"] . '","' . $valid_user_id . '","' . 1 . '")';
-        if (mysql_query($query) == FALSE) {
-            die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
+            if (mysql_query($query) == FALSE) {
+                die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
+            } 
         }
     }
     else {
@@ -53,16 +62,33 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
     }
 }
 
+if(isset($_GET["del"]) && $_GET["del"] != ""){
+    db_connect();
+    $query = "DELETE FROM bilderBeitrag WHERE uploadFolderName=\"" . $_GET["del"] . "\"";
+    mysql_query($query);
+    empty_get("bilderGalerie.php");
+}
+
 #get und session stuff
-if(isset($_GET["neu"])) {
+if(isset($_GET["neu"]) && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = guid();
     include 'templates/neuerBeitrag.tpl';
 }
-if(isset($_GET["old"]) && $_GET["old"] != "") {
+if(isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = $_GET["old"];
+    $_SESSION["editOld"] = TRUE;
+
+    db_connect();
+    $query = "SELECT * FROM bilderBeitrag WHERE uploadFolderName=\"" . $_GET["old"] . "\"";
+    $ergebnis = mysql_query($query);
+    if($row = mysql_fetch_array($ergebnis, MYSQL_ASSOC)){
+        $beitragTitel = $row["titel"];
+        $beitragUnterTitel = $row["unterTitel"];
+        $beitragtext = $row["text"];
+    }
     include 'templates/neuerBeitrag.tpl';
 }
-if(isset($_GET["fail"])) {
+if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
     $beitragTitel = isset($_SESSION["beitragTitel"]) ? $_SESSION["beitragTitel"] : "";
     $beitragUnterTitel = isset($_SESSION["beitragUnterTitel"]) ? $_SESSION["beitragUnterTitel"] : "";
     $beitragtext = isset($_SESSION["beitragText"]) ? $_SESSION["beitragText"] : "";
@@ -83,12 +109,13 @@ if(isset($_GET["fail"])) {
     }
     while ($row = mysql_fetch_array($ergebnis, MYSQL_ASSOC)) {
         echo '<div class="span7 offset2">';
-        echo '<h2>' . $row["titel"] . '</h3>';
-        if($row["unterTitel"] == "")
-        {
-            echo '<h4>'. $row["unterTitel"] .'</h5>';
+        echo '<h3 style="float:left">' . $row["titel"] . '</h3>';
+        echo '<a style="float:right; margin-left:10px;" href="?old='. $row["uploadFolderName"] .'">edit</a>
+              <a style="float:right" href="?del='. $row["uploadFolderName"] .'" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
+        if($row["unterTitel"] != ""){
+            echo '<h4 style="clear:both">'. $row["unterTitel"] .'</h4>';
         }
-        echo '<p>' . $row["text"] . '</p><br />';
+        echo '<p style="clear:both">' . $row["text"] . '</p><br />';
         $id = getCarouselHead();
         $folderName = $baseFolderPath . $row["uploadFolderName"] . "/";
         if ($handle = opendir($folderName)) {

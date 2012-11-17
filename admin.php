@@ -11,6 +11,10 @@ if (verify_user() == false) {
     exit();
 } else {
     $valid_user_id = verify_user();
+    if(getUserRolle($valid_user_id) != 2){
+        header("Location: index.php");
+        exit();
+    }
 }
 
 # Nutzernamen des Nutzers feststellen

@@ -61,6 +61,18 @@ function verify_user() {
     }
 }
 
+#gibt die rolle des users zurück
+function getUserRolle($valid_user_id) {
+    db_connect();
+    if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
+        $query = mysql_query("SELECT * FROM user WHERE Id=\"" . $valid_user_id . "\"");
+        if ($row = mysql_fetch_array($query)) {
+            return $row["rolle"];
+        }
+     }
+     return false;
+}
+
 # Namen des momentan eingeloggten Users zurückgeben
 function current_username($valid_user_id) {
     $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
