@@ -21,8 +21,10 @@ if (verify_user() == false) {
 $username = current_username($valid_user_id);
 
 # Nutzer löschen, wenn der entsprechende Button geklickt wird
-if (isset($_GET["del"])) {
+if (isset($_GET["del"]) && $_GET["del"] != "") {
     mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
+    #$_GET leeren
+    empty_get($_SERVER['PHP_SELF']);
 }
 
 # Nutzer (de)aktivieren, wenn der entsprechende Button geklickt wird
@@ -44,6 +46,8 @@ if (isset($_GET["cs"])) {
             break;
     }
     mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . $change_status);
+    #$_GET leeren
+    empty_get($_SERVER['PHP_SELF']);
 }
 
 # Nutzer zum Admin bzw. zum User machen, wenn der entsprechende Button geklickt wird
@@ -58,10 +62,9 @@ if (isset($_GET["ru"])) {
         $new = 1;
     }
     mysql_query("UPDATE user SET rolle =" . $new . " WHERE id=" . $rank_user);
+    #$_GET leeren
+    empty_get($_SERVER['PHP_SELF']);
 }
-
-#$_GET leeren
-empty_get($_SERVER['PHP_SELF']);
 
 # Bestätigungs-Mail versenden, wenn das Neuen-Nutzer-Erstellen-Formular richtig ausgefüllt wurde
 if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rolle"]) && isset($_POST["create_user"]) && isset($_POST["vorname"]) && isset($_POST["nachname"])) {
@@ -107,63 +110,37 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
                     "Dein Fliegenberg-Team";
             mail($email, "Account für " . $_SERVER['SERVER_NAME'] . " bestätigen", $message, $headers);
             $success_msg = "Die Bestätigungs-Mail für den Account wurde erfolgreich versandt";
+            #$_GET leeren
+            empty_get($_SERVER['PHP_SELF']);
         }
     }
 }
 
 # Query für die ganze Tabelle
 $query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
+
+if (isset($error_msg)) {
+    echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>'  . $error_msg . '</div>';
+}
+if (isset($success_msg)){
+    echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>'  . $success_msg . '</div>';
+}
+
+if(isset($_GET["neu"])){
+    if(isset($_POST["email"])){
+        $email = $_POST["email"];
+        $email2 = $_POST["email_retype"];
+        $nachname = ($_POST["nachname"]);
+        $vorname = ($_POST["vorname"]);
+        $rolle = intval($_POST["rolle"]); 
+    }
+    include 'templates/useranlegen.tpl';
+}
+else {
+    echo '<a href="?neu" class="btn btn-primary">Neuen Nutzer erstellen</a>';
+}
 ?>
-<style type="text/css">
-    #legende {
-        border: 1px solid #000;
-        padding: 10px 10px 10px 10px;
-        width: 340px;
-    }
-
-    #create_user div{
-        display:none;
-        border: 1px solid #000;
-        padding: 10px 10px 10px 10px;
-    }
-
-    #create_user a {
-        text-decoration: none;
-        color: black;
-        outline: none;
-    }
-</style>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#create_user > input").click(function() { 
-            $(this).next("div").slideToggle();
-        });
-    });
-</script>
-<?php
-    if (isset($error_msg)) {
-        echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>'  . $error_msg . '</div>';
-    }
-    if (isset($success_msg)){
-        echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>'  . $success_msg . '</div>';
-    }
-    ?>
-<div id="create_user">
-    <input id="create_user" name="create_user" class="btn btn-primary" onclick="window.location.href = '#'" value="Neuen Nutzer erstellen" type="submit">
-    <div>
-        <form method="post">
-            <b>E-Mail-Adresse des Nutzers:</b> <input name="email" type="text" maxlength="256"?><br />
-            <b>E-Mail-Adresse des Nutzers bestätigen:</b> <input name="email_retype" type="text" maxlength="256"?><br />
-            <b>Vorname des Nutzers:</b> <input name="vorname" type="text" maxlength="256"?><br />
-            <b>Nachname des Nutzers:</b> <input name="nachname" type="text" maxlength="256"?><br />
-            <b>Rolle des Nutzers:</b> <select size="1" name="rolle">
-                <option value="1">Nutzer</option>
-                <option value="2">Admin</option>
-            </select> <a href="#"><i>Hilfe: Wer hat welche Rechte?</i></a><br />
-            <input class="btn btn-primary" type="submit" value="Nutzer erstellen" name="create_user">
-        </form>
-    </div>
-</div>
+<br />
 <br />
 <table class="table" id="tabelle">
     <tbody>
