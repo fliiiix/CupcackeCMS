@@ -51,7 +51,7 @@ if (isset($_POST['create_event'])){
         }
     }
     else {
-        $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
+        $error_msg = 'Bitte eine Titel und ein Datum angeben.';
     }
 }
 
@@ -85,8 +85,8 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
 </script>
 
 <div class="row">
-    <div class="span4">
-        <h2>Neuen Termin erstellen</h2>
+    <div class="span3">
+        <h2>Neuen Termin</h2>
         <?php
         if (isset($success_msg)) {
             echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' . $success_msg . '</div>';
@@ -99,21 +99,17 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
             <table>
                 <tr>
                     <td><input class="input" style="margin-bottom:0px;" name="event_title" id="event_title" type="text" placeholder="Termin-Titel" maxlength="100"></td>
-                    <td><i class="icon-asterisk"></i></td>
                 </tr>
                 <tr>
                     <td><textarea name="event_description" cols="50" rows="10" placeholder="Termin-Beschreibung"></textarea></td>
-                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="input-append date datepicker" id="dp3" data-date="<?php echo date('d\.m\.Y'); ?>" data-date-format="dd.mm.yyyy">
+                        Datum:
+                        <div style="margin-left: 0px; padding-left: 0px;" class="input-append date datepicker" id="dp3" data-date="<?php echo date('d\.m\.Y'); ?>" data-date-format="dd.mm.yyyy">
                             <input class="span2" size="16" type="text" value="<?php echo date('d\.m\.Y'); ?>" name="event_date">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
-                    </td>
-                    <td>
-                        <i class="icon-asterisk"></i>
                     </td>
                 </tr>
                 <tr>
@@ -126,7 +122,6 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                             </span>
                         </div>
                     </td>
-                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>
@@ -138,17 +133,10 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                             </span>
                         </div>
                     </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <i class="icon-asterisk"></i> = Pflichtfeld
-                    </td>
                 </tr>
                 <tr>
                     <td>
                         <input class="btn btn-primary" name="create_event" type="submit" value="Neuen Termin eintragen">
-                    <td>&nbsp;</td>
                     </td>
                 </tr>
             </table>
