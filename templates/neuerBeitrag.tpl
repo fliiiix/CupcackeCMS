@@ -1,4 +1,9 @@
 <link href="assets/css/jquery.fileupload-ui.css" rel="stylesheet">
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        $('.datepicker').datepicker();
+    });
+</script>
 <div class="form-horizontal well">    
     <!-- The file upload form used as target for the file upload widget -->
     <form id="mainUpload" action="bilderGalerie.php" method="POST">
@@ -17,14 +22,19 @@
             <textarea class="span6" rows="5" id="beitragtext" name="beitragText"><?php if(isset($beitragtext)){echo $beitragtext; }?></textarea>
         </div>
         <div class="control-group">
+            <label class="span3" for="beitragText">Datum:</label>
+            <div style="margin-left: 0px; padding-left: 0px;" class="input-append date datepicker" id="dp3" data-date="<?php echo date('d\.m\.Y'); ?>" data-date-format="dd.mm.yyyy">
+                <input class="span2" size="16" type="text" value="<?php if(isset($_SESSION['datum'])) { echo $_SESSION['datum']; } else { echo date('d.m.Y'); } ?>" name="event_date">
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+        </div>
+        <div class="control-group">
             <span class="span3"><input type="submit" value="Speichern" class="btn btn-primary start"></span>
         </div>
     </form>
     <form id="fileupload" action="server/" method="POST" enctype="multipart/form-data">
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="control-group fileupload-buttonbar">
         <div class="span7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
                     <span>Bilder ausw&auml;hlen...</span>

@@ -39,16 +39,16 @@ function getCarouselEnd($id)
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
     if($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
         db_connect();
-        if($_SESSION["editOld"] == TRUE){
-            $query = 'UPDATE bilderBeitrag SET titel="'.$_POST["beitragTitel"].'", unterTitel="'.$_POST["beitragUnterTitel"].'", text="'.$_POST["beitragText"].'" WHERE uploadFolderName="'.$_SESSION["uploadFolder"].'"';
+        if(isset($_SESSION["editOld"]) && $_SESSION["editOld"] == TRUE){
+            $query = 'UPDATE bilderBeitrag SET titel="'.$_POST["beitragTitel"].'", unterTitel="'.$_POST["beitragUnterTitel"].'", text="'.$_POST["beitragText"].'", datum="'. date_to_mysql(mysql_real_escape_string($_POST['event_date'])) .'" WHERE uploadFolderName="'.$_SESSION["uploadFolder"].'"';
             $_SESSION["editOld"] = FALSE;
             if (mysql_query($query) == FALSE) {
                 die('Der Post konnte nicht verändert werden werden: ' . mysql_error());
             } 
         }
         else {
-            $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv) 
-            VALUES("' . mysql_real_escape_string($_POST["beitragTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragUnterTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragText"]) . '","' . $_SESSION["uploadFolder"] . '","' . $valid_user_id . '","' . 1 . '")';
+            $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv, datum) 
+            VALUES("' . mysql_real_escape_string($_POST["beitragTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragUnterTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragText"]) . '","' . $_SESSION["uploadFolder"] . '","' . $valid_user_id . '","' . 1 . '","' . date_to_mysql(mysql_real_escape_string($_POST['event_date'])) . '")'; 
             if (mysql_query($query) == FALSE) {
                 die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
             } 
@@ -58,6 +58,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
         $_SESSION["beitragTitel"] = $_POST["beitragTitel"];
         $_SESSION["beitragUnterTitel"] = $_POST["beitragUnterTitel"];
         $_SESSION["beitragText"] = $_POST["beitragText"];
+        $_SESSION["datum"] = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
         header("Location: ?fail");
     }
 }
@@ -85,6 +86,7 @@ if(isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 
         $beitragTitel = $row["titel"];
         $beitragUnterTitel = $row["unterTitel"];
         $beitragtext = $row["text"];
+        $_SESSION["datum"] = date_format($row["datum"], "d.m.Y");
     }
     include 'templates/neuerBeitrag.tpl';
 }
@@ -97,19 +99,21 @@ if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
 }
 ?>
 <script src="assets/js/bootstrap-carousel.js"></script>
+<script src="assets/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/datepicker.css" type="text/css" rel="stylesheet" />
 <?php
     $baseFolderPath = dirname($_SERVER['SCRIPT_FILENAME']).'/server/files/';
     
     db_connect();
-    $query = "SELECT * FROM bilderBeitrag WHERE aktiv = \"1\"";
+    $query = "SELECT * FROM bilderBeitrag WHERE aktiv = \"1\" ORDER BY datum DESC";
     $ergebnis = mysql_query($query);
         
     if (!$ergebnis) {
         die('Konnte Abfrage nicht ausführen:' . mysql_error());
     }
     while ($row = mysql_fetch_array($ergebnis, MYSQL_ASSOC)) {
-        echo '<div class="span7 offset2">';
-        echo '<h3 style="float:left">' . $row["titel"] . '</h3>';
+        echo '<div class="span7 offset2" style="margin-top:30px;">';
+        echo '<h2 style="float:left">' . $row["titel"] . '</h2>';
         echo '<a style="float:right; margin-left:10px;" href="?old='. $row["uploadFolderName"] .'">edit</a>
               <a style="float:right" href="?del='. $row["uploadFolderName"] .'" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
         if($row["unterTitel"] != ""){
@@ -129,7 +133,7 @@ if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
             closedir($handle);
         }
         getCarouselEnd($id);
-        echo '</div><br /><br />';
+        echo '</div>';
     }
 ?>
 <?php include 'templates/footer.tpl'; ?>
