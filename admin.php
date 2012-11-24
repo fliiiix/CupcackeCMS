@@ -133,46 +133,14 @@ if(isset($_GET["neu"])){
         $nachname = ($_POST["nachname"]);
         $vorname = ($_POST["vorname"]);
         $rolle = intval($_POST["rolle"]); 
-    }  
-?>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#create_user > input").click(function() { 
-            $(this).next("div").slideToggle();
-        });
-    });
-</script>
-<?php
-if (isset($error_msg)) {
-    echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>' . $error_msg . '</div>';
-}
-if (isset($success_msg)) {
-    echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' . $success_msg . '</div>';
-}
-?>
-<div id="create_user">
-    <input id="create_user" name="create_user" class="btn btn-primary" onclick="window.location.href = '#'" value="Neuen Nutzer erstellen" type="submit">
-    <div>
-        <form method="post">
-            <b>E-Mail-Adresse des Nutzers:</b> <input name="email" type="text" maxlength="256"?><br />
-            <b>E-Mail-Adresse des Nutzers bestätigen:</b> <input name="email_retype" type="text" maxlength="256"?><br />
-            <b>Vorname des Nutzers:</b> <input name="vorname" type="text" maxlength="256"?><br />
-            <b>Nachname des Nutzers:</b> <input name="nachname" type="text" maxlength="256"?><br />
-            <b>Rolle des Nutzers:</b> <select size="1" name="rolle">
-                <option value="1">Nutzer</option>
-                <option value="2">Admin</option>
-            </select> <a href="#"><i>Hilfe: Wer hat welche Rechte?</i></a><br />
-            <input class="btn btn-primary" type="submit" value="Nutzer erstellen" name="create_user">
-        </form>
-    </div>
-</div>
+    }
     include 'templates/useranlegen.tpl';
 }
 else {
     echo '<a href="?neu" class="btn btn-primary">Neuen Nutzer erstellen</a>';
 }
 ?>
+<br />
 <br />
 <table class="table" id="tabelle">
     <tbody>
@@ -205,22 +173,22 @@ else {
                 <td style="vertical-align: top;"><?php echo $row["email"]; ?>
                 </td>
                 <td style="vertical-align: top;"><?php
-        switch ($row["aktiv"]) {
-            # Account ist noch nicht bestätigt
-            case (0):
-                echo "<img src='./assets/img/questionmark.png'>";
-                break;
+            switch ($row["aktiv"]) {
+                # Account ist noch nicht bestätigt
+                case (0):
+                    echo "<img src='./assets/img/questionmark.png'>";
+                    break;
 
-            # Account ist deaktiviert
-            case (1):
-                echo "<img src='./assets/img/cross.png'>";
-                break;
+                # Account ist deaktiviert
+                case (1):
+                    echo "<img src='./assets/img/cross.png'>";
+                    break;
 
-            # Account ist aktiv
-            case (2):
-                echo "<img src='./assets/img/accepted.png'>";
-                break;
-        }
+                # Account ist aktiv
+                case (2):
+                    echo "<img src='./assets/img/accepted.png'>";
+                    break;
+            }
             ?>
                 </td>
                 <td style="vertical-align: top;"><?php
@@ -234,27 +202,25 @@ else {
                 </td>
                 <td style="vertical-align: top;">
                     <?php if ($row["aktiv"] == 1 || $row["aktiv"] == 2) { ?>
-                        <a href='?cs=<?php echo $row["id"]; ?>' <?php
-                if ($row["aktiv"] == 1) {
+                        <input <?php if ($row["aktiv"] == 1) {
                     echo"class=\"btn btn-success\"";
                 } if ($row["aktiv"] == 2) {
                     echo"class=\"btn btn-danger\"";
+                } ?> name="change_status" type="submit" onclick="window.location.href = '?cs=<?php echo $row["id"]; ?>';" value="Nutzer <?php
+                if ($row["aktiv"] == 1) {
+                    echo "aktivieren";
                 }
-                        ?>>Nutzer <?php
-                    if ($row["aktiv"] == 1) {
-                        echo "aktivieren";
-                    }
-                    if ($row["aktiv"] == 2) {
-                        echo "deaktivieren";
-                    }
-                    ?></a>
-    <?php } ?>
+                if ($row["aktiv"] == 2) {
+                    echo "deaktivieren";
+                }
+                        ?>">
+                    <?php } ?>
                 </td>
                 <td>
-                    <a class="btn btn-danger" href='?del=<?php echo $row["id"]; ?>'>Nutzer löschen</a>
+                    <input class="btn btn-danger" name="delete_user" type="submit" onclick="window.location.href = '?del=<?php echo $row["id"]; ?>';" value="Nutzer löschen">
                 </td>
                 <td>
-                    <a class="btn btn-primary" href='?ru=<?php echo $row["id"]; ?>'>Zum <?php
+                    <input class="btn btn-primary" name="rank_user" type="submit" onclick="window.location.href = '?ru=<?php echo $row["id"]; ?>';" value="Zum <?php
                 # Nutzer ist Admin
                 if ($row["rolle"] == 2) {
                     echo "Nutzer";
@@ -263,7 +229,7 @@ else {
                 if ($row["rolle"] == 1) {
                     echo "Administrator";
                 }
-                ?> machen</a>
+                ?> machen">
                 </td>
             </tr>
 <?php } ?>
