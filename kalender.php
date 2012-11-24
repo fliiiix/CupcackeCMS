@@ -12,7 +12,7 @@ include 'templates/header.tpl';
 $db = new_db_o();
 
 
-// MySQL-Vorbereitung für die Termin-Vorbereitung
+// MySQL-Vorbereitung für die Termin-Ausgabe
 $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` = ? ORDER BY `date`';
 $ergebnis = $db->prepare($sql);
 $ergebnis->bind_param('s', $date);
