@@ -97,6 +97,12 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
 <script type="text/javascript">
     $(document).ready(function(){ 
         $('.timepicker-default').timepicker({
+            minuteStep: 1,
+            showMeridian: false
+        });
+        $('.timepicker-edit').timepicker({
+            minuteStep: 1,
+            defaultTime: 'value',
             showMeridian: false
         });
         $('.datepicker').datepicker();
@@ -188,14 +194,14 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     $edit_output .= '</div><br />';
                     $edit_output .= 'Start:';
                     $edit_output .= '<div class="input-append bootstrap-timepicker-component">';
-                    $edit_output .= '<input type="text" class="timepicker-default input-small" name="edit_event_startTime" value="' . $output_startTime . '">';
+                    $edit_output .= '<input type="text" class="timepicker-edit input-small" name="edit_event_startTime" value="' . $output_startTime . '">';
                     $edit_output .= '<span class="add-on">';
                     $edit_output .= '<i class="icon-time"></i>';
                     $edit_output .= '</span>';
                     $edit_output .= '</div>';
                     $edit_output .= 'Ende:';
                     $edit_output .= '<div class="input-append bootstrap-timepicker-component">';
-                    $edit_output .= '<input type="text" class="timepicker-default input-small" name="edit_event_endTime" value="' . $output_endTime . '">';
+                    $edit_output .= '<input type="text" class="timepicker-edit input-small" name="edit_event_endTime" value="' . $output_endTime . '">';
                     $edit_output .= '<span class="add-on">';
                     $edit_output .= '<i class="icon-time"></i>';
                     $edit_output .= '</span>';

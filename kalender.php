@@ -11,13 +11,18 @@ if (isset($_GET['date'])) {
 include 'templates/header.tpl';
 $db = new_db_o();
 
-
-// MySQL-Vorbereitung für die Termin-Ausgabe
-$sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` = ? ORDER BY `date`';
-$ergebnis = $db->prepare($sql);
-$ergebnis->bind_param('s', $date);
-$ergebnis->execute();
-$ergebnis->bind_result($output_date, $output_title, $output_description, $output_startTime, $output_endTime);
+if (isset($date)) {
+    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` = ? ORDER BY `date`';
+    $ergebnis = $db->prepare($sql);
+    $ergebnis->bind_param('s', $date);
+    $ergebnis->execute();
+    $ergebnis->bind_result($output_date, $output_title, $output_description, $output_startTime, $output_endTime);
+} else {
+    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` ORDER BY `date`';
+    $ergebnis = $db->prepare($sql);
+    $ergebnis->execute();
+    $ergebnis->bind_result($output_date, $output_title, $output_description, $output_startTime, $output_endTime);
+}
 ?>
 <h2><? echo $current_site; ?></h2>
 <table class="table">
