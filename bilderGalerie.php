@@ -11,9 +11,11 @@ if ($result == false) {
     exit();
 } else {
     $valid_user_id = $result;
+    $admin = FALSE;
+    $admin = getUserRolle($valid_user_id) == 2;
 }
 
-if(!isset($_GET["neu"]) && !isset($_GET["fail"]) && !isset($_GET["old"]) && getUserRolle($valid_user_id) == 2)
+if(!isset($_GET["neu"]) && !isset($_GET["fail"]) && !isset($_GET["old"]) && $admin)
 {
     echo '<div class="span11">
             <a href="bilderGalerie.php?neu" class="btn btn-primary">Neuer Beitrag</a><br>
@@ -36,7 +38,7 @@ function getCarouselEnd($id)
             </div>';
 }
 
-if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"])){
+if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"]) && $admin){
     if($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
         db_connect();
         if(isset($_SESSION["editOld"]) && $_SESSION["editOld"] == TRUE){
@@ -63,7 +65,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
     }
 }
 
-if(isset($_GET["del"]) && $_GET["del"] != ""){
+if(isset($_GET["del"]) && $_GET["del"] != "" && $admin){
     db_connect();
     $query = "DELETE FROM bilderBeitrag WHERE uploadFolderName=\"" . $_GET["del"] . "\"";
     mysql_query($query);
@@ -90,7 +92,7 @@ if(isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 
     }
     include 'templates/neuerBeitrag.tpl';
 }
-if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
+if(isset($_GET["fail"]) && $admin) {
     $beitragTitel = isset($_SESSION["beitragTitel"]) ? $_SESSION["beitragTitel"] : "";
     $beitragUnterTitel = isset($_SESSION["beitragUnterTitel"]) ? $_SESSION["beitragUnterTitel"] : "";
     $beitragtext = isset($_SESSION["beitragText"]) ? $_SESSION["beitragText"] : "";
@@ -114,8 +116,10 @@ if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
     while ($row = mysql_fetch_array($ergebnis, MYSQL_ASSOC)) {
         echo '<div class="span7 offset2" style="margin-top:30px;">';
         echo '<h2 style="float:left">' . $row["titel"] . '</h2>';
-        echo '<a style="float:right; margin-left:10px;" href="?old='. $row["uploadFolderName"] .'">edit</a>
-              <a style="float:right" href="?del='. $row["uploadFolderName"] .'" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
+        if($admin) {
+            echo '<a style="float:right; margin-left:10px;" href="?old='. $row["uploadFolderName"] .'">edit</a>
+                  <a style="float:right" href="?del='. $row["uploadFolderName"] .'" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
+        }
         if($row["unterTitel"] != ""){
             echo '<h4 style="clear:both">'. $row["unterTitel"] .'</h4>';
         }
