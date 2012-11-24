@@ -2,7 +2,7 @@
 require_once('utils.php');
 // Schauen, ob in der URL ein Datum angegeben ist und den Seitentitel entsprechend ändern und danach Date in ein MySQL-kompatibles Format umwandeln
 if (isset($_GET['date'])) {
-    $date = mysql_real_escape_string($_GET['date']);
+    $date = $_GET['date'];
     $current_site = 'Termine am ' . $date;
     $date = date_to_mysql($date);
 } else {
