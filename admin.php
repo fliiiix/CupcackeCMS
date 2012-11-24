@@ -3,6 +3,7 @@ error_reporting(E_ALL | E_STRICT);
 $current_site = "Admin-Panel";
 include 'templates/header.tpl';
 require_once('utils.php');
+$db = new_db_o();
 db_connect();
 
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
@@ -11,7 +12,7 @@ if (verify_user() == false) {
     exit();
 } else {
     $valid_user_id = verify_user();
-    if(getUserRolle($valid_user_id) != 2){
+    if (getUserRolle($valid_user_id) != 2) {
         header("Location: index.php");
         exit();
     }
@@ -22,17 +23,24 @@ $username = current_username($valid_user_id);
 
 # Nutzer löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET["del"]) && $_GET["del"] != "") {
-    mysql_query("DELETE FROM user WHERE id=" . mysql_real_escape_string($_GET["del"]));
+    $delete_id = intval($_GET["del"]);
+    $sql = 'DELETE FROM `user` WHERE `id`=?';
+    $eintrag = $db->prepare($sql);
+    $eintrag->bind_param('i', $delete_id);
+    $eintrag->execute();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
 
 # Nutzer (de)aktivieren, wenn der entsprechende Button geklickt wird
 if (isset($_GET["cs"])) {
-    $change_status = mysql_real_escape_string($_GET["cs"]);
-    $query = mysql_query("SELECT aktiv FROM user WHERE id=" . $change_status);
-    $row = mysql_fetch_array($query);
-    switch ($row["aktiv"]) {
+    $change_status = intval($_GET["cs"]);
+    $sql = 'SELECT `aktiv` FROM `user` WHERE `id`=?';
+    $ergebnis->bind_param('i', $change_status);
+    $ergebnis = $db->prepare($sql);
+    $ergebnis->execute();
+    $ergebnis->bind_result($aktiv_status);
+    switch ($aktiv_status) {
         case (0):
             $new = "";
             break;
@@ -45,23 +53,32 @@ if (isset($_GET["cs"])) {
             $new = 1;
             break;
     }
-    mysql_query("UPDATE user SET aktiv=" . $new . " WHERE id=" . $change_status);
+    $sql = 'UPDATE `user` SET `aktiv`=? WHERE `id`=?';
+    $eintrag = $db->prepare($sql);
+    $eintrag->bind_param('ii', $new, $change_status);
+    $eintrag->execute();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
 
 # Nutzer zum Admin bzw. zum User machen, wenn der entsprechende Button geklickt wird
 if (isset($_GET["ru"])) {
-    $rank_user = mysql_real_escape_string($_GET["ru"]);
-    $query = mysql_query("SELECT rolle FROM user WHERE id=" . $rank_user);
-    $row = mysql_fetch_array($query);
-    if ($row["rolle"] == 1) {
+    $rank_user = intval($_GET["ru"]);
+    $sql = 'SELECT `rolle` FROM `user` WHERE `id`=?';
+    $ergebnis = $db->prepare($sql);
+    $ergebnis->bind_param('i', $rank_user);
+    $ergebnis->execute();
+    $ergebnis->bind_result($rolle);
+    if ($rolle == 1) {
         $new = 2;
     }
-    if ($row["rolle"] == 2) {
+    if ($rolle == 2) {
         $new = 1;
     }
-    mysql_query("UPDATE user SET rolle =" . $new . " WHERE id=" . $rank_user);
+    $sql = 'UPDATE `user` SET `rolle`=? WHERE `id`=?';
+    $eintrag = $db->prepare($sql);
+    $eintrag->bind_param('ii', $new, $rank_user);
+    $eintrag->execute();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
@@ -81,16 +98,28 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
         if (mysql_num_rows($query) > 0) {
             $error_msg = "Diese E-Mail-Adresse existiert leider schon";
         } else {
-            mysql_query("INSERT INTO user (vorname, nachname, email, rolle) VALUES(\"" . $vorname . "\",\"" . $nachname . "\",\"" . $email . "\"," . $rolle . ")");
-            $query = mysql_query("SELECT id FROM user WHERE email=\"" . $email . "\"");
-            $row = mysql_fetch_array($query);
-            $new_user_id = $row["id"];
+            $sql = 'INSERT INTO `user` (`vorname`, `nachname`, `email`, `rolle`) VALUES (?,?,?,?)';
+            $eintrag = $db->prepare($sql);
+            $eintrag->bind_param('sssi', $vorname, $nachname, $email, $rolle);
+            $eintrag->execute();
+
+            $sql = 'SELECT `id` FROM `user` WHERE `email`=?';
+            $ergebnis = $db->prepare($sql);
+            $ergebnis->bind_param('s', $email);
+            $ergebnis->execute();
+            $ergebnis->bind_result($new_user_id);
             $repeat = true;
             do {
                 $random = hash("haval128,3", rand(0, getrandmax()), false);
-                $ergebnis = mysql_query("SELECT * FROM email_verify WHERE random=\"" . $random . "\"");
-                if (mysql_num_rows($ergebnis) == 0) {
-                    mysql_query("INSERT INTO email_verify (user_id, random) VALUES(" . $new_user_id . ",\"" . $random . "\")");
+                $sql = 'SELECT * FROM `email_verify` WHERE `random`=?';
+                $ergebnis = $db->prepare($sql);
+                $ergebnis->bind_param('s', $random);
+                $ergebnis->execute();
+                if (!$ergebnis->fetch()) {
+                    $sql = 'INSERT INTO `email_verify` (`user_id`, `random`) VALUES(?,?)';
+                    $eintrag = $db->prepare($sql);
+                    $eintrag->bind_param('is', $new_user_id, $random);
+                    $ergebnis->execute();
                     $repeat = false;
                 }
             } while ($repeat);
@@ -117,26 +146,29 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
 }
 
 # Query für die ganze Tabelle
-$query = mysql_query("SELECT * FROM user WHERE NOT id=" . $valid_user_id);
+$sql = 'SELECT `id`, `vorname`, `nachname`, `rolle`, `email`, `aktiv` FROM `user` WHERE NOT `id`=?';
+$ergebnis = $db->prepare($sql);
+$ergebnis->bind_param('i', $valid_user_id);
+$ergebnis->execute();
+$ergebnis->bind_result($out_id, $out_vorname, $out_nachname, $out_rolle, $out_email, $out_aktiv);
 
 if (isset($error_msg)) {
-    echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>'  . $error_msg . '</div>';
+    echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>' . $error_msg . '</div>';
 }
-if (isset($success_msg)){
-    echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>'  . $success_msg . '</div>';
+if (isset($success_msg)) {
+    echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' . $success_msg . '</div>';
 }
 
-if(isset($_GET["neu"])){
-    if(isset($_POST["email"])){
+if (isset($_GET["neu"])) {
+    if (isset($_POST["email"])) {
         $email = $_POST["email"];
         $email2 = $_POST["email_retype"];
         $nachname = ($_POST["nachname"]);
         $vorname = ($_POST["vorname"]);
-        $rolle = intval($_POST["rolle"]); 
+        $rolle = intval($_POST["rolle"]);
     }
     include 'templates/useranlegen.tpl';
-}
-else {
+} else {
     echo '<a href="?neu" class="btn btn-primary">Neuen Nutzer erstellen</a>';
 }
 ?>
@@ -163,76 +195,78 @@ else {
             </td>
         </tr>
         <?php
-        while ($row = mysql_fetch_array($query)) {
+        while ($ergebnis->fetch()) {
             ?>
             <tr>
-                <td style="vertical-align: top;"><?php echo $row["vorname"]; ?>
+                <td style="vertical-align: top;"><?php echo $out_vorname; ?>
                 </td>
-                <td style="vertical-align: top;"><?php echo $row["nachname"]; ?>
+                <td style="vertical-align: top;"><?php echo $out_nachname; ?>
                 </td>
-                <td style="vertical-align: top;"><?php echo $row["email"]; ?>
+                <td style="vertical-align: top;"><?php echo $out_email; ?>
                 </td>
                 <td style="vertical-align: top;"><?php
-            switch ($row["aktiv"]) {
-                # Account ist noch nicht bestätigt
-                case (0):
-                    echo "<img src='./assets/img/questionmark.png'>";
-                    break;
+        switch ($out_aktiv) {
+            # Account ist noch nicht bestätigt
+            case (0):
+                echo "<img src='./assets/img/questionmark.png'>";
+                break;
 
-                # Account ist deaktiviert
-                case (1):
-                    echo "<img src='./assets/img/cross.png'>";
-                    break;
+            # Account ist deaktiviert
+            case (1):
+                echo "<img src='./assets/img/cross.png'>";
+                break;
 
-                # Account ist aktiv
-                case (2):
-                    echo "<img src='./assets/img/accepted.png'>";
-                    break;
-            }
+            # Account ist aktiv
+            case (2):
+                echo "<img src='./assets/img/accepted.png'>";
+                break;
+        }
             ?>
                 </td>
                 <td style="vertical-align: top;"><?php
-                if ($row["rolle"] == 1) {
+                if ($out_rolle == 1) {
                     echo "Nutzer";
                 }
-                if ($row["rolle"] == 2) {
+                if ($out_rolle == 2) {
                     echo "Administrator";
                 }
             ?>
                 </td>
                 <td style="vertical-align: top;">
                     <?php if ($row["aktiv"] == 1 || $row["aktiv"] == 2) { ?>
-                        <input <?php if ($row["aktiv"] == 1) {
+                        <input <?php
+                if ($out_aktiv == 1) {
                     echo"class=\"btn btn-success\"";
-                } if ($row["aktiv"] == 2) {
+                } if ($out_aktiv == 2) {
                     echo"class=\"btn btn-danger\"";
-                } ?> name="change_status" type="submit" onclick="window.location.href = '?cs=<?php echo $row["id"]; ?>';" value="Nutzer <?php
-                if ($row["aktiv"] == 1) {
-                    echo "aktivieren";
                 }
-                if ($row["aktiv"] == 2) {
-                    echo "deaktivieren";
-                }
+                        ?> name="change_status" type="submit" onclick="window.location.href = '?cs=<?php echo $out_id; ?>';" value="Nutzer <?php
+                    if ($out_aktiv == 1) {
+                        echo "aktivieren";
+                    }
+                    if ($out_aktiv == 2) {
+                        echo "deaktivieren";
+                    }
                         ?>">
-                    <?php } ?>
+                        <?php } ?>
                 </td>
                 <td>
-                    <input class="btn btn-danger" name="delete_user" type="submit" onclick="window.location.href = '?del=<?php echo $row["id"]; ?>';" value="Nutzer löschen">
+                    <input class="btn btn-danger" name="delete_user" type="submit" onclick="window.location.href = '?del=<?php echo $out_id; ?>';" value="Nutzer löschen">
                 </td>
                 <td>
-                    <input class="btn btn-primary" name="rank_user" type="submit" onclick="window.location.href = '?ru=<?php echo $row["id"]; ?>';" value="Zum <?php
-                # Nutzer ist Admin
-                if ($row["rolle"] == 2) {
-                    echo "Nutzer";
-                }
-                # Nutzer ist normaler Nutzer
-                if ($row["rolle"] == 1) {
-                    echo "Administrator";
-                }
-                ?> machen">
+                    <input class="btn btn-primary" name="rank_user" type="submit" onclick="window.location.href = '?ru=<?php echo $out_id; ?>';" value="Zum <?php
+                    # Nutzer ist Admin
+                    if ($out_rolle == 2) {
+                        echo "Nutzer";
+                    }
+                    # Nutzer ist normaler Nutzer
+                    if ($out_rolle == 1) {
+                        echo "Administrator";
+                    }
+                        ?> machen">
                 </td>
             </tr>
-<?php } ?>
+        <?php } ?>
     </tbody>
 </table><br />
 <br />
