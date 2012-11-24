@@ -86,7 +86,7 @@ if(isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 
         $beitragTitel = $row["titel"];
         $beitragUnterTitel = $row["unterTitel"];
         $beitragtext = $row["text"];
-        $_SESSION["datum"] = date_format($row["datum"], "d.m.Y");
+        $_SESSION["datum"] = date_format(date_create($row["datum"]), "d.m.Y");
     }
     include 'templates/neuerBeitrag.tpl';
 }
@@ -119,7 +119,7 @@ if(isset($_GET["fail"]) && getUserRolle($valid_user_id) == 2) {
         if($row["unterTitel"] != ""){
             echo '<h4 style="clear:both">'. $row["unterTitel"] .'</h4>';
         }
-        echo '<p style="clear:both">' . $row["text"] . '</p><br />';
+        echo '<p style="clear:both">' . str_replace("\r\n", "<br>", $row["text"]) . '</p><br />';
         $id = getCarouselHead();
         $folderName = $baseFolderPath . $row["uploadFolderName"] . "/";
         if ($handle = opendir($folderName)) {
