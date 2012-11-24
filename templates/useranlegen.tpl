@@ -4,7 +4,7 @@
             <table>
                 <tr>
                     <td><b>E-Mail-Adresse des Nutzers:</b></td> 
-                    <td><input name="email" type="text" maxlength="256" value="<?php if(isset($beitragTitel)){echo $email; }?>"></td> 
+                    <td><input name="email" type="text" maxlength="256" value="<?php if(isset($email)){echo $email; }?>"></td> 
                 </tr>
                 <tr>
                     <td><b>E-Mail-Adresse des Nutzers bestätigen:</b></td>
