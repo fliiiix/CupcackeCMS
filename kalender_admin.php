@@ -191,37 +191,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
             while ($ergebnis->fetch()) {
                 if (isset($_GET['edit']) && $_GET['edit'] == $output_id) {
                     # Momentane Daten des Termins in Variablen schreiben um nachdem der Nutzer das Ändern-Fomular abgeschickt hat feststellen zu können, ob er etwas geändert hat
-                    $edit_output = '<tr><td><form method="post">';
-                    $edit_output .= '<div class="input-append date datepicker" id="dp4" data-date="' . mysql_to_date($output_date) . '" data-date-format="dd.mm.yyyy">';
-                    $edit_output .= '<input class="span2" size="16" type="text" value="' . mysql_to_date($output_date) . '" name="edit_event_date">';
-                    $edit_output .= '<span class="add-on"><i class="icon-th"></i></span>';
-                    $edit_output .= '</div><br />';
-                    $edit_output .= 'Start:';
-                    $edit_output .= '<div class="input-append bootstrap-timepicker-component">';
-                    $edit_output .= '<input type="text" class="timepicker-edit input-small" name="edit_event_startTime" value="' . $output_startTime . '">';
-                    $edit_output .= '<span class="add-on">';
-                    $edit_output .= '<i class="icon-time"></i>';
-                    $edit_output .= '</span>';
-                    $edit_output .= '</div>';
-                    $edit_output .= 'Ende:';
-                    $edit_output .= '<div class="input-append bootstrap-timepicker-component">';
-                    $edit_output .= '<input type="text" class="timepicker-edit input-small" name="edit_event_endTime" value="' . $output_endTime . '">';
-                    $edit_output .= '<span class="add-on">';
-                    $edit_output .= '<i class="icon-time"></i>';
-                    $edit_output .= '</span>';
-                    $edit_output .= '</div>';
-                    $edit_output .='</td>';
-                    $edit_output .='<td>';
-                    $edit_output .= '<input class="input" name="edit_event_title" id="edit_event_title" type="text" value="' . $output_title . '" maxlength="100">';
-                    $edit_output .='</td>';
-                    $edit_output .='<td>';
-                    $edit_output .= '<textarea name="edit_event_description" cols="50" rows="10">' . $output_description . '</textarea>';
-                    $edit_output .='</td>';
-                    $edit_output .='<td>';
-                    $edit_output .= get_username($output_lastEditor) . '<br />';
-                    $edit_output .= '<input class="btn btn-primary" name="save_edited_event" id="save_edited_event" type="submit" value="Termin ändern">';
-                    $edit_output .='</td></form>';
-                    echo $edit_output;
+                    include 'templates/termin.tpl';
                 } else {
                     $output = '<tr><td>' . mysql_to_date($output_date);
                     if ($output_startTime != 0 && $output_endTime != 0) {

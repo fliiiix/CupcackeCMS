@@ -233,37 +233,26 @@ if (isset($_GET["neu"])) {
             ?>
                 </td>
                 <td style="vertical-align: top;">
-                    <?php if ($row["aktiv"] == 1 || $row["aktiv"] == 2) { ?>
-                        <input <?php
-                if ($out_aktiv == 1) {
-                    echo"class=\"btn btn-success\"";
-                } if ($out_aktiv == 2) {
-                    echo"class=\"btn btn-danger\"";
-                }
-                        ?> name="change_status" type="submit" onclick="window.location.href = '?cs=<?php echo $out_id; ?>';" value="Nutzer <?php
-                    if ($out_aktiv == 1) {
-                        echo "aktivieren";
-                    }
-                    if ($out_aktiv == 2) {
-                        echo "deaktivieren";
-                    }
-                        ?>">
-                        <?php } ?>
+                    <?php if($out_aktiv == 1 || $out_aktiv == 2) {
+                        if ($out_aktiv == 1) { $buttonart = "btn-success"; $status = "aktivieren";} 
+                        if ($out_aktiv == 2) { $buttonart = "btn-danger"; $status = "deaktivieren";}
+                        echo '<a class="btn ' . $buttonart . '" href="?cs='. $out_id .'">Nutzer ' . $status .'</a>';
+                    }?>
                 </td>
                 <td>
-                    <input class="btn btn-danger" name="delete_user" type="submit" onclick="window.location.href = '?del=<?php echo $out_id; ?>';" value="Nutzer löschen">
+                    <a class="btn btn-danger" href="?del=<?php echo $out_id; ?>">Nutzer löschen</a>
                 </td>
                 <td>
-                    <input class="btn btn-primary" name="rank_user" type="submit" onclick="window.location.href = '?ru=<?php echo $out_id; ?>';" value="Zum <?php
-                    # Nutzer ist Admin
-                    if ($out_rolle == 2) {
-                        echo "Nutzer";
-                    }
-                    # Nutzer ist normaler Nutzer
-                    if ($out_rolle == 1) {
-                        echo "Administrator";
-                    }
-                        ?> machen">
+                    <?php 
+                        if ($out_rolle == 2) {
+                            $rolle = "Nutzer";
+                        }
+                        # Nutzer ist normaler Nutzer
+                        if ($out_rolle == 1) {
+                            $rolle = "Administrator";
+                        }
+                    ?>
+                    <a class="btn btn-primary" href="?ru=<?php echo $out_id; ?>">Zum <?php echo $rolle;?> machen</a>
                 </td>
             </tr>
         <?php } ?>
