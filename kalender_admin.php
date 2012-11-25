@@ -30,6 +30,8 @@ if (isset($_GET['del'])) {
     $query = $db->prepare($sql);
     $query->bind_param('s', $del_event_id);
     $query->execute();
+    empty_get($_SERVER['PHP_SELF']);
+    
 }
 
 # Geänderten Termin speichern, wenn der entsprechende Button geklickt wird
