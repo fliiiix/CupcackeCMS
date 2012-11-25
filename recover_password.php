@@ -9,24 +9,38 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])){
 	}
   else{
 	db_connect();
+        $db = new_db_o();
 	$valid_email = mysql_real_escape_string($_POST["email"]);
-	$ergebnis = mysql_query("SELECT id,vorname,nachname FROM user WHERE email=\"" . $valid_email . "\"");
-	if ($row = mysql_fetch_array($ergebnis)){
-		$valid_user_id = $row["id"];
-		$valid_name = $row["vorname"] . " " . $row["nachname"];
+        $sql = 'SELECT `id`,`vorname`,`nachname` FROM `user` WHERE email=?';
+        $ergebnis = $db->prepare($sql);
+	$ergebnis->bind_param('s', $valid_email);
+        $ergebnis->execute();
+        $ergebnis->bind_result($out_id, $out_vorname, $out_nachname);
+	if ($ergebnis->affected_rows != 0){
+		$valid_user_id = $out_id;
+		$valid_name = $out_vorname . " " . $out_nachname;
 	} else {
 			$errormsg = " Die E-Mail-Adresse ist nicht valide";
 		}
 	}
 	if (isset($valid_user_id)){
-		mysql_query("DELETE FROM pw_forgot WHERE user_id=" . $valid_user_id);
+		$sql= 'DELETE FROM `pw_forgot` WHERE `user_id`=?';
+                $eintrag = $db->prepare($sql);
+                $eintrag->bind_param('i', $valid_user_id);
+                $eintrag->execute();
 		$repeat = true;
 		do{
 			$link_component = hash("haval128,3",rand(0,getrandmax()),false);
-			$ergebnis = mysql_query("SELECT * FROM pw_forgot WHERE link_component=\"" . $link_component . "\"");
-			if (mysql_num_rows($ergebnis) == 0){
+			$sql = 'SELECT * FROM `pw_forgot` WHERE `link_component`=?';
+                        $ergebnis = $db->prepare($sql);
+                        $ergebnis->bind_param('s', $link_component);
+                        $ergbnis->execute();
+			if ($ergebnis->affected_rows == 0){
 			  $repeat = false;
-			  mysql_query("INSERT INTO pw_forgot (user_id, link_component) VALUES(" . $valid_user_id . ", \"" . $link_component . "\")");
+			  $sql = 'INSERT INTO `pw_forgot` (`user_id`, `link_component`) VALUES(?,?)';
+                          $eintrag = $db->prepare($sql);
+                          $eintrag->bind_param('is', $valid_user_id, $link_component);
+                          $eintrag->execute();
 			}
 		}while($repeat);
 		$headers = "From: noreply@fliegenberg.de" . "\n" .

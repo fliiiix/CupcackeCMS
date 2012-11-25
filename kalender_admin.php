@@ -39,6 +39,9 @@ if (isset($_POST['save_edited_event'])) {
     if (!($_POST['edit_event_startTime'] == $_POST['edit_event_endTime'])) {
         $new_startTime = mysql_real_escape_string($_POST['edit_event_startTime']);
         $new_endTime = mysql_real_escape_string($_POST['edit_event_endTime']);
+    } else {
+        $new_startTime = '0';
+        $new_endTime = '0';
     }
     $edit_event_id = intval($_GET['edit']);
     $sql = 'UPDATE events SET `date`=?, `title`=?, `description`=?, `startTime`=?, `endTime`=?, `lastEditor`=? WHERE `id`=?';
