@@ -193,7 +193,6 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
             <?php
             while ($ergebnis->fetch()) {
                 if (isset($_GET['edit']) && $_GET['edit'] == $output_id) {
-                    # Momentane Daten des Termins in Variablen schreiben um nachdem der Nutzer das Ändern-Fomular abgeschickt hat feststellen zu können, ob er etwas geändert hat
                     include 'templates/termin.tpl';
                 } else {
                     $output = '<tr><td>' . mysql_to_date($output_date);
@@ -207,8 +206,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                         $output .= '&nbsp;';
                     }
                     $output .= '</td><td>' . get_username($output_lastEditor) . '</td>';
-                    $output .= '<td><a href="?edit=' . $output_id . '" class="btn btn-inverse"><i class="icon-edit icon-white"></i></a>';
-                    $output .= '<td><a href="?del=' . $output_id . '" class="btn btn-danger"><i class="icon-remove-circle"></i></a>';
+                    $output .= '<td><a href="?edit=' . $output_id . '" class="btn btn-inverse"><i class="icon-edit icon-white"></i></a> <a href="?del=' . $output_id . '" class="btn btn-danger"><i class="icon-remove-circle"></i></a>';
                     echo $output;
                 }
             }
