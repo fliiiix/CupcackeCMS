@@ -115,7 +115,7 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
                 $ergebnis = $db->prepare($sql);
                 $ergebnis->bind_param('s', $random);
                 $ergebnis->execute();
-                if (!$ergebnis->fetch()) {
+                if ($ergebnis->affected_rows == 0) {
                     $sql = 'INSERT INTO `email_verify` (`user_id`, `random`) VALUES(?,?)';
                     $eintrag = $db->prepare($sql);
                     $eintrag->bind_param('is', $new_user_id, $random);

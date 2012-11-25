@@ -10,6 +10,7 @@ if ($result == false) {
     header("Location: index.php");
     exit();
 } else {
+    # User, die zwar eingeloggt aber nicht Admin sind  auch rauswerfen
     $valid_user_id = $result;
     if(getUserRolle($valid_user_id) != 2){
         header("Location: index.php");
@@ -23,7 +24,7 @@ $username = current_username($valid_user_id);
 # $_GET leeren
 # empty_get($_SERVER['PHP_SELF']);
 # Termin löschen, wenn der entsprechende Button geklickt wird
-if (isset($_GET['del']) && $admin) {
+if (isset($_GET['del'])) {
     $del_event_id = mysql_real_escape_string($_GET['del']);
     $sql = 'DELETE FROM `events` WHERE id = ?';
     $query = $db->prepare($sql);
