@@ -94,7 +94,20 @@ if (isset($_POST['create_event'])) {
 }
 
 // MySQL-Vorbereitung für die Termine-Tabelle
-$sql = 'SELECT `id`, `date`, `title`, `description`, `startTime`, `endTime`, `lastEditor` FROM `events` ORDER BY `date`';
+if(isset($_GET["all"])) {
+    if(!isset($_SESSION["all"])){
+        $_SESSION["all"] = FALSE;
+    }
+    else {
+        $_SESSION["all"] =  !$_SESSION["all"];
+    }
+}
+
+$filter = 'WHERE `date` + 14 >= CURDATE()';
+if(isset($_SESSION["all"]) && $_SESSION["all"] == FALSE){
+    $filter = '';
+}
+$sql = 'SELECT `id`, `date`, `title`, `description`, `startTime`, `endTime`, `lastEditor` FROM `events` ' . $filter . ' ORDER BY `date`, `startTime`';
 $ergebnis = $db->prepare($sql);
 $ergebnis->execute();
 $ergebnis->bind_result($output_id, $output_date, $output_title, $output_description, $output_startTime, $output_endTime, $output_lastEditor);

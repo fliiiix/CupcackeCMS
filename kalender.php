@@ -12,13 +12,13 @@ include 'templates/header.tpl';
 $db = new_db_o();
 
 if (isset($date)) {
-    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` = ? ORDER BY `date`';
+    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` = ? ORDER BY `date`, `startTime`';
     $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('s', $date);
     $ergebnis->execute();
     $ergebnis->bind_result($output_date, $output_title, $output_description, $output_startTime, $output_endTime);
 } else {
-    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` ORDER BY `date`';
+    $sql = 'SELECT `date`, `title`, `description`, `startTime`, `endTime`  FROM `events` WHERE `date` + 1 >= CURDATE()  ORDER BY `date`, `startTime`';
     $ergebnis = $db->prepare($sql);
     $ergebnis->execute();
     $ergebnis->bind_result($output_date, $output_title, $output_description, $output_startTime, $output_endTime);
@@ -36,23 +36,27 @@ while ($ergebnis->fetch()) {
         echo '<h3>' . mysql_to_date($output_date) . '</h3>';
         echo '<table class="table" style="margin-bottom: 20px;">
                 <tr>
-                    <td><b>Datum und Zeit</b></td>
-                    <td><b>Titel</b></td>
-                    <td><b>Beschreibung</b></td>
+                    <td class="span2"><b>Titel</b></td>
+                    <td class="span4"><b>Beschreibung</b></td>
+                    <td class="span2"><b>Zeit</b></td>
                 </tr>';
     }
     
-    $output = '<tr><td>' . mysql_to_date($output_date);
-    if ($output_startTime != 0 && $output_endTime != 0) {
-        $output .= '<br />von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr';
-    }
-    $output .= '</td><td>' . $output_title . '</td><td>';
+    $output = '<tr><td>' . $output_title . '</td><td>';
     if (isset($output_description)) {
         $output .= $output_description;
     } else {
         $output .= '&nbsp;';
     }
     $output .= '</td>';
+    
+    if ($output_startTime != NULL && $output_endTime != NULL) {
+        $output .= '<td><br />von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr</td>';
+    }
+    else {
+        $output .= '<td>&nbsp;</td>';
+    }
+    $output .= '</tr>';
     echo $output;
     
     $vorhergehendesDatum = $output_date;
