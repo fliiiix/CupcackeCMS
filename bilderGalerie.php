@@ -40,26 +40,46 @@ function getCarouselEnd($id)
 
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"]) && $admin){
     if($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
-        db_connect();
+        $db = new_db_o();
         if(isset($_SESSION["editOld"]) && $_SESSION["editOld"] == TRUE){
-            $query = 'UPDATE bilderBeitrag SET titel="'.$_POST["beitragTitel"].'", unterTitel="'.$_POST["beitragUnterTitel"].'", text="'.$_POST["beitragText"].'", datum="'. date_to_mysql(mysql_real_escape_string($_POST['event_date'])) .'" WHERE uploadFolderName="'.$_SESSION["uploadFolder"].'"';
+            $titel = mysql_real_escape_string($_POST["beitragTitel"]);
+            $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
+            $text = mysql_real_escape_string($_POST["beitragText"]);
+            $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+            $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
+            
+            $sql = 'UPDATE `bilderBeitrag` SET `titel`=?, `unterTitel`=?, `text`=?, `datum`=? WHERE `uploadFolderName`=?';
+            $eintrag = $db->prepare($sql);
+            $eintrag->bind_param('sssss', $titel, $unterTitel, $text, $datum, $uploadFolder);
+            $eintrag->execute();
             $_SESSION["editOld"] = FALSE;
-            if (mysql_query($query) == FALSE) {
+            if ($eintrag->affected_rows == 0) {
+                # Sollte in der finalen Version raus, keine Debug-Ausgaben für Nutzer!
                 die('Der Post konnte nicht verändert werden werden: ' . mysql_error());
             } 
         }
         else {
-            $query = 'INSERT INTO bilderBeitrag (titel, unterTitel, text, uploadFolderName, ownerId, aktiv, datum) 
-            VALUES("' . mysql_real_escape_string($_POST["beitragTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragUnterTitel"]) . '","' .  mysql_real_escape_string($_POST["beitragText"]) . '","' . $_SESSION["uploadFolder"] . '","' . $valid_user_id . '","' . 1 . '","' . date_to_mysql(mysql_real_escape_string($_POST['event_date'])) . '")'; 
-            if (mysql_query($query) == FALSE) {
+            $titel = mysql_real_escape_string($_POST["beitragTitel"]);
+            $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
+            $text = mysql_real_escape_string($_POST["beitragText"]);
+            $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
+            $aktiv = 1;
+            $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+            
+            $sql = 'INSERT INTO `bilderBeitrag` (`titel`, `unterTitel`, `text`, `uploadFolderName`, `ownerId`, `aktiv`, `datum`) VALUES (?,?,?,?,?,?,?)';
+            $eintrag = $db->prepare($sql);
+            $eintrag->bind_param('ssssiis', $titel, $unterTitel, $text, $uploadFolder, $valid_user_id, $aktiv, $datum);
+            $eintrag->execute();
+            if ($eintrag->affected_rows == 0) {
+                # Siehe oben
                 die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
             } 
         }
     }
     else {
-        $_SESSION["beitragTitel"] = $_POST["beitragTitel"];
-        $_SESSION["beitragUnterTitel"] = $_POST["beitragUnterTitel"];
-        $_SESSION["beitragText"] = $_POST["beitragText"];
+        $_SESSION["beitragTitel"] = mysql_real_escape_string($_POST["beitragTitel"]);
+        $_SESSION["beitragUnterTitel"] = mysql_real_escape_string($_POST["beitragUnterTitel"]);
+        $_SESSION["beitragText"] = mysql_real_escape_string($_POST["beitragText"]);
         $_SESSION["datum"] = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
         header("Location: ?fail");
     }
