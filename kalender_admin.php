@@ -21,8 +21,6 @@ if ($result == false) {
 # Nutzernamen des Nutzers feststellen
 $username = current_username($valid_user_id);
 
-# $_GET leeren
-# empty_get($_SERVER['PHP_SELF']);
 # Termin löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET['del'])) {
     $del_event_id = mysql_real_escape_string($_GET['del']);

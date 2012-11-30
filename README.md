@@ -16,11 +16,11 @@ If you come across any bugs in CupcackeCMS don't hesitate to tell us: [Create an
 ##License
 
 ##Credits
-* [Bootstrap](https://github.com/twitter/bootstrap/) - Layout Grundlagen
-* [Bootswatch](http://bootswatch.com/) - fürs Layout
-* [Glyphicons](http://glyphicons.com/) - Symbole
-* [Bootstrap-Timepicker](http://jdewit.github.com/bootstrap-timepicker/) - Uhrzeit-Auswahl
-* [Bootstrap-Datepicker](http://www.eyecon.ro/bootstrap-datepicker/) - Datums-Auswahl
+* [Bootstrap](https://github.com/twitter/bootstrap/) - Basic layout
+* [Bootswatch](http://bootswatch.com/) - Layout
+* [Glyphicons](http://glyphicons.com/) - Icons
+* [Bootstrap-Timepicker](http://jdewit.github.com/bootstrap-timepicker/)
+* [Bootstrap-Datepicker](http://www.eyecon.ro/bootstrap-datepicker/)
 
 Created by
 * fliiiix
