@@ -8,7 +8,6 @@ if (isset($login)){
 <div class="span12"><h1>Titel</h1></div>
 <div class="span9">
 	<p>Hier kommt irgend ein Text hin</p>
-	<img alt="bildhalt" src="googleWallet.png">
 </div>
 <div class="span2">
 	<?php

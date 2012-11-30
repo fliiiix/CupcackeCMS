@@ -51,7 +51,7 @@ while ($ergebnis->fetch()) {
     $output .= '</td>';
     
     if ($output_startTime != NULL && $output_endTime != NULL) {
-        $output .= '<td><br />von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr</td>';
+        $output .= '<td>von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr</td>';
     }
     else {
         $output .= '<td>&nbsp;</td>';

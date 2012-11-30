@@ -84,6 +84,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
 if (isset($_GET["del"]) && $_GET["del"] != "" && $admin) {
     $uploadFolder = mysql_real_escape_string($_GET["del"]);
     $sql = 'DELETE FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
+    $eintrag = NULL;
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('s', $uploadFolder);
     $eintrag->execute();
@@ -101,6 +102,7 @@ if (isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) ==
 
     $uploadFolder = mysql_real_escape_string($_GET["old"]);
     $sql = 'SELECT `titel`, `untertitel`, `text`, `datum` FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
+    $ergebnis = NULL;
     $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('s', $uploadFolder);
     $ergebnis->execute();
@@ -123,12 +125,12 @@ if (isset($_GET["fail"]) && $admin) {
 <link href="assets/css/datepicker.css" type="text/css" rel="stylesheet" />
 <?php
 
-$baseFolderPath = dirname($_SERVER['SCRIPT_FILENAME']) . '/server/files/';
+$baseFolderPath = 'server/files/';
 
 $sql = 'SELECT `titel`, `uploadFolderName`, `unterTitel`, `text` FROM `bilderBeitrag` WHERE `aktiv`=1 ORDER BY `datum` DESC';
+$ergebnis = NULL;
 $ergebnis = $db->prepare($sql);
-$ergbnis->execute();
-
+$ergebnis->execute();
 if ($ergebnis->affected_rows == 0) {
     die('Konnte Abfrage nicht ausführen:' . mysql_error());
 }
@@ -150,7 +152,7 @@ while ($ergebnis->fetch()) {
         $erstesBildItem = "active";
         while (false !== ($file = readdir($handle))) {
             if ($file !== '.' && $file !== '..' && !is_dir($folderName . $file)) {
-                echo "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $row["uploadFolderName"] . "/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto\"></div>";
+                echo "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto\"></div>";
                 $erstesBildItem = "";
             }
         }
