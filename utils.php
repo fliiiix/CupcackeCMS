@@ -32,9 +32,8 @@ function login_user($email, $password) {
     if (!$ergebnis->affected_rows == 0) {
         $ergebnis->bind_result($user_id);
         $ergebnis->fetch();
-        $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id`=?';
+        $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id` = ?';
         $eintrag = $db->prepare($sql);
-        echo $user_id;
         $eintrag->bind_param('i', $user_id);
         $eintrag->execute();
 
@@ -61,18 +60,28 @@ function login_user($email, $password) {
 # Logout-Funktion für alle Backend-Seiten
 
 function logout($valid_user_id) {
-    mysql_query("DELETE FROM cookie_mapping WHERE user_id=" . $valid_user_id);
+    $db = new_db_o();
+    $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id`=?';
+    $eintrag = $db->prepare($sql);
+    $eintrag->bind_param($valid_user_id);
+    $eintrag->execute();
     setcookie("CupcackeCMS_Cookie", "", -1);
 }
 
 # Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
 
 function verify_user() {
-    db_connect();
+    $db = new_db_o();
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
-        $query = mysql_query("SELECT user_id FROM cookie_mapping WHERE cookie_content=" . intval($_COOKIE["CupcackeCMS_Cookie"]));
-        if ($row = mysql_fetch_array($query)) {
-            return $row["user_id"];
+        $cookie_content = intval($_COOKIE["CupcackeCMS_Cookie"]);
+        $sql = 'SELECT `user_id` FROM `cookie_mapping` WHERE `cookie_content`=?';
+        $ergebnis = $db->prepare($sql);
+        $ergebnis->bind_param('i', $cookie_content);
+        $ergebnis->execute();
+        if (!$ergebnis->affected_rows == 0) {
+            $ergebnis->bind_result($user_id);
+            $ergebnis->fetch();
+            return $user_id;
         } else {
             return false;
         }
@@ -113,27 +122,28 @@ function calendar($month, $year, $db) {
     $current_m_first_wd = date("w", mktime(0, 0, 0, $current_m, 1, $current_y));
     $current_m_last_d = date("d", mktime(0, 0, 0, $current_m + 1, 0, $current_y));
     # Tabellen-Stuff (Wochentages-Leiste)
-    $output = '<table class="table" style="width: 100px; margin-bottom: 0px;">';
-    $output .= '  <tr>';
-    $output .= '    <td colspan="7" style="border-top: 0px solid black; font-weight:bold;">' . $current_m_name . '</td>';
-    $output .= '  </tr>';
-    $output .= '  <tr>';
-    $output .= '    <td><b>Mo</b></td>';
-    $output .= '    <td><b>Di</b></td>';
-    $output .= '    <td><b>Mi</b></td>';
-    $output .= '    <td><b>Do</b></td>';
-    $output .= '    <td><b>Fr</b></td>';
-    $output .= '    <td><b>Sa</b></td>';
-    $output .= '    <td><b>So</b></td>';
-    $output .= '  </tr>';
-    $output .= '  <tr>';
+    $output = '<table class = "table" style = "width: 100px; margin-bottom: 0px;">';
+    $output .= ' <tr>';
+    $output .= ' <td colspan = "7" style = "border-top: 0px solid black; font-weight:bold;">' . $current_m_name . '</td>';
+    $output .= ' </tr>';
+    $output .= ' <tr>';
+    $output .= ' <td><b>Mo</b></td>';
+    $output .= ' <td><b>Di</b></td>';
+    $output .= ' <td><b>Mi</b></td>';
+    $output .= ' <td><b>Do</b></td>';
+    $output .= ' <td><b>Fr</b></td>';
+    $output .= ' <td><b>Sa</b></td>';
+    $output .= ' <td><b>So</b></td>';
+    $output .= ' </tr>';
+    $output .= ' <tr>';
     # Sonntags-Bugfix
     if ($current_m_first_wd == 0) {
         $current_m_first_wd = 7;
     }
     # Leere Tabellen-Felder ausgeben, wenn der erste Tag des Monats kein Montag ist
     if ($current_m_first_wd > 1) {
-        $output .= '<td colspan="' . ($current_m_first_wd - 1) . '">&nbsp;</td>';
+        $output .= '<td colspan = "' . ($current_m_first_wd - 1) . '">&nbsp;
+</td>';
     }
 
     # Query, für die Termin-Hyperlinks zu den entsprechenden Daten
@@ -150,7 +160,7 @@ function calendar($month, $year, $db) {
     for ($act_day = 1, $act_wd = $current_m_first_wd; $act_day <= $current_m_last_d; $act_day++, $act_wd++) {
         # Wenn am ausgegebenen Tag ein Event ist einen Link auf zur kalender.php auf das Datum legen
         if (isset($event_dates_array[$act_day])) {
-            $output .= '<td><a href="kalender.php?date=' . $act_day . '.' . $current_m . '.' . $current_y . '">' . $act_day . '</a></td>';
+            $output .= '<td><a href = "kalender.php?date=' . $act_day . '.' . $current_m . '.' . $current_y . '">' . $act_day . '</a></td>';
             # Wenn kein Event am ausgegebenen Tag ist den Tag ganz normal ausgeben
         } else {
             $output .= '<td>' . $act_day . '</td>';
@@ -167,13 +177,15 @@ function calendar($month, $year, $db) {
     }
     # Wenn der letzte Tag des Monats kein Sonntag ist am Ende der Tabellen-Zeile noch leere Zellen einfügen
     if ($act_wd > 1) {
-        $output .= '<td colspan="' . (8 - $act_wd) . '">&nbsp;</td></tr>';
+        $output .= '<td colspan = "' . (8 - $act_wd) . '">&nbsp;
+</td></tr>';
     }
-    $output .= '  <tr>';
-    $output .= '    <td colspan="3">' . calendar_link('b', $current_m, $current_y) . '</td>';
-    $output .= '    <td>&nbsp;</td>';
-    $output .= '    <td colspan="3" style="text-align:right">' . calendar_link('f', $current_m, $current_y) . '</td>';
-    $output .= '  </tr>';
+    $output .= ' <tr>';
+    $output .= ' <td colspan = "3">' . calendar_link('b', $current_m, $current_y) . '</td>';
+    $output .= ' <td>&nbsp;
+</td>';
+    $output .= ' <td colspan = "3" style = "text-align:right">' . calendar_link('f', $current_m, $current_y) . '</td>';
+    $output .= ' </tr>';
     $output .= '</table>';
     return $output;
 }
@@ -181,7 +193,7 @@ function calendar($month, $year, $db) {
 # Funktion, die die Vor- und Zurück-Buttons unter dem Kalender generiert
 
 function calendar_link($dir, $current_m, $current_y) {
-    $output = '<a href="?m=';
+    $output = '<a href = "?m=';
     if ($dir == 'f') {
         $arrows = '<i class="icon-circle-arrow-right"></i>';
         if ($current_m == 12) {
