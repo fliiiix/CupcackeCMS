@@ -39,13 +39,14 @@ function getCarouselEnd($id) {
 
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"]) && $admin) {
     if ($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
+        
+        $titel = mysql_real_escape_string($_POST["beitragTitel"]);
+        $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
+        $text = mysql_real_escape_string($_POST["beitragText"]);
+        $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+        $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
+        
         if (isset($_SESSION["editOld"]) && $_SESSION["editOld"] == TRUE) {
-            $titel = mysql_real_escape_string($_POST["beitragTitel"]);
-            $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
-            $text = mysql_real_escape_string($_POST["beitragText"]);
-            $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
-            $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
-
             $sql = 'UPDATE `bilderBeitrag` SET `titel`=?, `unterTitel`=?, `text`=?, `datum`=? WHERE `uploadFolderName`=?';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('sssss', $titel, $unterTitel, $text, $datum, $uploadFolder);
@@ -56,13 +57,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
                 die('Der Post konnte nicht verändert werden werden: ' . mysql_error());
             }
         } else {
-            $titel = mysql_real_escape_string($_POST["beitragTitel"]);
-            $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
-            $text = mysql_real_escape_string($_POST["beitragText"]);
-            $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
             $aktiv = 1;
-            $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
-
             $sql = 'INSERT INTO `bilderBeitrag` (`titel`, `unterTitel`, `text`, `uploadFolderName`, `ownerId`, `aktiv`, `datum`) VALUES (?,?,?,?,?,?,?)';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('ssssiis', $titel, $unterTitel, $text, $uploadFolder, $valid_user_id, $aktiv, $datum);
@@ -99,17 +94,19 @@ if (isset($_GET["neu"]) && getUserRolle($valid_user_id) == 2) {
 if (isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = $_GET["old"];
     $_SESSION["editOld"] = TRUE;
-
+    
     $uploadFolder = mysql_real_escape_string($_GET["old"]);
     $sql = 'SELECT `titel`, `untertitel`, `text`, `datum` FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
-    $ergebnis = NULL;
-    $ergebnis = $db->prepare($sql);
-    $ergebnis->bind_param('s', $uploadFolder);
-    $ergebnis->execute();
-    if ($ergebnis->affected_rows) {
-        $ergebnis->bind_result($beitragTitel, $beitragUnterTitel, $beitragtext, $datum);
-        $_SESSION["datum"] = date_format(date_create($datum), "d.m.Y");
+    $SQLAbfrage = $db->prepare($sql);
+    $SQLAbfrage->bind_param('s', $uploadFolder);
+    $SQLAbfrage->execute();
+    if ($SQLAbfrage->affected_rows) {
+        $SQLAbfrage->bind_result($beitragTitel, $beitragUnterTitel, $beitragtext, $datum);
+        $SQLAbfrage->fetch();
+        $datum = date_format(date_create($datum), "d.m.Y");
+        $beitragtext = str_replace("\\r\\n", "\r\n", $beitragtext);
     }
+    $SQLAbfrage->close();
     include 'templates/neuerBeitrag.tpl';
 }
 if (isset($_GET["fail"]) && $admin) {
@@ -134,8 +131,8 @@ $ergebnis->execute();
 if ($ergebnis->affected_rows == 0) {
     die('Konnte Abfrage nicht ausführen:' . mysql_error());
 }
+$ergebnis->bind_result($titel, $uploadFolderName, $unterTitel, $text);
 while ($ergebnis->fetch()) {
-    $ergebnis->bind_result($titel, $uploadFolderName, $unterTitel, $text);
     echo '<div class="span7 offset2" style="margin-top:30px;">';
     echo '<h2 style="float:left">' . $titel . '</h2>';
     if ($admin) {
@@ -145,13 +142,13 @@ while ($ergebnis->fetch()) {
     if ($unterTitel != "") {
         echo '<h4 style="clear:both">' . $unterTitel . '</h4>';
     }
-    echo '<p style="clear:both">' . str_replace("\r\n", "<br>", $text) . '</p><br />';
+    echo '<p style="clear:both">' . str_replace("\\r\\n", "<br>", $text) . '</p><br />';
     $id = getCarouselHead();
     $folderName = $baseFolderPath . $uploadFolderName . "/";
-    if ($handle = opendir($folderName)) {
+    if (($handle = opendir($folderName))) {
         $erstesBildItem = "active";
         while (false !== ($file = readdir($handle))) {
-            if ($file !== '.' && $file !== '..' && !is_dir($folderName . $file)) {
+            if ($file !== '.' && $file !== '..' && !is_dir($folderName . $file) && $file !== ".htaccess") {
                 echo "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto\"></div>";
                 $erstesBildItem = "";
             }

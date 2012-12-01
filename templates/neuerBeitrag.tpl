@@ -23,8 +23,8 @@
         </div>
         <div class="control-group">
             <label class="span3" for="beitragText">Datum:</label>
-            <div style="margin-left: 0px; padding-left: 0px;" class="input-append date datepicker" id="dp3" data-date="<?php if(isset($_SESSION['datum'])) { echo $_SESSION['datum']; } else { echo date('d\.m\.Y'); }  ?>" data-date-format="dd.mm.yyyy">
-                <input class="span2" size="16" type="text" value="<?php if(isset($_SESSION['datum'])) { echo $_SESSION['datum']; } else { echo date('d\.m\.Y'); } ?>" name="event_date">
+            <div style="margin-left: 0px; padding-left: 0px;" class="input-append date datepicker" id="dp3" data-date="<?php if(isset($datum)) { echo $datum; } else { echo date('d\.m\.Y'); }  ?>" data-date-format="dd.mm.yyyy">
+                <input class="span2" size="16" type="text" value="<?php if(isset($datum)) { echo $datum; } else { echo date('d\.m\.Y'); } ?>" name="event_date">
                 <span class="add-on"><i class="icon-th"></i></span>
             </div>
         </div>
