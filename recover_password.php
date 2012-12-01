@@ -13,8 +13,9 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
         $ergebnis = $db->prepare($sql);
         $ergebnis->bind_param('s', $valid_email);
         $ergebnis->execute();
-        $ergebnis->bind_result($out_id, $out_vorname, $out_nachname);
         if ($ergebnis->affected_rows != 0) {
+            $ergebnis->bind_result($out_id, $out_vorname, $out_nachname);
+            $ergebnis->fetch();
             $valid_user_id = $out_id;
             $valid_name = $out_vorname . " " . $out_nachname;
         } else {
@@ -80,6 +81,7 @@ if (!isset($valid_user_id)) {
 
 <?php } else { ?>
     <div class="alert alert-success">Die E-Mail zum Ändern deines Passworts wurde erfolgreich versandt <a href="index.php">Zurück zur Startseite</a></div>
-<?php }
+<?php
+}
 include 'templates/footer.tpl';
 ?>

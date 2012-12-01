@@ -11,10 +11,11 @@ if (isset($_GET["key"])) {
     $ergbnis = $db->prepare($sql);
     $ergebnis->bind_param('s', $key);
     $ergebnis->execute();
-    $ergebnis->bind_result($out_user_id);
     if ($ergbnis->affected_rows == 0) {
         $invalid_key = 1;
     } else {
+        $ergebnis->bind_result($out_user_id);
+        $ergebnis->fetch();
         $valid_user_id = $out_user_id;
     }
 } else {

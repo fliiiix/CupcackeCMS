@@ -36,7 +36,7 @@ if (isset($_GET['del'])) {
 if (isset($_POST['save_edited_event'])) {
     $new_date = date_to_mysql(mysql_real_escape_string($_POST['edit_event_date']));
     $new_title = mysql_real_escape_string($_POST['edit_event_title']);
-    $new_description = mysql_real_escape_string($_POST['edit_event_description']);
+    $new_description = str_replace("\\r\\n", "\r\n", mysql_real_escape_string($_POST['edit_event_description']));
     if (!($_POST['edit_event_startTime'] == $_POST['edit_event_endTime'])) {
         $new_startTime = mysql_real_escape_string($_POST['edit_event_startTime']);
         $new_endTime = mysql_real_escape_string($_POST['edit_event_endTime']);
@@ -72,7 +72,7 @@ if (isset($_POST['create_event'])) {
         }
 
         if (isset($_POST['event_description'])) {
-            $event_description = mysql_real_escape_string($_POST['event_description']);
+            $event_description = str_replace("\\r\\n", "\r\n", mysql_real_escape_string($_POST['event_description']));
         }
         $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `startTime`, `endTime`, `lastEditor`) VALUES (?, ?, ?, ?, ?, ?)';
         $eintrag = $db->prepare($sql);
@@ -215,7 +215,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     }
                     $output .= '</td><td>' . $output_title . '</td><td>';
                     if (isset($output_description)) {
-                        $output .= $output_description;
+                        $output .= nl2br($output_description, false);
                     } else {
                         $output .= '&nbsp;';
                     }
