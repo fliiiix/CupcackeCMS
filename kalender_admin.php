@@ -23,23 +23,22 @@ $username = current_username($valid_user_id);
 
 # Termin löschen, wenn der entsprechende Button geklickt wird
 if (isset($_GET['del'])) {
-    $del_event_id = mysql_real_escape_string($_GET['del']);
+    $del_event_id = escape($_GET['del']);
     $sql = 'DELETE FROM `events` WHERE id = ?';
     $query = $db->prepare($sql);
     $query->bind_param('s', $del_event_id);
     $query->execute();
     empty_get($_SERVER['PHP_SELF']);
-    
 }
 
 # Geänderten Termin speichern, wenn der entsprechende Button geklickt wird
 if (isset($_POST['save_edited_event'])) {
-    $new_date = date_to_mysql(mysql_real_escape_string($_POST['edit_event_date']));
-    $new_title = mysql_real_escape_string($_POST['edit_event_title']);
-    $new_description = str_replace("\\r\\n", "\r\n", mysql_real_escape_string($_POST['edit_event_description']));
+    $new_date = date_to_mysql(escape($_POST['edit_event_date']));
+    $new_title = escape($_POST['edit_event_title']);
+    $new_description = escape($_POST['edit_event_description']);
     if (!($_POST['edit_event_startTime'] == $_POST['edit_event_endTime'])) {
-        $new_startTime = mysql_real_escape_string($_POST['edit_event_startTime']);
-        $new_endTime = mysql_real_escape_string($_POST['edit_event_endTime']);
+        $new_startTime = escape($_POST['edit_event_startTime']);
+        $new_endTime = escape($_POST['edit_event_endTime']);
     } else {
         $new_startTime = '0';
         $new_endTime = '0';
@@ -60,19 +59,19 @@ if (isset($_POST['save_edited_event'])) {
 # Neuen Termin speichern, wenn alle Pflicht-Felder ausgefüllt sind, wenn Pflicht-Felder fehlen eine Fehlermeldung ausgeben
 if (isset($_POST['create_event'])) {
     if (isset($_POST['event_title']) && $_POST['event_title'] != "" && isset($_POST['event_date']) && $_POST['event_date'] != "") {
-        $event_title = mysql_real_escape_string($_POST['event_title']);
-        $event_date = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+        $event_title = escape($_POST['event_title']);
+        $event_date = date_to_mysql(escape($_POST['event_date']));
 
         if (!($_POST['startTime'] == $_POST['endTime'])) {
-            $event_startTime = mysql_real_escape_string($_POST['startTime']);
-            $event_endTime = mysql_real_escape_string($_POST['endTime']);
+            $event_startTime = escape($_POST['startTime']);
+            $event_endTime = escape($_POST['endTime']);
         } else {
             $event_startTime = '0';
             $event_endTime = '0';
         }
 
         if (isset($_POST['event_description'])) {
-            $event_description = str_replace("\\r\\n", "\r\n", mysql_real_escape_string($_POST['event_description']));
+            $event_description =  escape($_POST['event_description']);
         }
         $sql = 'INSERT INTO `events` (`date`, `title`, `description`, `startTime`, `endTime`, `lastEditor`) VALUES (?, ?, ?, ?, ?, ?)';
         $eintrag = $db->prepare($sql);
@@ -207,6 +206,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
             <?php
             while ($ergebnis->fetch()) {
                 if (isset($_GET['edit']) && $_GET['edit'] == $output_id) {
+                    $output_description = str_replace("\\r\\n", "\r\n", $output_description);
                     include 'templates/termin.tpl';
                 } else {
                     $output = '<tr><td>' . mysql_to_date($output_date);
@@ -215,11 +215,11 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     }
                     $output .= '</td><td>' . $output_title . '</td><td>';
                     if (isset($output_description)) {
-                        $output .= nl2br($output_description, false);
+                        $output .= str_replace("\\r\\n", "<br />", $output_description);
                     } else {
                         $output .= '&nbsp;';
                     }
-                    $output .= '</td><td>' . get_username($output_lastEditor) . '</td>';
+                    $output .= '</td><td>' . current_username($output_lastEditor) . '</td>';
                     $output .= '<td><a href="?edit=' . $output_id . '" class="btn btn-inverse"><i class="icon-edit icon-white"></i></a> <a href="?del=' . $output_id . '" class="btn btn-danger"><i class="icon-remove-circle"></i></a>';
                     echo $output;
                 }

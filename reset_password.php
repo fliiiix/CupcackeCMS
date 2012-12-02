@@ -17,6 +17,7 @@ if (isset($_GET["key"])) {
         $ergebnis->bind_result($out_user_id);
         $ergebnis->fetch();
         $valid_user_id = $out_user_id;
+        $ergebnis->close();
     }
 } else {
     $invalid_key = 1;
@@ -38,11 +39,13 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('is', $valid_user_id, $password_hash);
                 $eintrag->execute();
+                $eintrag->close();
                 
                 $sql = 'DELETE FROM `pw_forgot` WHERE `link_component`=?';
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('s', $key);
                 $eintrag->execute();
+                $eintrag->close();
                 $success_msg = 1;
             }
         }
@@ -51,7 +54,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 ?>
 <h2> Passwort zurücksetzen</h2>
 <?php if (isset($invalid_key)) { ?>
-    <div class="alert alert-error"Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</div>
+<div class="alert alert-error">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</div>
     <?php
 } else {
     if (isset($success_msg)) {

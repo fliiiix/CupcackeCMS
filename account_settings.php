@@ -3,7 +3,7 @@ error_reporting(E_ALL | E_STRICT);
 $current_site = "Account-Einstellungen";
 include 'templates/header.tpl'; 
 require_once('utils.php');
-db_connect();
+$db = new_db_o();
 
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
 $valid_user_id = verify_user();
@@ -23,21 +23,28 @@ if (isset($_GET["logout"])){
 }
 
 # Momentane E-Mail-Adresse und Namen des Users aus der Datenbank holen
-$query = mysql_query("SELECT vorname,nachname,email FROM user WHERE id=" . $valid_user_id);
-$row = mysql_fetch_array($query);
-$current_email = $row["email"];
-$vorname = $row["vorname"];
-$nachname = $row["nachname"];
+$sql = 'SELECT `vorname`,`nachname`,`email` FROM `user` WHERE `id`=?';
+$eintrag = $db->prepare($sql);
+$eintrag->bind_param('i', $valid_user_id);
+$eintrag->execute();
+$eintrag->bind_result($vorname, $nachname, $current_email);
+$eintrag->fetch();
+$eintrag->close();
 
 # Wenn der Passwort-Ändern-Button geklickt wird überprüfen, ob die beiden Passwörter übereinstimmen, wenn ja das Passwort in der Datenbank ändern und eine Erfolgs-Meldung ausgeben
 if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POST["change_password"])) {
 	if(8 > strlen($_POST["password"])){
-	  $errormsg = "Bitte gebe ein Passwort, das länger als 7 Zeichen ist ein";
+	  $errormsg = "Bitte gebe ein Passwort, welches mindestens 8 zeichen enthält";
 	} else {
 		if($_POST["password"] != $_POST["password_verify"]){
 			$errormsg = "Bitte gebe zwei übereinstimmende Passwörter ein";
-		} else {
-			mysql_query("UPDATE user SET pw_hash=\"" . hash("whirlpool", mysql_real_escape_string($_POST["password"])) . "\" WHERE id=" . $valid_user_id);
+		} 
+                else {
+                        $sql = 'UPDATE `user` SET `pw_hash`="?" WHERE `id`="?"';
+                        $eintrag = $db->prepare($sql);
+                        $eintrag->bind_param('si', hash("whirlpool", mysql_real_escape_string($_POST["password"])), $valid_user_id);
+                        $eintrag->execute();
+                        $eintrag->close();
 			$success_msg = "Dein Passwort wurde erfolgreich geändert";
 		}
 	}
@@ -47,16 +54,28 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["change_email"])){
 	if ($_POST["email"] != $_POST["email_verify"]){
 		$email_errormsg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
-	} else {
+	} 
+        else {
 		if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
 			$email_errormsg = "Bitte eine valide E-Mail-Adresse eingeben";
-		} else {
-			$new_email = mysql_real_escape_string($_POST["email"]);
-			do{
+		} 
+                else {
+			$new_email = escape($_POST["email"]);
+			$sql = 'SELECT `id` FROM `change_email` WHERE `random`="?"';
+                        $eintrag = $db->prepare($sql);
+                        do{
 				$random = hash("haval128,3",rand(0,getrandmax()),false);
-				$ergebnis = mysql_query("SELECT * FROM change_email WHERE random=\"" . $random . "\"");
-				if (mysql_num_rows($ergebnis) == 0){
-					mysql_query("INSERT INTO change_email (user_id, random, new_email) VALUES(" . $valid_user_id . ",\"" . $random . "\",\"" . $new_email . "\")");
+                                $eintrag->bind_param('s', $random);
+                                $eintrag->execute();
+                                $eintrag->store_result();
+				if ($eintrag->num_rows == 0){
+					$eintrag->close();
+                                        
+                                        $sql = 'INSERT INTO change_email (user_id, random, new_email) VALUES(?, ?, ?)';
+                                        $eintrag = $db->prepare($sql);
+                                        $eintrag->bind_param('iss', $valid_user_id, $random, $new_email);
+                                        $eintrag->execute();
+                                        $eintrag->close();
 					$repeat = false;
 				}
 			} while($repeat);
@@ -87,8 +106,9 @@ if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["cha
 <?php if (isset($errormsg)){ 
  	echo "<b style=\"color:red\">" . $errormsg . "</b>";?>
 <?php } ?>
-<div>
-<b>Passwort ändern</b>
+<div class="span5" style="margin-left: 0px; padding-left: 0px;">
+<h3>Passwort ändern</h3>
+Wenn du dein Passwort ändern möchtest.<br /><br />
 <form method="post">
 	<table>
 		<tr>
@@ -103,9 +123,9 @@ if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["cha
   <input class="btn btn-primary" type="submit" value="Passwort ändern" name="change_password">
 </form>
 </div>
-<div>
-	<b>E-Mail-Adresse ändern</b><br />
-	Deine momentane E-Mail-Adresse ist <?php echo $current_email; ?><br />
+<div class="span5">
+	<h3>E-Mail-Adresse ändern</h3>
+	Deine momentane E-Mail-Adresse ist <?php echo $current_email; ?><br /><br />
 	<?php if (isset($email_errormsg)){ 
  	echo "<b style=\"color:red\">" . $email_errormsg . "</b>";?>
  	<?php } ?>

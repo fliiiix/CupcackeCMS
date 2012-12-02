@@ -3,16 +3,15 @@ require_once("utils.php");
 
 # Wenn der Logout-Button gerückt wird den Nutzer ausloggen
 if(isset($_GET['logout'])){
-  logout( verify_user());
+  logout(verify_user());
 }
 
 // Überprüfen, ob der Nutzer das richtige Passwort und den richtigen Benutzernamen angegeben hat
 // Wenn alle Daten stimmen zum Admin-Interface weiterleiten
 if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_button"])) {
-  db_connect();
   setcookie("CupcackeCMS_Cookie","",0);
 
-  $login = login_user($_POST["email"],$_POST["password"]);
+  $login = login_user(($_POST["email"]),($_POST["password"]));
   if ($login == "true"){
     header("Location: index.php");
     exit();
@@ -64,12 +63,15 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
             <ul class="nav">
               <li><a href="index.php">Startseite</a></li>
               <li><a href="kalender.php">Termine</a></li>
-              <?php 
-              	if(verify_user() != false){
-                echo "<li><a href=\"bilderGalerie.php\">Bildergalerie</a></li>";
-                echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
-                echo "<li><a href=\"kalender_admin.php\">Terminverwaltung</a></li>";
-		            }
+              <?php
+              $userId = verify_user();
+              if($userId != false){
+                    if(getUserRolle($userId) == 2){
+                        echo "<li><a href=\"kalender_admin.php\">Terminverwaltung</a></li>";
+                        echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
+                    }
+                    echo "<li><a href=\"bilderGalerie.php\">Bildergalerie</a></li>";
+		}
               ?>
             </ul>
       	    <ul class="nav pull-right">
@@ -83,6 +85,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               {
                   echo("Hallo " . current_username($result));
                   echo " <a class=\"btn btn-primary\" href=\"?logout\"><i class=\"icon-off icon-white\"></i></a>";
+                  echo " <a class=\"btn btn-primary\" href=\"account_settings.php\"><i class=\"icon-wrench icon-white\"></i></a>";
               }
             ?>
       	  </ul>

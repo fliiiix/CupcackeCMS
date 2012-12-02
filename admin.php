@@ -4,7 +4,6 @@ $current_site = "Admin-Panel";
 include 'templates/header.tpl';
 require_once('utils.php');
 $db = new_db_o();
-db_connect();
 
 # Nicht eigeloggte User rauswerfen, sonst valide User-ID speichern
 if (verify_user() == false) {
@@ -28,6 +27,7 @@ if (isset($_GET["del"]) && $_GET["del"] != "") {
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('i', $delete_id);
     $eintrag->execute();
+    $eintrag->close();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
@@ -36,10 +36,12 @@ if (isset($_GET["del"]) && $_GET["del"] != "") {
 if (isset($_GET["cs"])) {
     $change_status = intval($_GET["cs"]);
     $sql = 'SELECT `aktiv` FROM `user` WHERE `id`=?';
-    $ergebnis->bind_param('i', $change_status);
     $ergebnis = $db->prepare($sql);
+    $ergebnis->bind_param('i', $change_status);
     $ergebnis->execute();
     $ergebnis->bind_result($aktiv_status);
+    $ergebnis->fetch();
+    $ergebnis->close();
     switch ($aktiv_status) {
         case (0):
             $new = "";
@@ -57,6 +59,7 @@ if (isset($_GET["cs"])) {
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('ii', $new, $change_status);
     $eintrag->execute();
+    $eintrag->close();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
@@ -69,6 +72,8 @@ if (isset($_GET["ru"])) {
     $ergebnis->bind_param('i', $rank_user);
     $ergebnis->execute();
     $ergebnis->bind_result($rolle);
+    $ergebnis->fetch();
+    $ergebnis->close();
     if ($rolle == 1) {
         $new = 2;
     }
@@ -79,6 +84,7 @@ if (isset($_GET["ru"])) {
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('ii', $new, $rank_user);
     $eintrag->execute();
+    $ergebnis->close();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
@@ -261,8 +267,8 @@ if (isset($_GET["neu"])) {
 <br />
 <div id="legende">
     Legende:<br />
-    <img src='./assets/img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
-    <img src='./assets/img/cross.png'> = Account deaktiviert<br />
-    <img src='./assets/img/accepted.png'> = Account aktiv<br />
+    <img src='assets/img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
+    <img src='assets/img/cross.png'> = Account deaktiviert<br />
+    <img src='assets/img/accepted.png'> = Account aktiv<br />
 </div>
 <?php include 'templates/footer.tpl'; ?>

@@ -2,13 +2,12 @@
 
 //Sammlung von nützlichen Funktionen für CupcackeCMS
 # Mit der Datenbank verbinden
-function db_connect() {
+/*function db_connect() {
     mysql_connect("localhost", "root", "") or die(mysql_error());
     mysql_select_db("cupcackecms") or die(mysql_error());
-}
+}*/
 
 # Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
-
 function new_db_o() {
     $db = @new mysqli('localhost', 'root', '', 'cupcackecms');
     return $db;
@@ -18,10 +17,9 @@ function new_db_o() {
 $GLOBALS["site_name"] = "CupcackeCMS";
 
 # Login-Funktion für die Startseite
-
 function login_user($email, $password) {
     $db = new_db_o();
-    $escaped_email = mysql_real_escape_string($email);
+    $escaped_email = escape($email);
     $hashed_password = hash("whirlpool", $password, false);
     $sql = 'SELECT `id` FROM `user` WHERE `email`=? AND `pw_hash`=? AND `aktiv`=2';
     $ergebnis = $db->prepare($sql);
@@ -32,21 +30,30 @@ function login_user($email, $password) {
     if (!$ergebnis->affected_rows == 0) {
         $ergebnis->bind_result($user_id);
         $ergebnis->fetch();
+        $ergebnis->close();
+        
         $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id` = ?';
         $eintrag = $db->prepare($sql);
         $eintrag->bind_param('i', $user_id);
         $eintrag->execute();
+        $ergebnis->fetch();
+        $ergebnis->close();
 
         $cookie_content = rand(0, getrandmax());
         $sql = 'SELECT * FROM `cookie_mapping` WHERE `cookie_content`=?';
         $ergebnis = $db->prepare($sql);
         $ergebnis->bind_param($cookie_content);
         $ergebnis->execute();
+        $ergebnis->fetch();
+        $ergebnis->close();
+        
         if ($ergebnis->affected_rows == 0) {
             $sql = 'INSERT INTO `cookie_mapping` (`user_id`, `cookie_content`) VALUES (?,?)';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('is', $user_id, $cookie_content);
             $eintrag->execute();
+            $ergebnis->fetch();
+            $ergebnis->close();
             setcookie("CupcackeCMS_Cookie", $cookie_content, time() + 7200);
             return true;
         } else {
@@ -58,7 +65,6 @@ function login_user($email, $password) {
 }
 
 # Logout-Funktion für alle Backend-Seiten
-
 function logout($valid_user_id) {
     $db = new_db_o();
     $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id`=?';
@@ -69,7 +75,6 @@ function logout($valid_user_id) {
 }
 
 # Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
-
 function verify_user() {
     $db = new_db_o();
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
@@ -91,29 +96,42 @@ function verify_user() {
 }
 
 #gibt die rolle des users zurück
-
 function getUserRolle($valid_user_id) {
-    db_connect();
+    $db = new_db_o();
+    $rolle = 0;
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
-        $query = mysql_query("SELECT * FROM user WHERE Id=\"" . $valid_user_id . "\"");
-        if ($row = mysql_fetch_array($query)) {
-            return $row["rolle"];
+        $sql = 'SELECT `rolle` FROM user WHERE Id=?';
+        $ergebnis = $db->prepare($sql);
+        $ergebnis->bind_param('i', $valid_user_id);
+        $ergebnis->execute();
+        if (!$ergebnis->affected_rows == 0) {
+            $ergebnis->bind_result($rolle);
+            $ergebnis->fetch();
         }
+        $ergebnis->close();
+        return $rolle;
     }
-    return false;
 }
 
 # Namen des momentan eingeloggten Users zurückgeben
-
 function current_username($valid_user_id) {
-    $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $valid_user_id);
-    $row = mysql_fetch_array($query);
-    $username = $row["vorname"] . " " . $row["nachname"];
-    return $username;
+    $db = new_db_o();
+    $vorname = "";
+    $nachname = "";
+    
+    $sql = 'SELECT `vorname`,`nachname` FROM `user` WHERE id=?';
+    $ergebnis = $db->prepare($sql);
+    $ergebnis->bind_param('i', $valid_user_id);
+    $ergebnis->execute();
+    if (!$ergebnis->affected_rows == 0) {
+        $ergebnis->bind_result($vorname, $nachname);
+        $ergebnis->fetch();
+    }
+    $ergebnis->close();
+    return $vorname . " " . $nachname;
 }
 
 # Kalender-Funktion
-
 function calendar($month, $year, $db) {
     $current_m = $month;
     $current_y = $year;
@@ -142,8 +160,7 @@ function calendar($month, $year, $db) {
     }
     # Leere Tabellen-Felder ausgeben, wenn der erste Tag des Monats kein Montag ist
     if ($current_m_first_wd > 1) {
-        $output .= '<td colspan = "' . ($current_m_first_wd - 1) . '">&nbsp;
-</td>';
+        $output .= '<td colspan = "' . ($current_m_first_wd - 1) . '">&nbsp;</td>';
     }
 
     # Query, für die Termin-Hyperlinks zu den entsprechenden Daten
@@ -160,7 +177,7 @@ function calendar($month, $year, $db) {
     for ($act_day = 1, $act_wd = $current_m_first_wd; $act_day <= $current_m_last_d; $act_day++, $act_wd++) {
         # Wenn am ausgegebenen Tag ein Event ist einen Link auf zur kalender.php auf das Datum legen
         if (isset($event_dates_array[$act_day])) {
-            $output .= '<td><a href = "kalender.php?date=' . $act_day . '.' . $current_m . '.' . $current_y . '">' . $act_day . '</a></td>';
+            $output .= '<td><b><a href = "kalender.php?date=' . $act_day . '.' . $current_m . '.' . $current_y . '">' . $act_day . '</a></b></td>';
             # Wenn kein Event am ausgegebenen Tag ist den Tag ganz normal ausgeben
         } else {
             $output .= '<td>' . $act_day . '</td>';
@@ -177,13 +194,11 @@ function calendar($month, $year, $db) {
     }
     # Wenn der letzte Tag des Monats kein Sonntag ist am Ende der Tabellen-Zeile noch leere Zellen einfügen
     if ($act_wd > 1) {
-        $output .= '<td colspan = "' . (8 - $act_wd) . '">&nbsp;
-</td></tr>';
+        $output .= '<td colspan = "' . (8 - $act_wd) . '">&nbsp;</td></tr>';
     }
     $output .= ' <tr>';
     $output .= ' <td colspan = "3">' . calendar_link('b', $current_m, $current_y) . '</td>';
-    $output .= ' <td>&nbsp;
-</td>';
+    $output .= ' <td>&nbsp;</td>';
     $output .= ' <td colspan = "3" style = "text-align:right">' . calendar_link('f', $current_m, $current_y) . '</td>';
     $output .= ' </tr>';
     $output .= '</table>';
@@ -191,7 +206,6 @@ function calendar($month, $year, $db) {
 }
 
 # Funktion, die die Vor- und Zurück-Buttons unter dem Kalender generiert
-
 function calendar_link($dir, $current_m, $current_y) {
     $output = '<a href = "?m=';
     if ($dir == 'f') {
@@ -218,30 +232,19 @@ function calendar_link($dir, $current_m, $current_y) {
     return $output;
 }
 
-# Funktion zu Konvertierung des europäischen Datums-Formats in das von MySQL
-
+#Konvertierung des europäischen Datums-Formats in das von MySQL
 function date_to_mysql($input) {
     $a = explode('.', $input);
     return sprintf('%04d-%02d-%02d', $a[2], $a[1], $a[0]);
 }
 
-# Funktion zur Kovertierung vom MySQL-Datum-Format in das europäische
-
+#Kovertierung vom MySQL-Datum-Format in das europäische
 function mysql_to_date($input) {
     $a = explode('-', $input);
     return sprintf('%02d.%02d.%04d', $a[2], $a[1], $a[0]);
 }
 
-# Funktion, die den entsprechenden Nutzernamen zu einer ID ausgibt
-
-function get_username($id) {
-    $query = mysql_query("SELECT vorname,nachname FROM user WHERE id=" . $id);
-    $row = mysql_fetch_array($query);
-    return $row['vorname'] . ' ' . $row['nachname'];
-}
-
-#guid halt
-
+#erzeugt eine guid
 function guid() {
     if (function_exists('com_create_guid')) {
         return com_create_guid();
@@ -260,12 +263,18 @@ function guid() {
     }
 }
 
-# Funktion zum Leeren von $_GET
-
+#Leeren von $_GET
 function empty_get($site) {
     if (count($_GET) != 0) {
         header("Location: " . $site);
     }
 }
 
+#escapet daten für die db
+function escape($value)
+{
+    $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
+    $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
+    return str_replace($search, $replace, (string)$value);
+}
 ?>

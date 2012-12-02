@@ -16,6 +16,7 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
         if ($ergebnis->affected_rows != 0) {
             $ergebnis->bind_result($out_id, $out_vorname, $out_nachname);
             $ergebnis->fetch();
+            $ergebnis->close();
             $valid_user_id = $out_id;
             $valid_name = $out_vorname . " " . $out_nachname;
         } else {
@@ -34,12 +35,14 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
             $ergebnis = $db->prepare($sql);
             $ergebnis->bind_param('s', $link_component);
             $ergbnis->execute();
+            $ergbnis->close();
             if ($ergebnis->affected_rows == 0) {
                 $repeat = false;
                 $sql = 'INSERT INTO `pw_forgot` (`user_id`, `link_component`) VALUES(?,?)';
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('is', $valid_user_id, $link_component);
                 $eintrag->execute();
+                $ergbnis->close();
             }
         } while ($repeat);
         $headers = "From: noreply@fliegenberg.de" . "\n" .

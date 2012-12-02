@@ -44,13 +44,14 @@ while ($ergebnis->fetch()) {
     
     $output = '<tr><td>' . $output_title . '</td><td>';
     if (isset($output_description)) {
-        $output .= $output_description;
-    } else {
+        $output .= str_replace("\\r\\n", "<br />", $output_description);
+    } 
+    else {
         $output .= '&nbsp;';
     }
-    $output .= '</td>';
+    $output .= '</td>'; 
     
-    if ($output_startTime != NULL && $output_endTime != NULL) {
+    if ($output_startTime != 0 && $output_endTime != 0) {
         $output .= '<td>von ' . $output_startTime . ' Uhr bis ' . $output_endTime . ' Uhr</td>';
     }
     else {

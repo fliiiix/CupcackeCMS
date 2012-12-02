@@ -37,52 +37,93 @@ function getCarouselEnd($id) {
             </div>';
 }
 
+function hasFileToDownload($guid){
+    $baseFolderPath = 'server/files/';
+    $folderName = $baseFolderPath . escape($guid) . "/";
+    $inline_file_types = '/\.(gif|jpe?g|png)$/i';
+    $counter = 0;
+    
+    if (($handle = opendir($folderName))) {
+        while (false !== ($file = readdir($handle)) || $counter == 1) {
+            if (preg_match($inline_file_types, $file)) {
+                  $counter++;
+            }
+        }
+    }
+    return $counter != 0;
+}
+
+if(isset($_GET["dl"]) && $_GET["dl"] != ""){
+    $baseFolderPath = 'server/files/';
+    $folderName = $baseFolderPath . escape($_GET["dl"]) . "/";
+    $zipFolderName = "bilder.zip";
+    $inline_file_types = '/\.(gif|jpe?g|png)$/i';
+    
+    $zip = new ZipArchive;
+    $zip->open($folderName . $zipFolderName, ZIPARCHIVE::OVERWRITE);
+    
+    if (($handle = opendir($folderName))) {
+        while (false !== ($file = readdir($handle))) {
+            if (preg_match($inline_file_types, $file)) {
+                  $zip->addFile($folderName . $file, $file);  
+            }
+        }
+    }
+    
+    closedir($handle);
+    $zip->close();
+
+    $zipfile = $folderName . $zipFolderName;
+    header('Content-Type: application/zip');
+    header('Content-disposition: attachment; filename="' . $zipFolderName . '"');
+    header('Content-Length: ' . filesize($zipfile));
+    ob_clean();
+    flush();
+    echo readfile($zipfile);
+    unset($zipfile);
+}
+
 if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset($_POST["beitragText"]) && $admin) {
     if ($_POST["beitragTitel"] != "" && $_POST["beitragText"] != "") {
-        
-        $titel = mysql_real_escape_string($_POST["beitragTitel"]);
-        $unterTitel = mysql_real_escape_string($_POST["beitragUnterTitel"]);
-        $text = mysql_real_escape_string($_POST["beitragText"]);
-        $datum = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
-        $uploadFolder = mysql_real_escape_string($_SESSION["uploadFolder"]);
+        $titel = escape($_POST["beitragTitel"]);
+        $unterTitel = escape($_POST["beitragUnterTitel"]);
+        $text = escape($_POST["beitragText"]);
+        $datum = date_to_mysql(escape($_POST['event_date']));
+        $uploadFolder = escape($_SESSION["uploadFolder"]);
         
         if (isset($_SESSION["editOld"]) && $_SESSION["editOld"] == TRUE) {
             $sql = 'UPDATE `bilderBeitrag` SET `titel`=?, `unterTitel`=?, `text`=?, `datum`=? WHERE `uploadFolderName`=?';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('sssss', $titel, $unterTitel, $text, $datum, $uploadFolder);
             $eintrag->execute();
+            $eintrag->fetch();
             $_SESSION["editOld"] = FALSE;
-            if ($eintrag->affected_rows == 0) {
-                # Sollte in der finalen Version raus, keine Debug-Ausgaben für Nutzer!
-                die('Der Post konnte nicht verändert werden werden: ' . mysql_error());
-            }
-        } else {
+        } 
+        else {
             $aktiv = 1;
             $sql = 'INSERT INTO `bilderBeitrag` (`titel`, `unterTitel`, `text`, `uploadFolderName`, `ownerId`, `aktiv`, `datum`) VALUES (?,?,?,?,?,?,?)';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('ssssiis', $titel, $unterTitel, $text, $uploadFolder, $valid_user_id, $aktiv, $datum);
             $eintrag->execute();
-            if ($eintrag->affected_rows == 0) {
-                # Siehe oben
-                die('Der Post konnte nicht gespeichert werden: ' . mysql_error());
-            }
+            $eintrag->fetch();
         }
+        $eintrag->close();
     } else {
-        $_SESSION["beitragTitel"] = mysql_real_escape_string($_POST["beitragTitel"]);
-        $_SESSION["beitragUnterTitel"] = mysql_real_escape_string($_POST["beitragUnterTitel"]);
-        $_SESSION["beitragText"] = mysql_real_escape_string($_POST["beitragText"]);
-        $_SESSION["datum"] = date_to_mysql(mysql_real_escape_string($_POST['event_date']));
+        $_SESSION["beitragTitel"] = escape($_POST["beitragTitel"]);
+        $_SESSION["beitragUnterTitel"] = escape($_POST["beitragUnterTitel"]);
+        $_SESSION["beitragText"] = escape($_POST["beitragText"]);
+        $_SESSION["datum"] = date_to_mysql(escape($_POST['event_date']));
         header("Location: ?fail");
     }
 }
 
 if (isset($_GET["del"]) && $_GET["del"] != "" && $admin) {
-    $uploadFolder = mysql_real_escape_string($_GET["del"]);
+    $uploadFolder = escape($_GET["del"]);
     $sql = 'DELETE FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
-    $eintrag = NULL;
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('s', $uploadFolder);
     $eintrag->execute();
+    $eintrag->close();
     empty_get($_SERVER['PHP_SELF']);
 }
 
@@ -95,7 +136,7 @@ if (isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) ==
     $_SESSION["uploadFolder"] = $_GET["old"];
     $_SESSION["editOld"] = TRUE;
     
-    $uploadFolder = mysql_real_escape_string($_GET["old"]);
+    $uploadFolder = escape($_GET["old"]);
     $sql = 'SELECT `titel`, `untertitel`, `text`, `datum` FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
     $SQLAbfrage = $db->prepare($sql);
     $SQLAbfrage->bind_param('s', $uploadFolder);
@@ -125,7 +166,6 @@ if (isset($_GET["fail"]) && $admin) {
 $baseFolderPath = 'server/files/';
 
 $sql = 'SELECT `titel`, `uploadFolderName`, `unterTitel`, `text` FROM `bilderBeitrag` WHERE `aktiv`=1 ORDER BY `datum` DESC';
-$ergebnis = NULL;
 $ergebnis = $db->prepare($sql);
 $ergebnis->execute();
 if ($ergebnis->affected_rows == 0) {
@@ -133,8 +173,13 @@ if ($ergebnis->affected_rows == 0) {
 }
 $ergebnis->bind_result($titel, $uploadFolderName, $unterTitel, $text);
 while ($ergebnis->fetch()) {
+    $output = "";
     echo '<div class="span7 offset2" style="margin-top:30px;">';
     echo '<h2 style="float:left">' . $titel . '</h2>';
+    if(hasFileToDownload($uploadFolderName)){
+        echo '<a style="float:right; margin-left:10px;" href="?dl=' . $uploadFolderName . '">Herunterladen</a>';
+    }
+    
     if ($admin) {
         echo '<a style="float:right; margin-left:10px;" href="?old=' . $uploadFolderName . '">edit</a>
                   <a style="float:right" href="?del=' . $uploadFolderName . '" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
@@ -143,19 +188,25 @@ while ($ergebnis->fetch()) {
         echo '<h4 style="clear:both">' . $unterTitel . '</h4>';
     }
     echo '<p style="clear:both">' . str_replace("\\r\\n", "<br>", $text) . '</p><br />';
-    $id = getCarouselHead();
+    
     $folderName = $baseFolderPath . $uploadFolderName . "/";
     if (($handle = opendir($folderName))) {
         $erstesBildItem = "active";
         while (false !== ($file = readdir($handle))) {
             if ($file !== '.' && $file !== '..' && !is_dir($folderName . $file) && $file !== ".htaccess") {
-                echo "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto\"></div>";
+                $output .= "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/medium/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto;\"></div>";
                 $erstesBildItem = "";
             }
         }
         closedir($handle);
     }
-    getCarouselEnd($id);
+    
+    if($output != "")
+    {
+        $id = getCarouselHead();
+        echo $output;
+        getCarouselEnd($id);
+    }
     echo '</div>';
 }
 ?>
