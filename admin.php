@@ -84,7 +84,7 @@ if (isset($_GET["ru"])) {
     $eintrag = $db->prepare($sql);
     $eintrag->bind_param('ii', $new, $rank_user);
     $eintrag->execute();
-    $ergebnis->close();
+    $eintrag->close();
     #$_GET leeren
     empty_get($_SERVER['PHP_SELF']);
 }
@@ -96,9 +96,9 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
     } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
         $error_msg = "Bitte eine valide E-Mail-Adresse eingeben";
     } else {
-        $email = mysql_real_escape_string($_POST["email"]);
-        $nachname = mysql_real_escape_string($_POST["nachname"]);
-        $vorname = mysql_real_escape_string($_POST["vorname"]);
+        $email = escape($_POST['email']);
+        $nachname = escape($_POST["nachname"]);
+        $vorname = escape($_POST["vorname"]);
         $rolle = intval($_POST["rolle"]);
         $query = mysql_query("SELECT * FROM user WHERE email=\"" . $email . "\"");
         if (mysql_num_rows($query) > 0) {
@@ -114,18 +114,23 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
             $ergebnis->bind_param('s', $email);
             $ergebnis->execute();
             $ergebnis->bind_result($new_user_id);
+            $ergebnis->fetch();
+            $ergebnis->close();
             $repeat = true;
+            echo '119';
             do {
                 $random = hash("haval128,3", rand(0, getrandmax()), false);
                 $sql = 'SELECT * FROM `email_verify` WHERE `random`=?';
                 $ergebnis = $db->prepare($sql);
                 $ergebnis->bind_param('s', $random);
                 $ergebnis->execute();
-                if ($ergebnis->affected_rows == 0) {
+                $ergebnis->fetch();
+                if ($ergebnis->affected_rows != 1) {
+                    $ergebnis->close();
                     $sql = 'INSERT INTO `email_verify` (`user_id`, `random`) VALUES(?,?)';
                     $eintrag = $db->prepare($sql);
                     $eintrag->bind_param('is', $new_user_id, $random);
-                    $ergebnis->execute();
+                    $eintrag->execute();
                     $repeat = false;
                 }
             } while ($repeat);
@@ -139,7 +144,8 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
                     "ein Administrator hat dir einen Account für Fliegenberg.de erstellt." . "\r\n" .
                     "Klicke auf den folgenden Link, um deine Daten zu überprüfen, dein Passwort zu setzen und den Account zu aktivieren: \r\n" .
                     "\r\n" .
-                    "http://" . $_SERVER['SERVER_NAME'] . "/email_verify.php?key=" . $random . "\r\n" .
+                    "http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?new_key=" . $random . "\r\n" .
+                    "\r\n" . 
                     "Wenn du dir keinen Account erstellen möchtest lasse diesen Link einfach verfallen. \r\n" .
                     "Mit freundlichen Grüßen\r\n" .
                     "Dein Fliegenberg-Team";
@@ -166,13 +172,6 @@ if (isset($success_msg)) {
 }
 
 if (isset($_GET["neu"])) {
-    if (isset($_POST["email"])) {
-        $email = $_POST["email"];
-        $email2 = $_POST["email_retype"];
-        $nachname = ($_POST["nachname"]);
-        $vorname = ($_POST["vorname"]);
-        $rolle = intval($_POST["rolle"]);
-    }
     include 'templates/useranlegen.tpl';
 } else {
     echo '<a href="?neu" class="btn btn-primary">Neuen Nutzer erstellen</a>';

@@ -1,11 +1,6 @@
 <?php
 
 //Sammlung von nützlichen Funktionen für CupcackeCMS
-# Mit der Datenbank verbinden
-/*function db_connect() {
-    mysql_connect("localhost", "root", "") or die(mysql_error());
-    mysql_select_db("cupcackecms") or die(mysql_error());
-}*/
 
 # Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
 function new_db_o() {

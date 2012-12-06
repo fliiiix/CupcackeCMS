@@ -89,7 +89,7 @@ if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["cha
 			"jemand hat auf Fliegenberg.de die Änderung der zu deinem Account gehörigen E-Mail-Adresse veranlasst." . "\r\n" . 
 			"Klicke auf den folgenden Link, um diese neue E-Mail-Adresse zu bestätigen: \r\n".
 			"\r\n".
-			"http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?key=" . $random . "\r\n" . 
+			"http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?change_key=" . $random . "\r\n" . 
 			"\r\n".
 			"Wenn du deine E-Mail-Adresse gar nicht ändern möchtest ignoriere diese Mail einfach. \r\n".
 			"Mit freundlichen Grüßen\r\n".

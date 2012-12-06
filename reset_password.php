@@ -59,11 +59,11 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 } else {
     if (isset($success_msg)) {
         ?>
-        <div class="alert"><b style="color:green">Dein Passwort wurde erfolgreich geändert</b></div>
+        <div class="alert alert-success">Dein Passwort wurde erfolgreich geändert</div>
     <?php
     } else {
         if (isset($errormsg)) {
-            echo '<div class="alert"><b style="color:red">" . $errormsg . "</b></div>';
+            echo '<div class="alert alert-error">' . $errormsg . '</div>';
         }
         ?>
         <form name="form1" method="post" action="<?php if (isset($_GET["key"])) echo "?key=" . $_GET["key"]; ?>">
