@@ -40,7 +40,7 @@ if (isset($_GET["change_key"])){
 		$eintrag->execute();
 		$eintrag->close();
 		
-		$success_msg = '<div class="alert alert-success">Deine neue E-Mail-Adresse wurde erfolgreich bestätigt.</div>';
+		echo '<div class="alert alert-success">Deine neue E-Mail-Adresse wurde erfolgreich bestätigt.</div>';
 	}
 }
 
@@ -89,8 +89,8 @@ if (isset($_GET['new_key'])){
                     <br>
                     <div>
                         <form method="post">
-                            <input class="input" style="margin-bottom:0px;" name="passwort" id="passwort" type="text" placeholder="Passwort">
-                            <input class="input" style="margin-bottom:0px;" name="passwortRetype" id="passwortRetype" type="text" placeholder="Passwort Wiederholen">
+                            <input class="input" style="margin-bottom:0px;" name="passwort" id="passwort" type="password" placeholder="Passwort">
+                            <input class="input" style="margin-bottom:0px;" name="passwortRetype" id="passwortRetype" type="password" placeholder="Passwort Wiederholen">
                             <input class="btn btn-primary" name="setPassword" type="submit" value="Passwort Speichern">
                         </form>
                     </div>';
