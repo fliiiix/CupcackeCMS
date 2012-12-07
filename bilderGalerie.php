@@ -96,7 +96,6 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('sssss', $titel, $unterTitel, $text, $datum, $uploadFolder);
             $eintrag->execute();
-            $eintrag->fetch();
             $_SESSION["editOld"] = FALSE;
         } 
         else {
@@ -105,7 +104,6 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('ssssiis', $titel, $unterTitel, $text, $uploadFolder, $valid_user_id, $aktiv, $datum);
             $eintrag->execute();
-            $eintrag->fetch();
         }
         $eintrag->close();
     } else {
@@ -154,7 +152,7 @@ if (isset($_GET["fail"]) && $admin) {
     $beitragTitel = isset($_SESSION["beitragTitel"]) ? $_SESSION["beitragTitel"] : "";
     $beitragUnterTitel = isset($_SESSION["beitragUnterTitel"]) ? $_SESSION["beitragUnterTitel"] : "";
     $beitragtext = isset($_SESSION["beitragText"]) ? $_SESSION["beitragText"] : "";
-    echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button><strong>Warning!</strong> Zum Speichern muss mindestens der Titel und ein Text Vorhanden sein.</div>';
+    echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button>Zum Speichern muss mindestens der Titel und ein Text Vorhanden sein.</div>';
     include 'templates/neuerBeitrag.tpl';
 }
 ?>

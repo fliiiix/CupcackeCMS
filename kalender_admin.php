@@ -33,26 +33,31 @@ if (isset($_GET['del'])) {
 
 # Geänderten Termin speichern, wenn der entsprechende Button geklickt wird
 if (isset($_POST['save_edited_event'])) {
-    $new_date = date_to_mysql(escape($_POST['edit_event_date']));
-    $new_title = escape($_POST['edit_event_title']);
-    $new_description = escape($_POST['edit_event_description']);
-    if (!($_POST['edit_event_startTime'] == $_POST['edit_event_endTime'])) {
-        $new_startTime = escape($_POST['edit_event_startTime']);
-        $new_endTime = escape($_POST['edit_event_endTime']);
-    } else {
-        $new_startTime = '0';
-        $new_endTime = '0';
+    if (isset($_POST['edit_event_title']) && $_POST['edit_event_title'] != "" && isset($_POST['edit_event_date']) && $_POST['edit_event_date'] != "") {
+        $new_date = date_to_mysql(escape($_POST['edit_event_date']));
+        $new_title = escape($_POST['edit_event_title']);
+        $new_description = escape($_POST['edit_event_description']);
+        if (!($_POST['edit_event_startTime'] == $_POST['edit_event_endTime'])) {
+            $new_startTime = escape($_POST['edit_event_startTime']);
+            $new_endTime = escape($_POST['edit_event_endTime']);
+        } else {
+            $new_startTime = '0';
+            $new_endTime = '0';
+        }
+        $edit_event_id = intval($_GET['edit']);
+        $sql = 'UPDATE events SET `date`=?, `title`=?, `description`=?, `startTime`=?, `endTime`=?, `lastEditor`=? WHERE `id`=?';
+        $eintrag = $db->prepare($sql);
+        $eintrag->bind_param('sssssii', $new_date, $new_title, $new_description, $new_startTime, $new_endTime, $valid_user_id, $edit_event_id);
+        $eintrag->execute();
+        if ($eintrag->affected_rows == 1) {
+            empty_get($_SERVER['PHP_SELF']);
+        } else {
+            $error_msg = 'Der Termin konnte nicht editiert werden.';
+        }
     }
-    $edit_event_id = intval($_GET['edit']);
-    $sql = 'UPDATE events SET `date`=?, `title`=?, `description`=?, `startTime`=?, `endTime`=?, `lastEditor`=? WHERE `id`=?';
-    $eintrag = $db->prepare($sql);
-    $eintrag->bind_param('sssssii', $new_date, $new_title, $new_description, $new_startTime, $new_endTime, $valid_user_id, $edit_event_id);
-    $eintrag->execute();
-    if ($eintrag->affected_rows == 1) {
-        $success_msg = 'Der Termin wurde erfolgreich editiert.';
-        empty_get($_SERVER['PHP_SELF']);
-    } else {
-        $error_msg = 'Der Termin konnte nicht editiert werden.';
+    else
+    {
+        $error_msg = 'Bitte alle Pflichtfelder ausfüllen (Titel, Datum)';
     }
 }
 
@@ -80,13 +85,11 @@ if (isset($_POST['create_event'])) {
         $eintrag->execute();
 
         // Prüfen ob der Eintrag efolgreich war
-        if ($eintrag->affected_rows == 1) {
-            $success_msg = 'Der neue Termin wurde erfolgreich hinzugef&uuml;gt.';
-        } else {
+        if ($eintrag->affected_rows != 1) {
             $error_msg = 'Der Eintrag konnte nicht hinzugef&uuml;gt werden.';
-        }
+        } 
     } else {
-        $error_msg = 'Bitte alle Pflichtfelder ausfüllen';
+        $error_msg = 'Bitte alle Pflichtfelder ausfüllen (Titel, Datum)';
     }
 }
 
@@ -132,9 +135,6 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
 <div class="row">
     <div class="span12">
         <?php
-        if (isset($success_msg)) {
-            echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' . $success_msg . '</div>';
-        }
         if (isset($error_msg)) {
             echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>' . $error_msg . '</div>';
         }
