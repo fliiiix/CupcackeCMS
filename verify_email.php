@@ -67,6 +67,12 @@ if (isset($_GET['new_key'])){
 		$eintrag->execute();
 		$eintrag->close();
 
+		$sql = 'DELETE FROM `email_verify` WHERE `random`=?';
+		$eintrag = $db->prepare($sql);
+		$eintrag->bind_param('s', $key);
+		$eintrag->execute();
+		$eintrag->close();
+
 		$success_msg = '<div class="alert alert-success">Deine E-Mail-Adresse für deinen neuen Account wurde erfolgreich bestätigt.</div>';
 	}
 }

@@ -84,8 +84,8 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               else
               {
                   echo("Hallo " . current_username($result));
-                  echo " <a class=\"btn btn-primary\" href=\"?logout\"><i class=\"icon-off icon-white\"></i></a>";
                   echo " <a class=\"btn btn-primary\" href=\"account_settings.php\"><i class=\"icon-wrench icon-white\"></i></a>";
+                  echo " <a class=\"btn btn-primary\" href=\"?logout\"><i class=\"icon-off icon-white\"></i></a>";
               }
             ?>
       	  </ul>

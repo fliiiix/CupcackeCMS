@@ -58,24 +58,29 @@ if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["cha
         else {
 		if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
 			$email_errormsg = "Bitte eine valide E-Mail-Adresse eingeben";
-		} 
-                else {
+		} else {
+			echo '62!';
 			$new_email = escape($_POST["email"]);
-			$sql = 'SELECT `id` FROM `change_email` WHERE `random`="?"';
-                        $eintrag = $db->prepare($sql);
-                        do{
-				$random = hash("haval128,3",rand(0,getrandmax()),false);
-                                $eintrag->bind_param('s', $random);
-                                $eintrag->execute();
-                                $eintrag->store_result();
-				if ($eintrag->num_rows == 0){
-					$eintrag->close();
-                                        
-                                        $sql = 'INSERT INTO change_email (user_id, random, new_email) VALUES(?, ?, ?)';
-                                        $eintrag = $db->prepare($sql);
-                                        $eintrag->bind_param('iss', $valid_user_id, $random, $new_email);
-                                        $eintrag->execute();
-                                        $eintrag->close();
+			$sql = 'SELECT `user_id` FROM `change_email` WHERE `random`=?';
+            do{
+            	$eintrag = $db->prepare($sql);
+            	echo '67!';
+            	$random = hash("haval128,3",rand(0,getrandmax()),false);
+            	echo '69!|' . $random . '|';
+                $eintrag->bind_param('s', $random);
+                echo '71!';
+                $eintrag->execute();
+                $eintrag->store_result();
+                echo '72|' . $eintrag->num_rows;
+                if ($eintrag->num_rows < 1){
+                	echo '73!';
+                	$eintrag->close();
+
+                	$sql = 'INSERT INTO `change_email` (`user_id`, `random`, `new_email`) VALUES(?, ?, ?)';
+                	$eintrag = $db->prepare($sql);
+                    $eintrag->bind_param('iss', $valid_user_id, $random, $new_email);
+                    $eintrag->execute();
+                    $eintrag->close();
 					$repeat = false;
 				}
 			} while($repeat);

@@ -3,3 +3,8 @@
     		<script src="assets/js/bootstrap-image-gallery.min.js"></script> -->
   </body>
 </html>
+<?php
+if (isset($db)){
+	$db->close();
+}
+?>
