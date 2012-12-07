@@ -40,9 +40,10 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 			$errormsg = "Bitte gebe zwei übereinstimmende Passwörter ein";
 		} 
                 else {
-                        $sql = 'UPDATE `user` SET `pw_hash`="?" WHERE `id`="?"';
+                        $passwortHash = hash("whirlpool", escape($_POST["password"]));
+                        $sql = 'UPDATE `user` SET `pw_hash`=? WHERE `id`=?';
                         $eintrag = $db->prepare($sql);
-                        $eintrag->bind_param('si', hash("whirlpool", mysql_real_escape_string($_POST["password"])), $valid_user_id);
+                        $eintrag->bind_param('si', $passwortHash, $valid_user_id);
                         $eintrag->execute();
                         $eintrag->close();
 			$success_msg = "Dein Passwort wurde erfolgreich geändert";
@@ -52,65 +53,66 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 
 # Email-Bestätigungs-Mail verschicken, wenn eine richtige E-Mail-Adresse eingegeben wird
 if (isset($_POST["email"]) && isset($_POST["email_verify"]) && isset($_POST["change_email"])){
-	if ($_POST["email"] != $_POST["email_verify"]){
-		$email_errormsg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
-	} 
-        else {
-		if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-			$email_errormsg = "Bitte eine valide E-Mail-Adresse eingeben";
-		} else {
-			echo '62!';
-			$new_email = escape($_POST["email"]);
-			$sql = 'SELECT `user_id` FROM `change_email` WHERE `random`=?';
-            do{
-            	$eintrag = $db->prepare($sql);
-            	echo '67!';
-            	$random = hash("haval128,3",rand(0,getrandmax()),false);
-            	echo '69!|' . $random . '|';
-                $eintrag->bind_param('s', $random);
-                echo '71!';
-                $eintrag->execute();
-                $eintrag->store_result();
-                echo '72|' . $eintrag->num_rows;
-                if ($eintrag->num_rows < 1){
-                	echo '73!';
-                	$eintrag->close();
+    if ($_POST["email"] != $_POST["email_verify"]){
+            $errormsg = "Bitte übereinstimmende E-Mail-Adressen eingeben";
+    } 
+    else {
+            if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                    $errormsg = "Bitte eine valide E-Mail-Adresse eingeben";
+            } 
+            else {
+                $new_email = escape($_POST["email"]);
+                $sql = 'SELECT `user_id` FROM `change_email` WHERE `random`=?';
+                do{
+                        $eintrag = $db->prepare($sql);
+                        $random = hash("haval128,3",rand(0,getrandmax()),false);
+                        $eintrag->bind_param('s', $random);
+                        $eintrag->execute();
+                        $eintrag->store_result();
+                        if ($eintrag->num_rows < 1){
+                                $eintrag->close();
 
-                	$sql = 'INSERT INTO `change_email` (`user_id`, `random`, `new_email`) VALUES(?, ?, ?)';
-                	$eintrag = $db->prepare($sql);
-                    $eintrag->bind_param('iss', $valid_user_id, $random, $new_email);
-                    $eintrag->execute();
-                    $eintrag->close();
-					$repeat = false;
-				}
-			} while($repeat);
-			$headers = "From: noreply@fliegenberg.de" . "\n" .
-			"X-Mailer: PHP/" . phpversion() . "\n" .
-			"Mime-Version: 1.0" . "\n" . 
-			"Content-Type: text/plain; charset=UTF-8" . "\n" .
-			"Content-Transfer-Encoding: 8bit" . "\r\n";
-			$message = "Hallo " . $vorname . " " . $nachname . ", \r\n" .
-			"\r\n" .
-			"jemand hat auf Fliegenberg.de die Änderung der zu deinem Account gehörigen E-Mail-Adresse veranlasst." . "\r\n" . 
-			"Klicke auf den folgenden Link, um diese neue E-Mail-Adresse zu bestätigen: \r\n".
-			"\r\n".
-			"http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?change_key=" . $random . "\r\n" . 
-			"\r\n".
-			"Wenn du deine E-Mail-Adresse gar nicht ändern möchtest ignoriere diese Mail einfach. \r\n".
-			"Mit freundlichen Grüßen\r\n".
-			"\r\n".
-			"Dein Fliegenberg-Team";
-			mail($new_email, "Änderung deiner E-Mail-Adresse auf " . $_SERVER['SERVER_NAME'], $message, $headers);
-			$success_msg = "Die Bestätigungs-Mail für deine neue E-Mail-Adresse wurde erfolgreich versandt";
-		}
-	}
+                                $sql = 'INSERT INTO `change_email` (`user_id`, `random`, `new_email`) VALUES(?, ?, ?)';
+                                $eintrag = $db->prepare($sql);
+                                $eintrag->bind_param('iss', $valid_user_id, $random, $new_email);
+                                $eintrag->execute();
+                                $eintrag->close();
+                                $repeat = false;
+                        }
+                    } while($repeat);
+                    $headers = "From: noreply@fliegenberg.de" . "\n" .
+                    "X-Mailer: PHP/" . phpversion() . "\n" .
+                    "Mime-Version: 1.0" . "\n" . 
+                    "Content-Type: text/plain; charset=UTF-8" . "\n" .
+                    "Content-Transfer-Encoding: 8bit" . "\r\n";
+                    $message = "Hallo " . $vorname . " " . $nachname . ", \r\n" .
+                    "\r\n" .
+                    "jemand hat auf Fliegenberg.de die Änderung der zu deinem Account gehörigen E-Mail-Adresse veranlasst." . "\r\n" . 
+                    "Klicke auf den folgenden Link, um diese neue E-Mail-Adresse zu bestätigen: \r\n".
+                    "\r\n".
+                    "http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?change_key=" . $random . "\r\n" . 
+                    "\r\n".
+                    "Wenn du deine E-Mail-Adresse gar nicht ändern möchtest ignoriere diese Mail einfach. \r\n".
+                    "Mit freundlichen Grüßen\r\n".
+                    "\r\n".
+                    "Dein Fliegenberg-Team";
+                    mail($new_email, "Änderung deiner E-Mail-Adresse auf " . $_SERVER['SERVER_NAME'], $message, $headers);
+                    $success_msg = "Die Bestätigungs-Mail für deine neue E-Mail-Adresse wurde erfolgreich versandt";
+                }
+    }
 }
 
 ?>
+<?php 
+    if(isset($errormsg)){
+        echo '<div class="alert alert-error">' . $errormsg . '</div>';
+    }
+    if(isset($success_msg)){
+        echo '<div class="alert alert-success">' . $success_msg . '</div>';
+    }
+    
+?>
 <h2>Account-Einstellungen</h2>
-<?php if (isset($errormsg)){ 
- 	echo "<b style=\"color:red\">" . $errormsg . "</b>";?>
-<?php } ?>
 <div class="span5" style="margin-left: 0px; padding-left: 0px;">
 <h3>Passwort ändern</h3>
 Wenn du dein Passwort ändern möchtest.<br /><br />
@@ -131,9 +133,6 @@ Wenn du dein Passwort ändern möchtest.<br /><br />
 <div class="span5">
 	<h3>E-Mail-Adresse ändern</h3>
 	Deine momentane E-Mail-Adresse ist <?php echo $current_email; ?><br /><br />
-	<?php if (isset($email_errormsg)){ 
- 	echo "<b style=\"color:red\">" . $email_errormsg . "</b>";?>
- 	<?php } ?>
 	<form method="post">
 	<table>
 		<tr>
@@ -148,7 +147,4 @@ Wenn du dein Passwort ändern möchtest.<br /><br />
   <input class="btn btn-primary" type="submit" value="E-Mail-Adresse ändern" name="change_email">
 </form>
 </div>
-<?php if (isset($success_msg)){ 
- 	echo "<b style=\"color:green\">" . $success_msg . "</b>";?>
-<?php }
-include 'templates/footer.tpl'; ?>
+<?php include 'templates/footer.tpl'; ?>

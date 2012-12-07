@@ -64,8 +64,9 @@ function logout($valid_user_id) {
     $db = new_db_o();
     $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id`=?';
     $eintrag = $db->prepare($sql);
-    $eintrag->bind_param($valid_user_id);
+    $eintrag->bind_param('i',$valid_user_id);
     $eintrag->execute();
+    $eintrag->close();
     setcookie("CupcackeCMS_Cookie", "", -1);
 }
 
