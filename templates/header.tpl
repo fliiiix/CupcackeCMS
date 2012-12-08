@@ -39,13 +39,6 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
     <![endif]-->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-
-    <!-- Le fav and touch icons
-    <link rel="shortcut icon" href="/assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">-->
   </head>
 
   <body>
@@ -66,11 +59,15 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               <?php
               $userId = verify_user();
               if($userId != false){
-                    if(getUserRolle($userId) == 2){
+                    $userRollenId = getUserRolle($userId);
+                    if($userRollenId == 2){
                         echo "<li><a href=\"kalender_admin.php\">Terminverwaltung</a></li>";
-                        echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
+                        
                     }
                     echo "<li><a href=\"bilderGalerie.php\">Bildergalerie</a></li>";
+                    if($userRollenId == 2){
+                        echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
+                    }
 		}
               ?>
             </ul>

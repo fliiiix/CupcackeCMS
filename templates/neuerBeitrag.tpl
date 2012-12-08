@@ -5,6 +5,7 @@
     });
 </script>
 <div class="form-horizontal well">    
+    <a href="bilderGalerie.php" class="btn btn-primary start" style="float: right;"><i class=" icon-remove-circle icon-white"></i></a>
     <!-- The file upload form used as target for the file upload widget -->
     <form id="mainUpload" action="bilderGalerie.php" method="POST">
         <div class="control-group">

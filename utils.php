@@ -1,17 +1,29 @@
 <?php
+#Sammlung von nützlichen Funktionen für CupcackeCMS
 
-//Sammlung von nützlichen Funktionen für CupcackeCMS
 
-# Funktion zum Erzeugen eines Datenbank-Objekts für Prepared Statements
+/**
+ * Erzeugt ein neues Datenbank-Objekt
+ * @return mysqli connection
+ */
 function new_db_o() {
     $db = @new mysqli('localhost', 'root', '', 'cupcackecms');
     return $db;
 }
 
-# Name der Webseite für das <title>-Tag
+/**
+ * Name der Webseite für das <title>-Tag
+ * @global string $GLOBALS['site_name']
+ * @name $site_name 
+ */
 $GLOBALS["site_name"] = "CupcackeCMS";
 
-# Login-Funktion für die Startseite
+/**
+ * Login-Funktion für die Startseite
+ * @param type $email ist der 'eindeutige' username
+ * @param type $password ist das passwort im klartext
+ * @return boolean|string true wenn der user verifiziert ist oder ein Fehlertext wenn nicht
+ */
 function login_user($email, $password) {
     $db = new_db_o();
     $escaped_email = escape($email);
@@ -59,7 +71,10 @@ function login_user($email, $password) {
     }
 }
 
-# Logout-Funktion für alle Backend-Seiten
+/**
+ * Logout löscht das Cookie
+ * @param type $valid_user_id ist die datenbank id des users
+ */
 function logout($valid_user_id) {
     $db = new_db_o();
     $sql = 'DELETE FROM `cookie_mapping` WHERE `user_id`=?';
@@ -70,7 +85,10 @@ function logout($valid_user_id) {
     setcookie("CupcackeCMS_Cookie", "", -1);
 }
 
-# Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
+/**
+ * Kontrolle, ob der User, der sich momentan auf der Seite befindet eingeloggt ist
+ * @return boolean|int gibt entweder die userid aus oder False
+ */
 function verify_user() {
     $db = new_db_o();
     if (isset($_COOKIE["CupcackeCMS_Cookie"])) {
@@ -91,7 +109,11 @@ function verify_user() {
     }
 }
 
-#gibt die rolle des users zurück
+/**
+ * gibt die rolle des users zurück
+ * @param type $valid_user_id ist die datenbank id des users
+ * @return int user rollen Id aus der Datenbank
+ */
 function getUserRolle($valid_user_id) {
     $db = new_db_o();
     $rolle = 0;
@@ -109,7 +131,11 @@ function getUserRolle($valid_user_id) {
     }
 }
 
-# Namen des momentan eingeloggten Users zurückgeben
+/**
+ * Gibt den Namen eines Users zurück
+ * @param type $valid_user_id ist die datenbank id des users
+ * @return string gibt den Vor und Nachnamen zurück
+ */
 function current_username($valid_user_id) {
     $db = new_db_o();
     $vorname = "";
@@ -127,8 +153,29 @@ function current_username($valid_user_id) {
     return $vorname . " " . $nachname;
 }
 
-# Kalender-Funktion
+/**
+ * Baut einen HTML Kalender
+ * @param type $month
+ * @param type $year
+ * @param type $db
+ * @return string html kalender
+ */
 function calendar($month, $year, $db) {
+    #monats array damit die monate immer auf deutsch ausgegeben werden können
+    $monate = array(1=>"Januar",
+                2=>"Februar",
+                3=>"M&auml;rz",
+                4=>"April",
+                5=>"Mai",
+                6=>"Juni",
+                7=>"Juli",
+                8=>"August",
+                9=>"September",
+                10=>"Oktober",
+                11=>"November",
+                12=>"Dezember");
+    $monat = date("n");
+    
     $current_m = $month;
     $current_y = $year;
     # Namen des angezeigten Monats feststellen, ersten Wochentag dieses Monats feststellen, letzten Tag dieses Monats feststellen
@@ -138,7 +185,7 @@ function calendar($month, $year, $db) {
     # Tabellen-Stuff (Wochentages-Leiste)
     $output = '<table class = "table" style = "width: 100px; margin-bottom: 0px;">';
     $output .= ' <tr>';
-    $output .= ' <td colspan = "7" style = "border-top: 0px solid black; font-weight:bold;">' . $current_m_name . '</td>';
+    $output .= ' <td colspan = "7" style = "border-top: 0px solid black; font-weight:bold;">' . $monate[$monat] . '</td>';
     $output .= ' </tr>';
     $output .= ' <tr>';
     $output .= ' <td><b>Mo</b></td>';
@@ -201,7 +248,13 @@ function calendar($month, $year, $db) {
     return $output;
 }
 
-# Funktion, die die Vor- und Zurück-Buttons unter dem Kalender generiert
+/**
+ * die Vor- und Zurück-Buttons unter dem Kalender generiert
+ * @param type $dir
+ * @param type $current_m
+ * @param type $current_y
+ * @return string
+ */
 function calendar_link($dir, $current_m, $current_y) {
     $output = '<a href = "?m=';
     if ($dir == 'f') {
@@ -228,19 +281,30 @@ function calendar_link($dir, $current_m, $current_y) {
     return $output;
 }
 
-#Konvertierung des europäischen Datums-Formats in das von MySQL
+/**
+ * Konvertierung des europäischen Datums-Formats in das von MySQL
+ * @param type $input datum welches umgewandelt werden soll
+ * @return type umgewandeltes Datum
+ */
 function date_to_mysql($input) {
     $a = explode('.', $input);
     return sprintf('%04d-%02d-%02d', $a[2], $a[1], $a[0]);
 }
 
-#Kovertierung vom MySQL-Datum-Format in das europäische
+/**
+ * Kovertierung vom MySQL-Datum-Format in das europäische
+ * @param type $input datum welches umgewandelt werden soll
+ * @return type umgewandeltes Datum
+ */
 function mysql_to_date($input) {
     $a = explode('-', $input);
     return sprintf('%02d.%02d.%04d', $a[2], $a[1], $a[0]);
 }
 
-#erzeugt eine guid
+/**
+ * erzeugt eine guid
+ * @return type eine Neue GUID
+ */
 function guid() {
     if (function_exists('com_create_guid')) {
         return com_create_guid();
@@ -259,14 +323,21 @@ function guid() {
     }
 }
 
-#Leeren von $_GET
+/**
+ * Leeren von $_GET
+ * @param type $site target seite vo der das GET gelöscht werden soll
+ */
 function empty_get($site) {
     if (count($_GET) != 0) {
         header("Location: " . $site);
     }
 }
 
-#escapet daten für die db
+/**
+ * escapet daten für die db
+ * @param type $value wert der escapet werden muss
+ * @return type escaper wert
+ */
 function escape($value)
 {
     $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");

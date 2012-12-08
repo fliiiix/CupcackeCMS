@@ -15,7 +15,7 @@ class UploadHandler
     protected $options;
     // PHP File Upload error message codes:
     // http://php.net/manual/en/features.file-upload.errors.php
-    protected $error_messages = array(
+    /*protected $error_messages = array(
         1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
         2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
         3 => 'The uploaded file was only partially uploaded',
@@ -28,6 +28,26 @@ class UploadHandler
         'min_file_size' => 'File is too small',
         'accept_file_types' => 'Filetype not allowed',
         'max_number_of_files' => 'Maximum number of files exceeded',
+        'max_width' => 'Image exceeds maximum width',
+        'min_width' => 'Image requires a minimum width',
+        'max_height' => 'Image exceeds maximum height',
+        'min_height' => 'Image requires a minimum height'
+    );*/
+    
+    //Angepasste Fehlermeldungen
+    protected $error_messages = array(
+        1 => 'Die Hochgeladen Datei ist zu gross',
+        2 => 'Die Hochgeladen Datei ist zu gross',
+        3 => 'The uploaded file was only partially uploaded',
+        4 => 'Keine Datei wurde hochgeladen',
+        6 => 'Der Server konnte die Datei nicht Speichern',
+        7 => 'Der Server konnte die Datei nicht Speichern',
+        8 => 'Der Server konnte die Datei nicht Speichern',
+        'post_max_size' => 'Die Hochgeladen Datei ist zu gross',
+        'max_file_size' => 'Die Hochgeladen Datei ist zu gross',
+        'min_file_size' => 'Die Hochgeladen Datei ist zu klein',
+        'accept_file_types' => 'Dieser Dateityp ist nicht erlaubt (nur png,jpg,gif)',
+        'max_number_of_files' => 'Es konnen nicht so viele Dateine hochgeladen werden',
         'max_width' => 'Image exceeds maximum width',
         'min_width' => 'Image requires a minimum width',
         'max_height' => 'Image exceeds maximum height',

@@ -179,7 +179,7 @@ while ($ergebnis->fetch()) {
     }
     
     if ($admin) {
-        echo '<a style="float:right; margin-left:10px;" href="?old=' . $uploadFolderName . '">edit</a>
+        echo '<a style="float:right; margin-left:10px;" href="?old=' . $uploadFolderName . '">Editieren</a>
                   <a style="float:right" href="?del=' . $uploadFolderName . '" onclick="return confirm(\'Das Löschen kann nicht rückgängig gemacht werden! Wollen sie wirklich löschen?\');">Löschen</a>';
     }
     if ($unterTitel != "") {

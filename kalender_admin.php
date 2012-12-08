@@ -199,7 +199,6 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                 <td><b>Datum und Zeit</b></td>
                 <td><b>Titel</b></td>
                 <td><b>Beschreibung</b></td>
-                <td><b>Zuletzt bearbeitet von</b></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
@@ -219,8 +218,7 @@ $ergebnis->bind_result($output_id, $output_date, $output_title, $output_descript
                     } else {
                         $output .= '&nbsp;';
                     }
-                    $output .= '</td><td>' . current_username($output_lastEditor) . '</td>';
-                    $output .= '<td><a href="?edit=' . $output_id . '" class="btn btn-inverse"><i class="icon-edit icon-white"></i></a> <a href="?del=' . $output_id . '" class="btn btn-danger"><i class="icon-remove-circle"></i></a>';
+                    $output .= '</td><td><a href="?edit=' . $output_id . '" class="btn btn-inverse"><i class="icon-edit icon-white"></i></a> <a href="?del=' . $output_id . '" class="btn btn-danger"><i class="icon-remove-circle"></i></a>';
                     echo $output;
                 }
             }
