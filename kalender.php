@@ -28,6 +28,10 @@ if (isset($date)) {
 
 <?php
 $vorhergehendesDatum = NULL;
+$ergebnis->store_result();
+if($ergebnis->num_rows == 0){
+        echo '<h3>Aktuell sind keine Termine vorhanden!</h3>';
+}
 while ($ergebnis->fetch()) {
     if($vorhergehendesDatum != $output_date){
         if($vorhergehendesDatum != NULL){

@@ -265,9 +265,9 @@ if (isset($_GET["neu"])) {
 </table><br />
 <br />
 <div id="legende">
-    Legende:<br />
-    <img src='assets/img/questionmark.png'> = Account noch nicht vom Nutzer bestätigt<br />
-    <img src='assets/img/cross.png'> = Account deaktiviert<br />
-    <img src='assets/img/accepted.png'> = Account aktiv<br />
+    <h2>Legende:</h2>
+    <img src='assets/img/questionmark.png'> <b>= Account noch nicht vom Nutzer bestätigt</b><br />
+    <img src='assets/img/cross.png'><b> = Account deaktiviert</b><br />
+    <img src='assets/img/accepted.png'><b> = Account aktiv</b><br />
 </div>
 <?php include 'templates/footer.tpl'; ?>
