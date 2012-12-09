@@ -8,15 +8,16 @@ $db = new_db_o();
 if (isset($_GET["key"])) {
     $key = mysql_real_escape_string($_GET["key"]);
     $sql = 'SELECT `user_id` FROM `pw_forgot` WHERE `link_component`=?';
-    $ergbnis = $db->prepare($sql);
+    $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('s', $key);
     $ergebnis->execute();
-    if ($ergbnis->affected_rows == 0) {
+    $ergebnis->store_result();
+    if ($ergebnis->num_rows < 1) {
+        $ergebnis->close();
         $invalid_key = 1;
     } else {
-        $ergebnis->bind_result($out_user_id);
+        $ergebnis->bind_result($valid_user_id);
         $ergebnis->fetch();
-        $valid_user_id = $out_user_id;
         $ergebnis->close();
     }
 } else {
@@ -35,12 +36,12 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
                 $errormsg = "Bitte gebe ein Passwort, das länger als 7 Zeichen ist ein";
             } else {
                 $password_hash = hash("whirlpool", $_POST["password"], false);
-                $sql = 'UPDATE `user` WHERE `id`=? SET `pw_hash`=?';
+                $sql = 'UPDATE `user` SET `pw_hash`=? WHERE `id`=?';
                 $eintrag = $db->prepare($sql);
-                $eintrag->bind_param('is', $valid_user_id, $password_hash);
+                $eintrag->bind_param('si', $password_hash, $valid_user_id);
                 $eintrag->execute();
                 $eintrag->close();
-                
+
                 $sql = 'DELETE FROM `pw_forgot` WHERE `link_component`=?';
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('s', $key);
@@ -54,13 +55,13 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
 ?>
 <h2> Passwort zurücksetzen</h2>
 <?php if (isset($invalid_key)) { ?>
-<div class="alert alert-error">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</div>
+    <div class="alert alert-error">Der Passwort-Zurücksetzen-Link, über den du auf diese Seite gekommen bist, ist ungültig oder abgelaufen</div>
     <?php
 } else {
     if (isset($success_msg)) {
         ?>
-        <div class="alert alert-success">Dein Passwort wurde erfolgreich geändert</div>
-    <?php
+        <div class="alert alert-success">Dein Passwort wurde erfolgreich geändert <a href='index.php'>Zurück zur Startseite</a></div>
+        <?php
     } else {
         if (isset($errormsg)) {
             echo '<div class="alert alert-error">' . $errormsg . '</div>';
