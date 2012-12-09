@@ -6,7 +6,7 @@ $db = new_db_o();
 
 # Kontrolliere, ob ein Key vorhanden ist und ob er gültig ist
 if (isset($_GET["key"])) {
-    $key = mysql_real_escape_string($_GET["key"]);
+    $key = escape($_GET["key"]);
     $sql = 'SELECT `user_id` FROM `pw_forgot` WHERE `link_component`=?';
     $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('s', $key);

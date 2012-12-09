@@ -8,18 +8,20 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
         $errormsg = "Bitte eine E-Mail-Adresse eingeben";
     } else {
         $db = new_db_o();
-        $valid_email = mysql_real_escape_string($_POST["email"]);
-        $sql = 'SELECT `id`,`vorname`,`nachname` FROM `user` WHERE email=?';
+        $valid_email = escape($_POST["email"]);
+        $sql = 'SELECT `id`,`vorname`,`nachname` FROM `user` WHERE `email`=?';
         $ergebnis = $db->prepare($sql);
         $ergebnis->bind_param('s', $valid_email);
         $ergebnis->execute();
-        if ($ergebnis->affected_rows != 0) {
+        $ergebnis->store_result();
+        if ($ergebnis->num_rows > 0) {
             $ergebnis->bind_result($out_id, $out_vorname, $out_nachname);
             $ergebnis->fetch();
             $ergebnis->close();
             $valid_user_id = $out_id;
             $valid_name = $out_vorname . " " . $out_nachname;
         } else {
+            $ergebnis->close();
             $errormsg = " Die E-Mail-Adresse ist nicht valide";
         }
     }
@@ -39,7 +41,7 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
             if ($ergebnis->num_rows < 1) {
                 $ergebnis->close();
                 $repeat = false;
-                $sql = 'INSERT INTO `pw_forgot` (`user_id`, `link_component`) VALUES(?,?)';
+                $sql = 'INSERT INTO `pw_forgot` (`user_id`, `link_component`) VALUES (?,?)';
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('is', $valid_user_id, $link_component);
                 $eintrag->execute();
