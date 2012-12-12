@@ -12,8 +12,8 @@ Image upload shows "Error: Empty file upload result"
 ##Support
 If you come across any bugs in CupcackeCMS don't hesitate to tell us: [Create an Issue](https://github.com/fliiiix/CupcackeCMS/issues)
 
-----
 ##License
+See license file.
 
 ##Credits
 * [Bootstrap](https://github.com/twitter/bootstrap/) - Basic layout
