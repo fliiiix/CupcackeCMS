@@ -78,7 +78,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
                     <td><input name="password_verify" type="password"></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="right"><input name="change_password" type="submit" value="Passwort ändern"></td>
+                    <td colspan="2" align="right"><input name="change_password" class="btn btn-primary" type="submit" value="Passwort ändern"></td>
                 </tr>
             </table>
         </form>
