@@ -48,14 +48,14 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
                 $eintrag->close();
             }
         } while ($repeat);
-        $headers = "From: noreply@fliegenberg.de" . "\n" .
+        $headers = "From: noreply@fliegenberg.ch" . "\n" .
                 "X-Mailer: PHP/" . phpversion() . "\n" .
                 "Mime-Version: 1.0" . "\n" .
                 "Content-Type: text/plain; charset=UTF-8" . "\n" .
                 "Content-Transfer-Encoding: 8bit" . "\r\n";
         $message = "Hallo " . $valid_name . ", \r\n" .
                 "\r\n" .
-                "jemand hat auf fliegenberg.de ein neues Passwort für deinen Account angefordert." . "\r\n" .
+                "jemand hat auf fliegenberg.ch ein neues Passwort für deinen Account angefordert." . "\r\n" .
                 "Kein Problem, hier kommt ein Link, mit dem du ein neues Passwort setzen kannst: \r\n" .
                 "\r\n" .
                 "http://" . $_SERVER['SERVER_NAME'] . "/reset_password.php?key=" . $link_component . "\r\n" .
@@ -64,7 +64,7 @@ if (isset($_POST["email"]) && isset($_POST["password_reset"])) {
                 "\r\n" .
                 "Mit freundlichen Grüßen\r\n" .
                 "Dein Fliegenberg-Team";
-        mail($valid_email, "Neues Passwort für Fliegenberg.de", $message, $headers);
+        mail($valid_email, "Neues Passwort für fliegenberg.ch", $message, $headers);
     }
 }
 if (!isset($valid_user_id)) {

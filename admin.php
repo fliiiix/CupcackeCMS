@@ -134,14 +134,14 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
                     $repeat = false;
                 }
             } while ($repeat);
-            $headers = "From: noreply@fliegenberg.de" . "\n" .
+            $headers = "From: noreply@fliegenberg.ch" . "\n" .
                     "X-Mailer: PHP/" . phpversion() . "\n" .
                     "Mime-Version: 1.0" . "\n" .
                     "Content-Type: text/plain; charset=UTF-8" . "\n" .
                     "Content-Transfer-Encoding: 8bit" . "\r\n";
             $message = "Hallo " . $vorname . " " . $nachname . ", \r\n" .
                     "\r\n" .
-                    "ein Administrator hat dir einen Account für Fliegenberg.de erstellt." . "\r\n" .
+                    "ein Administrator hat dir einen Account für fliegenberg.ch erstellt." . "\r\n" .
                     "Klicke auf den folgenden Link, um deine Daten zu überprüfen, dein Passwort zu setzen und den Account zu aktivieren: \r\n" .
                     "\r\n" .
                     "http://" . $_SERVER['SERVER_NAME'] . "/verify_email.php?new_key=" . $random . "\r\n" .
