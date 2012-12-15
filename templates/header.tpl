@@ -68,7 +68,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
                     if($userRollenId == 2){
                         echo "<li><a href=\"admin.php\">Nutzerverwaltung</a></li>";
                     }
-		}
+		            }
               ?>
             </ul>
       	    <ul class="nav pull-right">
@@ -81,8 +81,9 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
               else
               {
                   echo("Hallo " . current_username($result));
-                  echo " <a class=\"btn btn-primary\" href=\"account_settings.php\"><i class=\"icon-wrench icon-white\"></i></a>";
-                  echo " <a class=\"btn btn-primary\" href=\"?logout\"><i class=\"icon-off icon-white\"></i></a>";
+                  echo "<a class=\"btn btn-primary\" href=\"account_settings.php\"><i class=\"icon-wrench icon-white\"></i></a>";
+                  echo "<a class=\"btn btn-primary\" href=\"assets/doc/Dokumentation.pdf\"><i class=\"icon-file icon-white\"></i></a>";
+                  echo "<a class=\"btn btn-primary\" href=\"?logout\"><i class=\"icon-off icon-white\"></i></a>";
               }
             ?>
       	  </ul>

@@ -1,5 +1,6 @@
 # NetBeans-Stuff
 /nbproject/
+nbproject/
 
 fuel/app/logs/*/*/*
 fuel/app/cache/*/*
