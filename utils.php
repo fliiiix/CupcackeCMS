@@ -33,8 +33,7 @@ function login_user($email, $password) {
     $ergebnis->bind_param('ss', $escaped_email, $hashed_password);
     $ergebnis->execute();
     $ergebnis->bind_result($user_id);
-    $ergebnis->fetch();
-    if (!$ergebnis->affected_rows == 0) {
+    if (!$ergebnis->num_rows == 0) {
         $ergebnis->bind_result($user_id);
         $ergebnis->fetch();
         $ergebnis->close();
