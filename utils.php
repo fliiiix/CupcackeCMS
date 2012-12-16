@@ -50,10 +50,9 @@ function login_user($email, $password) {
         $ergebnis = $db->prepare($sql);
         $ergebnis->bind_param($cookie_content);
         $ergebnis->execute();
-        $ergebnis->fetch();
-        $ergebnis->close();
         
-        if ($ergebnis->affected_rows == 0) {
+        if ($ergebnis->num_rows == 0) {
+            $ergebnis->close();
             $sql = 'INSERT INTO `cookie_mapping` (`user_id`, `cookie_content`) VALUES (?,?)';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('is', $user_id, $cookie_content);
