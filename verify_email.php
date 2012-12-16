@@ -66,7 +66,7 @@ if (isset($_GET['new_key'])){
                   isset($_POST["passwortRetype"]) && $_POST["passwortRetype"] != "" && 
                   $_POST["passwort"] == $_POST["passwortRetype"] && (strlen($_POST["passwort"]) >= 8)){
                     $aktiv = 2;
-                    $passwortHash = hash("whirlpool", $_POST["passwort"], false);
+                    $passwortHash = hash("whirlpool", escape($_POST["passwort"]), false);
                     $sql = 'UPDATE `user` SET `aktiv`=?, `pw_hash`=?  WHERE `id`=?';
                     $eintrag = $db->prepare($sql);
                     $eintrag->bind_param('isi', $aktiv, $passwortHash, $valid_user_id);

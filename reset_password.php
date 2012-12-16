@@ -35,7 +35,7 @@ if (isset($_POST["password"]) && isset($_POST["password_verify"]) && isset($_POS
             if (strlen($_POST["password"]) < 8) {
                 $errormsg = "Bitte gebe ein Passwort, das länger als 7 Zeichen ist ein";
             } else {
-                $password_hash = hash("whirlpool", $_POST["password"], false);
+                $password_hash = hash("whirlpool", escape($_POST["password"]), false);
                 $sql = 'UPDATE `user` SET `pw_hash`=? WHERE `id`=?';
                 $eintrag = $db->prepare($sql);
                 $eintrag->bind_param('si', $password_hash, $valid_user_id);

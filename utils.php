@@ -27,7 +27,7 @@ $GLOBALS["site_name"] = "CupcackeCMS";
 function login_user($email, $password) {
     $db = new_db_o();
     $escaped_email = escape($email);
-    $hashed_password = hash("whirlpool", $password, false);
+    $hashed_password = hash("whirlpool", escape($password), false);
     $sql = 'SELECT `id` FROM `user` WHERE `email`=? AND `pw_hash`=? AND `aktiv`=2';
     $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('ss', $escaped_email, $hashed_password);
