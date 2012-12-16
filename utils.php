@@ -49,6 +49,7 @@ function login_user($email, $password) {
         $ergebnis = $db->prepare($sql);
         $ergebnis->bind_param($cookie_content);
         $ergebnis->execute();
+        $ergebnis->store_result();
         
         if ($ergebnis->num_rows == 0) {
             $ergebnis->close();
@@ -60,10 +61,10 @@ function login_user($email, $password) {
             setcookie("CupcackeCMS_Cookie", $cookie_content, time() + 7200);
             return true;
         } else {
-            return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. 51";
+            return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. ";
         }
     } else {
-        return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. 54";
+        return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. ";
     }
 }
 
