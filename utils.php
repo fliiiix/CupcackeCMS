@@ -43,7 +43,6 @@ function login_user($email, $password) {
         $eintrag = $db->prepare($sql);
         $eintrag->bind_param('i', $user_id);
         $eintrag->execute();
-        $ergebnis->fetch();
         $ergebnis->close();
 
         $cookie_content = rand(0, getrandmax());
@@ -59,7 +58,6 @@ function login_user($email, $password) {
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('is', $user_id, $cookie_content);
             $eintrag->execute();
-            $ergebnis->fetch();
             $ergebnis->close();
             setcookie("CupcackeCMS_Cookie", $cookie_content, time() + 7200);
             return true;
