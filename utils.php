@@ -32,8 +32,8 @@ function login_user($email, $password) {
     $ergebnis = $db->prepare($sql);
     $ergebnis->bind_param('ss', $escaped_email, $hashed_password);
     $ergebnis->execute();
-    $ergebnis->bind_result($user_id);
-    if (!$ergebnis->num_rows == 0) {
+    $ergebnis->store_result();
+    if (!$ergebnis->num_rows < 1) {
         $ergebnis->bind_result($user_id);
         $ergebnis->fetch();
         $ergebnis->close();
@@ -50,8 +50,7 @@ function login_user($email, $password) {
         $ergebnis->bind_param($cookie_content);
         $ergebnis->execute();
         $ergebnis->store_result();
-        
-        if ($ergebnis->num_rows == 0) {
+        if ($ergebnis->num_rows < 1) {
             $ergebnis->close();
             $sql = 'INSERT INTO `cookie_mapping` (`user_id`, `cookie_content`) VALUES (?,?)';
             $eintrag = $db->prepare($sql);
@@ -61,9 +60,11 @@ function login_user($email, $password) {
             setcookie("CupcackeCMS_Cookie", $cookie_content, time() + 7200);
             return true;
         } else {
+            $ergebnis->close();
             return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. ";
         }
     } else {
+        $ergebnis->close();
         return "Falscher Benutzername, falsches Passwort oder deaktivierter Account. ";
     }
 }
