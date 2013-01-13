@@ -12,12 +12,11 @@ if (isset($login)){
 <div class="span2">
 	<?php
 		require_once('utils.php');
-		$db = new_db_o();
 		if (isset($_GET['m']) && (isset($_GET['y']))) {
-			$calendar = calendar(intval($_GET['m']), intval($_GET['y']), $db);
+			$calendar = calendar(intval($_GET['m']), intval($_GET['y']));
 		  echo $calendar;
 		} else {
-			$calendar = calendar(date('m'),date('Y'), $db);
+			$calendar = calendar(date('m'),date('Y'));
 		  echo $calendar;
 		}
 	?>

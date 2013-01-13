@@ -55,11 +55,11 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["login_b
           <div class="nav-collapse">
             <ul class="nav">
               <li><a href="index.php">Startseite</a></li>
-              <li><a href="kalender.php">Termine</a></li>
               <?php
               $userId = verify_user();
               if($userId != false){
                     $userRollenId = getUserRolle($userId);
+                    echo '<li><a href="kalender.php">Termine</a></li>';
                     if($userRollenId == 2){
                         echo "<li><a href=\"kalender_admin.php\">Terminverwaltung</a></li>";
                         

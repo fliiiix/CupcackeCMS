@@ -1,6 +1,10 @@
 <?php
 #Sammlung von nützlichen Funktionen für CupcackeCMS
 
+/**
+*Set default time zone for Date() function
+*/
+date_default_timezone_set("Europe/Zurich") ;
 
 /**
  * Erzeugt ein neues Datenbank-Objekt
@@ -158,7 +162,8 @@ function current_username($valid_user_id) {
  * @param type $db
  * @return string html kalender
  */
-function calendar($month, $year, $db) {
+function calendar($month, $year) {
+    $db = new_db_o();
     #monats array damit die monate immer auf deutsch ausgegeben werden können
     $monate = array(1=>"Januar",
                 2=>"Februar",
@@ -172,7 +177,6 @@ function calendar($month, $year, $db) {
                 10=>"Oktober",
                 11=>"November",
                 12=>"Dezember");
-    $monat = date("n");
     
     $current_m = $month;
     $current_y = $year;
@@ -183,7 +187,7 @@ function calendar($month, $year, $db) {
     # Tabellen-Stuff (Wochentages-Leiste)
     $output = '<table class = "table" style = "width: 100px; margin-bottom: 0px;">';
     $output .= ' <tr>';
-    $output .= ' <td colspan = "7" style = "border-top: 0px solid black; font-weight:bold;">' . $monate[$monat] . '</td>';
+    $output .= ' <td colspan = "7" style = "border-top: 0px solid black; font-weight:bold;">' . $monate[(int)$current_m] . '</td>';
     $output .= ' </tr>';
     $output .= ' <tr>';
     $output .= ' <td><b>Mo</b></td>';
