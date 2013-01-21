@@ -24,4 +24,4 @@ See license file.
 
 Created by
 * fliiiix
-* [@linux4ever](http://twitter.com/linux4ever2)[(Website)](http://l3r.de)
+* @[lx4r](http://twitter.com/lx4r)[(Website)](http://l3r.de)
