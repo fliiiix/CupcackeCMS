@@ -24,4 +24,4 @@ See license file.
 
 Created by
 * fliiiix
-* @[lx4r](http://twitter.com/lx4r)[(Website)](http://l3r.de)
+* [@lx4r](http://twitter.com/lx4r)([website](http://l3r.de))
