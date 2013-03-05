@@ -125,7 +125,6 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
             $ergebnis->fetch();
             $ergebnis->close();
             $repeat = true;
-            echo '119';
             do {
                 $random = hash("haval128,3", rand(0, getrandmax()), false);
                 $sql = 'SELECT * FROM `email_verify` WHERE `random`=?';
