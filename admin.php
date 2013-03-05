@@ -100,10 +100,18 @@ if (isset($_POST["email"]) && isset($_POST["email_retype"]) && isset($_POST["rol
         $nachname = escape($_POST["nachname"]);
         $vorname = escape($_POST["vorname"]);
         $rolle = intval($_POST["rolle"]);
-        $query = mysql_query("SELECT * FROM user WHERE email=\"" . $email . "\"");
-        if (mysql_num_rows($query) > 0) {
+
+        $sql = 'SELECT * FROM user WHERE email = ?';
+        $mailExist = $db->prepare($sql);
+        $mailExist->bind_param("s", $email);
+        $mailExist->execute();
+        $mailExist->store_result();
+
+        if ($mailExist->num_rows > 0) {
             $error_msg = "Diese E-Mail-Adresse existiert leider schon";
-        } else {
+        } 
+
+        else {
             $sql = 'INSERT INTO `user` (`vorname`, `nachname`, `email`, `rolle`) VALUES (?,?,?,?)';
             $eintrag = $db->prepare($sql);
             $eintrag->bind_param('sssi', $vorname, $nachname, $email, $rolle);
