@@ -41,19 +41,18 @@ function hasFileToDownload($guid){
     $baseFolderPath = 'server/files/';
     $folderName = $baseFolderPath . escape($guid) . "/";
     $inline_file_types = '/\.(gif|jpe?g|png)$/i';
-    $counter = 0;
     
     if (($handle = opendir($folderName))) {
-        while (false !== ($file = readdir($handle)) || $counter == 1) {
+        while (false !== ($file = readdir($handle))) {
             if (preg_match($inline_file_types, $file)) {
-                  $counter++;
+                  return true;
             }
         }
     }
-    return $counter != 0;
+    return false;
 }
 
-if(isset($_GET["dl"]) && $_GET["dl"] != ""){
+if(!empty($_REQUEST['dl']){
     $baseFolderPath = 'server/files/';
     $folderName = $baseFolderPath . escape($_GET["dl"]) . "/";
     $zipFolderName = "bilder.zip";
@@ -115,7 +114,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
     }
 }
 
-if (isset($_GET["del"]) && $_GET["del"] != "" && $admin) {
+if (if(!empty($_REQUEST['del']) && $admin) {
     $uploadFolder = escape($_GET["del"]);
     $sql = 'DELETE FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
     $eintrag = $db->prepare($sql);
@@ -130,7 +129,7 @@ if (isset($_GET["neu"]) && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = guid();
     include 'templates/neuerBeitrag.tpl';
 }
-if (isset($_GET["old"]) && $_GET["old"] != "" && getUserRolle($valid_user_id) == 2) {
+if (if(!empty($_REQUEST['old']) && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = $_GET["old"];
     $_SESSION["editOld"] = TRUE;
     
