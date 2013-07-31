@@ -190,7 +190,7 @@ while ($ergebnis->fetch()) {
     if (($handle = opendir($folderName))) {
         $erstesBildItem = "active";
         while (false !== ($file = readdir($handle))) {
-            if ($file !== '.' && $file !== '..' && !is_dir($folderName . $file) && $file !== ".htaccess") {
+            if ($file !== 'bilder.zip' && $file !== '.' && $file !== '..' && !is_dir($folderName . $file) && $file !== ".htaccess") {
                 $output .= "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/medium/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto;\"></div>";
                 $erstesBildItem = "";
             }
