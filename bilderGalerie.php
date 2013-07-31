@@ -52,7 +52,7 @@ function hasFileToDownload($guid){
     return false;
 }
 
-if(!empty($_REQUEST['dl']){
+if(!empty($_REQUEST['dl'])){
     $baseFolderPath = 'server/files/';
     $folderName = $baseFolderPath . escape($_GET["dl"]) . "/";
     $zipFolderName = "bilder.zip";
@@ -129,7 +129,7 @@ if (isset($_GET["neu"]) && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = guid();
     include 'templates/neuerBeitrag.tpl';
 }
-if (if(!empty($_REQUEST['old']) && getUserRolle($valid_user_id) == 2) {
+if (!empty($_REQUEST['old']) && getUserRolle($valid_user_id) == 2) {
     $_SESSION["uploadFolder"] = $_GET["old"];
     $_SESSION["editOld"] = TRUE;
     
