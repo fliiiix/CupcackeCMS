@@ -1,6 +1,5 @@
 <?php
-error_reporting(E_ALL | E_STRICT);
-$current_site = "Admin-Panel";
+$current_site = "Nutzerverwaltung";
 include 'templates/header.tpl';
 require_once('utils.php');
 $db = new_db_o();

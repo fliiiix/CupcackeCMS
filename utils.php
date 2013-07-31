@@ -1,6 +1,6 @@
 <?php
 #Sammlung von nützlichen Funktionen für CupcackeCMS
-
+require_once 'config.example.php';
 /**
 *Set default time zone for Date() function
 */
@@ -11,16 +11,9 @@ date_default_timezone_set("Europe/Zurich") ;
  * @return mysqli connection
  */
 function new_db_o() {
-    $db = @new mysqli('localhost', 'root', '', 'cupcackecms');
+    $db = @new mysqli($GLOBALS["dbHost"], $GLOBALS["dbUser"], $GLOBALS["dbPass"], $GLOBALS["dbName"]);
     return $db;
 }
-
-/**
- * Name der Webseite für das <title>-Tag
- * @global string $GLOBALS['site_name']
- * @name $site_name 
- */
-$GLOBALS["site_name"] = "CupcackeCMS";
 
 /**
  * Login-Funktion für die Startseite
@@ -313,14 +306,14 @@ function guid() {
     } else {
         mt_srand((double) microtime() * 10000); //optional for php 4.2.0 and up.
         $charid = strtoupper(md5(uniqid(rand(), true)));
-        $hyphen = chr(45); // "-"
-        $uuid = chr(123)// "{"
+        $hyphen = chr(45);
+        $uuid = chr(123)
                 . substr($charid, 0, 8) . $hyphen
                 . substr($charid, 8, 4) . $hyphen
                 . substr($charid, 12, 4) . $hyphen
                 . substr($charid, 16, 4) . $hyphen
                 . substr($charid, 20, 12)
-                . chr(125); // "}"
+                . chr(125);
         return str_replace("{", "", str_replace("}", "", $uuid));
     }
 }
