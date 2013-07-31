@@ -134,7 +134,7 @@
 </script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="assets/js/vendor/jquery.ui.widget.js"></script>
-<script src="asset/js/upload.js"></script>
+<script src="assets/js/upload.js"></script>
 <script src="assets/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
 <script src="assets/js/jquery.fileupload.js"></script>
