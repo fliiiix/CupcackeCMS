@@ -114,7 +114,7 @@ if (isset($_POST["beitragTitel"]) && isset($_POST["beitragUnterTitel"]) && isset
     }
 }
 
-if (if(!empty($_REQUEST['del']) && $admin) {
+if (!empty($_REQUEST['del']) && $admin) {
     $uploadFolder = escape($_GET["del"]);
     $sql = 'DELETE FROM `bilderBeitrag` WHERE `uploadFolderName`=?';
     $eintrag = $db->prepare($sql);
