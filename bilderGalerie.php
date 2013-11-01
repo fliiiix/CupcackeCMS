@@ -189,13 +189,31 @@ while ($ergebnis->fetch()) {
     $folderName = $baseFolderPath . $uploadFolderName . "/";
     if (($handle = opendir($folderName))) {
         $erstesBildItem = "active";
+        $pictures = array();
+        $i = 0;
         while (false !== ($file = readdir($handle))) {
             if ($file !== 'bilder.zip' && $file !== '.' && $file !== '..' && !is_dir($folderName . $file) && $file !== ".htaccess") {
-                $output .= "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/medium/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto;\"></div>";
-                $erstesBildItem = "";
+                
+                //Putting the images into an array
+                $pictures[$i] = $file;
+                $i++;
+
+                /* $output .= "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/medium/" . $file . "\" style=\"display: block; margin-left: auto; margin-right: auto;\"></div>";
+                $erstesBildItem = ""; */
             }
         }
         closedir($handle);
+        
+        // Sorting the images in the array asceding by their filename and in this way by
+        // the date they were taken (works with most cameras because they name the images
+        // ascending after date)
+        sort($pictures);
+
+        // Display the reordered pictures
+        for ($i=0; $i<= count($pictures); $i++) {
+            $output .= "<div class=\"item " . $erstesBildItem . "\">" . "<img src=\"server/files/" . $uploadFolderName . "/medium/" . $pictures[$i] . "\" style=\"display: block; margin-left: auto; margin-right: auto;\"></div>";
+            $erstesBildItem = "";
+        }
     }
     
     if($output != "")
